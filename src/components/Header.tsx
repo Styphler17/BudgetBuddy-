@@ -32,8 +32,19 @@ export function Header() {
                 ? "text-primary font-semibold"
                 : "text-gray-600 hover:text-gray-900"
             )}
+            >
+              Home
+          </Link>
+          <Link
+            to="/blog"
+            className={cn(
+              "transition-colors",
+              location.pathname.startsWith("/blog")
+                ? "text-primary font-semibold"
+                : "text-gray-600 hover:text-gray-900"
+            )}
           >
-            Home
+            Blog
           </Link>
           <Link
             to="/contact"
@@ -133,6 +144,18 @@ export function Header() {
               onClick={() => setIsMenuOpen(false)}
             >
               Home
+            </Link>
+            <Link
+              to="/blog"
+              className={cn(
+                "transition-colors",
+                location.pathname.startsWith("/blog")
+                  ? "text-primary font-semibold"
+                  : "text-gray-600 hover:text-gray-900"
+              )}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Blog
             </Link>
             <Link
               to="/contact"

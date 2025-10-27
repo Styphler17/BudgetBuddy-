@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Seo } from "@/components/Seo";
 import { BackToTop } from "@/components/BackToTop";
 import emailjs from '@emailjs/browser';
 import { useRef, useState, useEffect } from "react";
@@ -105,11 +105,17 @@ export function ContactUs() {
 
   return (
     <>
-      <Helmet>
-        <title>Contact Us - BudgetBuddy</title>
-        <meta name="description" content="Get in touch with BudgetBuddy. Contact our support team for help with budgeting, financial management, and any questions you may have." />
-        <meta name="keywords" content="contact BudgetBuddy, support, help, customer service, financial assistance" />
-      </Helmet>
+      <Seo
+        title="Contact BudgetBuddy Support"
+        description="Get in touch with the BudgetBuddy team for customer support, media inquiries, or partnership opportunities."
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/contact` : undefined}
+        keywords={[
+          "contact BudgetBuddy",
+          "budget app support",
+          "financial planning help",
+          "BudgetBuddy customer service"
+        ]}
+      />
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
         <Header />

@@ -17,6 +17,15 @@ CREATE TABLE IF NOT EXISTS admins (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- Seed temporary admin account (update these credentials after first login)
+INSERT INTO admins (email, name, password_hash, role, is_active)
+VALUES ('temp.admin@budgetbuddy.com', 'Temporary Admin', 'TempAdmin!123', 'admin', TRUE)
+ON DUPLICATE KEY UPDATE
+  name = VALUES(name),
+  password_hash = VALUES(password_hash),
+  role = VALUES(role),
+  is_active = VALUES(is_active);
+
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -132,6 +141,29 @@ CREATE TABLE IF NOT EXISTS system_settings (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- Blog posts table
+CREATE TABLE IF NOT EXISTS blog_posts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  admin_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  excerpt TEXT,
+  cover_image_url TEXT,
+  cover_image_alt VARCHAR(255),
+  status ENUM('draft', 'published', 'archived') DEFAULT 'draft',
+  content LONGTEXT,
+  tags TEXT,
+  meta_title VARCHAR(255),
+  meta_description TEXT,
+  meta_keywords TEXT,
+  reading_time INT DEFAULT 0,
+  feature_embed_url TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  published_at TIMESTAMP NULL,
+  FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE CASCADE
+);
+
 -- Sample data (optional - remove in production)
 -- INSERT INTO admins (email, name, password_hash, role) VALUES ('admin@budgetbuddy.com', 'Super Admin', '$2b$10$example.hash.here', 'super_admin');
 
@@ -145,3 +177,7 @@ CREATE INDEX idx_accounts_user ON accounts(user_id);
 CREATE INDEX idx_settings_user ON user_settings(user_id);
 CREATE INDEX idx_admin_logs_admin ON admin_logs(admin_id);
 CREATE INDEX idx_admin_logs_created ON admin_logs(created_at);
+CREATE INDEX idx_system_settings_key ON system_settings(setting_key);
+CREATE INDEX idx_blog_posts_status_published_at ON blog_posts(status, published_at);
+CREATE INDEX idx_blog_posts_slug ON blog_posts(slug);
+CREATE INDEX idx_blog_posts_tags ON blog_posts(tags(191));

@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
+import { Seo } from "@/components/Seo";
 import {
   Shield,
   Lock,
@@ -77,11 +77,17 @@ export function PrivacyPolicy() {
 
   return (
     <>
-      <Helmet>
-        <title>Privacy Policy - BudgetBuddy</title>
-        <meta name="description" content="Learn about BudgetBuddy's privacy policy. We are committed to protecting your financial data and personal information with bank-level security." />
-        <meta name="keywords" content="privacy policy, data protection, financial privacy, security, BudgetBuddy privacy" />
-      </Helmet>
+      <Seo
+        title="BudgetBuddy Privacy Policy"
+        description="Understand how BudgetBuddy protects your financial data, respects your privacy, and keeps your information secure."
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/privacy` : undefined}
+        keywords={[
+          "BudgetBuddy privacy policy",
+          "financial data protection",
+          "budget app security",
+          "personal finance privacy"
+        ]}
+      />
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
         <Header />

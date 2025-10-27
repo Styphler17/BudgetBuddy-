@@ -5,6 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
+import { Seo } from "@/components/Seo";
+import { BlogCard } from "@/components/blog/BlogCard";
+import { blogAPI, type BlogPostSummary } from "@/lib/api";
 import {
   TrendingUp,
   Shield,
@@ -21,6 +24,8 @@ import { useState, useEffect } from "react";
 
 export function Landing() {
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [featuredPosts, setFeaturedPosts] = useState<BlogPostSummary[]>([]);
+  const [loadingPosts, setLoadingPosts] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +34,21 @@ export function Landing() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const loadFeaturedPosts = async () => {
+      try {
+        const posts = await blogAPI.listPublished({ limit: 5 });
+        setFeaturedPosts(posts);
+      } catch (error) {
+        console.error("Failed to load featured blog posts:", error);
+      } finally {
+        setLoadingPosts(false);
+      }
+    };
+
+    void loadFeaturedPosts();
   }, []);
 
   const scrollToTop = () => {
@@ -90,7 +110,20 @@ export function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <>
+      <Seo
+        title="BudgetBuddy | Smart Budgeting & Personal Finance Platform"
+        description="Track spending, crush savings goals, and manage every account in one command center. BudgetBuddy puts real-time insights and automation in your pocket."
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/` : undefined}
+        keywords={[
+          "budgeting app",
+          "personal finance",
+          "expense tracking",
+          "savings goals",
+          "BudgetBuddy"
+        ]}
+      />
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <Header />
 
       {/* Hero Section */}
@@ -170,6 +203,39 @@ export function Landing() {
         </div>
       </section>
 
+      {/* Featured Blog Posts */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900">Latest from the BudgetBuddy blog</h2>
+            <p className="mt-2 text-lg text-gray-600">
+              Fresh insights and product tips to help you make smarter money moves.
+            </p>
+          </div>
+          <Button asChild variant="outline">
+            <Link to="/blog">View all blog posts</Link>
+          </Button>
+        </div>
+
+        <div className="mt-12">
+          {loadingPosts ? (
+            <div className="flex min-h-[200px] items-center justify-center text-muted-foreground">
+              Loading featured stories...
+            </div>
+          ) : featuredPosts.length === 0 ? (
+            <div className="rounded-lg border bg-muted/40 p-8 text-center text-muted-foreground">
+              New blog articles will appear here soon. Stay tuned!
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {featuredPosts.map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
@@ -222,6 +288,7 @@ export function Landing() {
 
         <Footer />
         <BackToTop />
-    </div>
+      </div>
+    </>
   );
 }

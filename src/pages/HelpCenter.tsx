@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
+import { Seo } from "@/components/Seo";
 import {
   Search,
   Book,
@@ -80,11 +80,17 @@ export function HelpCenter() {
 
   return (
     <>
-      <Helmet>
-        <title>Help Center - BudgetBuddy</title>
-        <meta name="description" content="Get help with BudgetBuddy. Find guides, tutorials, and answers to common questions about managing your finances." />
-        <meta name="keywords" content="BudgetBuddy help, financial management help, budgeting tutorials, expense tracking guide" />
-      </Helmet>
+      <Seo
+        title="BudgetBuddy Help Center"
+        description="Get help with BudgetBuddy. Browse tutorials, FAQs, and financial guidance to make the most of your budgeting workspace."
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/help` : undefined}
+        keywords={[
+          "BudgetBuddy help",
+          "budgeting tutorials",
+          "expense tracking support",
+          "financial management guides"
+        ]}
+      />
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
         <Header />

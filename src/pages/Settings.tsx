@@ -18,6 +18,7 @@ interface SettingsProps {
 interface DatabaseUser {
   id: number;
   username: string;
+  name?: string;
   email: string;
   first_name: string | null;
   last_name: string | null;
@@ -42,6 +43,7 @@ export default function Settings({ period }: SettingsProps) {
   const [user, setUser] = useState<DatabaseUser | null>(null);
   const [settings, setSettings] = useState<DatabaseSettings | null>(null);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [editUsername, setEditUsername] = useState("");
   const [editFirstName, setEditFirstName] = useState("");
   const [editLastName, setEditLastName] = useState("");
   const [editEmail, setEditEmail] = useState("");
@@ -50,6 +52,7 @@ export default function Settings({ period }: SettingsProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Fetch user data and settings on mount
   useEffect(() => {
@@ -67,9 +70,16 @@ export default function Settings({ period }: SettingsProps) {
         }
 
         // If no database data, fall back to localStorage
+        const fallbackDisplayName =
+          currentUser.username ||
+          currentUser.name ||
+          [currentUser.first_name, currentUser.last_name].filter(Boolean).join(" ") ||
+          (currentUser.email ? currentUser.email.split("@")[0] : "User");
+
         const fallbackUserData: DatabaseUser = {
           id: currentUser.id,
-          username: currentUser.username || currentUser.email,
+          username: fallbackDisplayName,
+          name: fallbackDisplayName,
           email: currentUser.email,
           first_name: currentUser.first_name || currentUser.name?.split(' ')[0] || null,
           last_name: currentUser.last_name || currentUser.name?.split(' ').slice(1).join(' ') || null,
@@ -78,7 +88,13 @@ export default function Settings({ period }: SettingsProps) {
           created_at: currentUser.created_at || new Date().toISOString()
         };
 
-        const finalUserData = userData || fallbackUserData;
+        const finalUserData: DatabaseUser = userData
+          ? {
+              ...userData,
+              username: (userData as DatabaseUser).username || (userData as DatabaseUser).name || fallbackDisplayName,
+              name: (userData as DatabaseUser).name || (userData as DatabaseUser).username || fallbackDisplayName
+            }
+          : fallbackUserData;
 
         // Get user settings from localStorage or create defaults
         const userSettingsKey = `settings_${currentUser.id}`;
@@ -105,14 +121,12 @@ export default function Settings({ period }: SettingsProps) {
 
         setUser(finalUserData);
         setSettings(userSettings);
+        setEditUsername(finalUserData.username || fallbackDisplayName);
         setEditFirstName(finalUserData.first_name || "");
         setEditLastName(finalUserData.last_name || "");
         setEditEmail(finalUserData.email);
-        setEditPassword(finalUserData.password_hash || "");
-
-        // Debug logging to verify password fetching
-        console.log('User data fetched:', finalUserData);
-        console.log('Password hash:', finalUserData.password_hash);
+        setEditPassword("");
+        setConfirmPassword("");
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -125,30 +139,51 @@ export default function Settings({ period }: SettingsProps) {
     if (!user) return;
 
     try {
+      const trimmedUsername = editUsername.trim();
+      const trimmedEmail = editEmail.trim();
+
+      if (!trimmedUsername) {
+        toast.error("Display name is required");
+        return;
+      }
+
+      if (!trimmedEmail) {
+        toast.error("Email is required");
+        return;
+      }
+
       // Update database
       await userAPI.update(user.id, {
+        name: trimmedUsername,
         first_name: editFirstName,
         last_name: editLastName,
-        email: editEmail
+        email: trimmedEmail
       });
 
       // Update localStorage user data
       const currentUser = JSON.parse(localStorage.getItem("user") || "null");
       const updatedUser = {
         ...currentUser,
+        name: trimmedUsername,
+        username: trimmedUsername,
         first_name: editFirstName,
         last_name: editLastName,
-        email: editEmail
+        email: trimmedEmail
       };
 
       localStorage.setItem("user", JSON.stringify(updatedUser));
+      setEditUsername(trimmedUsername);
+      setEditEmail(trimmedEmail);
+
 
       // Update state
       setUser(prev => prev ? {
         ...prev,
+        name: trimmedUsername,
+        username: trimmedUsername,
         first_name: editFirstName,
         last_name: editLastName,
-        email: editEmail
+        email: trimmedEmail
       } : null);
 
       toast.success("Profile updated successfully!");
@@ -160,40 +195,64 @@ export default function Settings({ period }: SettingsProps) {
   };
 
   const handleUpdatePassword = async () => {
-    if (!user || !editPassword) return;
+    if (!user) return;
+
+    const trimmedPassword = editPassword.trim();
+    const trimmedConfirm = confirmPassword.trim();
+
+    if (!trimmedPassword) {
+      toast.error("Please enter a new password");
+      return;
+    }
+
+    if (trimmedPassword.length < 8) {
+      toast.error("Use at least 8 characters for your new password");
+      return;
+    }
+
+    if (trimmedPassword !== trimmedConfirm) {
+      toast.error("New passwords do not match");
+      return;
+    }
 
     // Verify old password if user has an existing password
-    if (user.password_hash && oldPassword !== user.password_hash) {
-      toast.error("Old password is incorrect");
+    if (user.password_hash && user.password_hash.length > 0 && oldPassword !== user.password_hash) {
+      toast.error(oldPassword ? "Current password is incorrect" : "Please enter your current password");
       return;
     }
 
     try {
       // Update database
       await userAPI.update(user.id, {
-        password_hash: editPassword
+        password_hash: trimmedPassword
       });
 
       // Update localStorage user data
       const currentUser = JSON.parse(localStorage.getItem("user") || "null");
       const updatedUser = {
         ...currentUser,
-        password_hash: editPassword,
-        password: editPassword // Keep both for compatibility
+        password_hash: trimmedPassword,
+        password: trimmedPassword // Keep both for compatibility
       };
 
       localStorage.setItem("user", JSON.stringify(updatedUser));
+      setEditUsername(trimmedUsername);
+      setEditEmail(trimmedEmail);
+
 
       // Update state
       setUser(prev => prev ? {
         ...prev,
-        password_hash: editPassword
+        password_hash: trimmedPassword
       } : null);
 
       toast.success("Password updated successfully!");
       setIsChangingPassword(false);
       setEditPassword("");
       setOldPassword("");
+      setConfirmPassword("");
+      setShowPassword(false);
+      setShowOldPassword(false);
     } catch (error) {
       console.error('Error updating password:', error);
       toast.error("Failed to update password");
@@ -235,6 +294,15 @@ export default function Settings({ period }: SettingsProps) {
             {isEditingProfile ? (
               <>
                 <div className="space-y-2">
+                  <Label htmlFor="username">Display Name / Username</Label>
+                  <Input
+                    id="username"
+                    value={editUsername}
+                    onChange={(e) => setEditUsername(e.target.value)}
+                    placeholder="How should we address you?"
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
                   <Input
                     id="firstName"
@@ -264,7 +332,21 @@ export default function Settings({ period }: SettingsProps) {
                 </div>
                 <div className="flex gap-2">
                   <Button onClick={handleUpdateProfile} size="sm">Save</Button>
-                  <Button variant="outline" onClick={() => setIsEditingProfile(false)} size="sm">Cancel</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsEditingProfile(false);
+                      if (user) {
+                        setEditUsername(user.username || user.name || "");
+                        setEditFirstName(user.first_name || "");
+                        setEditLastName(user.last_name || "");
+                        setEditEmail(user.email);
+                      }
+                    }}
+                    size="sm"
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </>
             ) : (
@@ -272,7 +354,13 @@ export default function Settings({ period }: SettingsProps) {
                 <div className="space-y-2">
                   <Label>Display Name</Label>
                   <p className="text-sm text-muted-foreground">
-                    {user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.username : 'Loading...'}
+                    {user ? user.username || user.name || "Add your display name" : 'Loading...'}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label>Full Name</Label>
+                  <p className="text-sm text-muted-foreground">
+                    {user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Add your first and last name' : 'Loading...'}
                   </p>
                 </div>
                 <div className="space-y-2">
@@ -386,52 +474,55 @@ export default function Settings({ period }: SettingsProps) {
                     </Button>
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirm-password">Confirm New Password</Label>
+                  <Input
+                    id="confirm-password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Re-enter new password"
+                  />
+                </div>
                 <div className="flex gap-2">
                   <Button onClick={handleUpdatePassword} size="sm">Update Password</Button>
-                  <Button variant="outline" onClick={() => {
-                    setIsChangingPassword(false);
-                    setOldPassword("");
-                    setEditPassword("");
-                  }} size="sm">Cancel</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsChangingPassword(false);
+                      setOldPassword("");
+                      setEditPassword("");
+                      setConfirmPassword("");
+                      setShowPassword(false);
+                      setShowOldPassword(false);
+                    }}
+                    size="sm"
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </>
             ) : (
               <>
                 <div className="space-y-2">
-                  <Label>Current Password</Label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      value={user?.password_hash || ""}
-                      readOnly
-                      className="flex-1"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {user?.password_hash ? "Click the eye icon to view your current password" : "No password set"}
+                  <Label>Password</Label>
+                  <p className="text-sm text-muted-foreground">
+                    {user?.password_hash
+                      ? "Keep your password up to date to protect your account."
+                      : "You haven't set a password yet. Create one to secure your account."}
                   </p>
-                </div>
-                <div className="space-y-2">
-                  <Label>Two-Factor Authentication</Label>
-                  <p className="text-sm text-muted-foreground">Not enabled</p>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsChangingPassword(true)}
+                  onClick={() => {
+                    setIsChangingPassword(true);
+                    setOldPassword("");
+                    setEditPassword("");
+                    setConfirmPassword("");
+                    setShowPassword(false);
+                    setShowOldPassword(false);
+                  }}
                   className="w-full sm:w-auto"
                 >
                   Change Password
@@ -503,3 +594,4 @@ export default function Settings({ period }: SettingsProps) {
     </div>
   );
 }
+

@@ -12,20 +12,230 @@ const mockUserSettings: Record<string, unknown>[] = [];
 const mockAdminLogs: Record<string, unknown>[] = [];
 const mockSystemSettings: Record<string, unknown>[] = [];
 
+const seedDefaultAdminAccount = () => {
+  if (mockAdmins.some(admin => admin.email === 'temp.admin@budgetbuddy.com')) {
+    return;
+  }
+  const timestamp = new Date().toISOString();
+  mockAdmins.push({
+    id: mockAdmins.length + 1,
+    email: 'temp.admin@budgetbuddy.com',
+    name: 'Temporary Admin',
+    password_hash: 'TempAdmin!123',
+    role: 'admin',
+    is_active: true,
+    last_login: null,
+    created_at: timestamp
+  });
+};
+
+export type BlogPostStatus = 'draft' | 'published' | 'archived';
+
+export type BlogContentBlockType = 'paragraph' | 'heading' | 'image' | 'embed' | 'quote' | 'list';
+
+export interface BlogContentBlock {
+  type: BlogContentBlockType;
+  text?: string;
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  url?: string;
+  alt?: string;
+  caption?: string;
+  items?: string[];
+}
+
+interface BlogPostRecord {
+  id: number;
+  admin_id: number;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  cover_image_url: string | null;
+  cover_image_alt: string | null;
+  status: BlogPostStatus;
+  content: string;
+  tags: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  meta_keywords: string | null;
+  reading_time: number;
+  feature_embed_url: string | null;
+  created_at: string;
+  updated_at: string;
+  published_at: string | null;
+}
+
+export interface BlogPostSummary {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  coverImageUrl: string | null;
+  coverImageAlt: string | null;
+  status: BlogPostStatus;
+  tags: string[];
+  readingTime: number;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BlogPostDetail extends BlogPostSummary {
+  contentBlocks: BlogContentBlock[];
+  metaTitle: string | null;
+  metaDescription: string | null;
+  metaKeywords: string[];
+  featureEmbedUrl: string | null;
+  authorId: number;
+}
+
+export interface BlogPostCreateInput {
+  adminId: number;
+  title: string;
+  slug?: string;
+  excerpt?: string | null;
+  coverImageUrl?: string | null;
+  coverImageAlt?: string | null;
+  status?: BlogPostStatus;
+  contentBlocks: BlogContentBlock[];
+  tags?: string[];
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  metaKeywords?: string[];
+  featureEmbedUrl?: string | null;
+  publishedAt?: string | null;
+}
+
+export interface BlogPostUpdateInput {
+  title?: string;
+  slug?: string;
+  excerpt?: string | null;
+  coverImageUrl?: string | null;
+  coverImageAlt?: string | null;
+  status?: BlogPostStatus;
+  contentBlocks?: BlogContentBlock[];
+  tags?: string[];
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  metaKeywords?: string[];
+  featureEmbedUrl?: string | null;
+  publishedAt?: string | null;
+}
+
+export interface BlogListOptions {
+  limit?: number;
+  offset?: number;
+  tag?: string;
+  search?: string;
+  excludeId?: number;
+}
+
+const mockBlogPosts: BlogPostRecord[] = [];
+let mockBlogAutoIncrement = 1;
+
+const seedMockBlogPosts = () => {
+  if (mockBlogPosts.length > 0) return;
+
+  const now = new Date();
+  const sampleContent = (title: string) => JSON.stringify([
+    { type: 'heading', level: 2, text: title },
+    {
+      type: 'paragraph',
+      text: 'Discover practical strategies to make the most out of your income. This guide walks through actionable budgeting tactics, proven savings frameworks, and smart tools inside BudgetBuddy that keep your goals on track.'
+    },
+    {
+      type: 'image',
+      url: 'https://images.unsplash.com/photo-1454165205744-3b78555e5572?auto=format&fit=crop&w=1200&q=80',
+      alt: 'Person reviewing financial documents with a laptop',
+      caption: 'BudgetBuddy keeps your financial plans organised in one command centre.'
+    },
+    {
+      type: 'list',
+      items: [
+        'Start with a realistic baseline budget that reflects your lifestyle',
+        'Automate your bill payments and transfers to savings',
+        'Use category caps and alerts to prevent overspending',
+        'Review monthly analytics to spot trends early'
+      ]
+    },
+    {
+      type: 'paragraph',
+      text: 'Ready to go deeper? Inside the BudgetBuddy app you can simulate different saving scenarios, collaborate with partners, and plug in future goals to see their long-term impact.'
+    },
+    {
+      type: 'embed',
+      url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      caption: 'Watch a quick rundown of creating a goal-driven budget.'
+    }
+  ] satisfies BlogContentBlock[]);
+
+  const posts = [
+    {
+      id: mockBlogAutoIncrement++,
+      admin_id: 1,
+      title: 'Mastering Zero-Based Budgeting with BudgetBuddy',
+      slug: 'mastering-zero-based-budgeting',
+      excerpt: 'Learn how to give every dollar a job using BudgetBuddy’s automation and analytics.',
+      cover_image_url: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1200&q=80',
+      cover_image_alt: 'Notebook and calculator representing financial planning',
+      status: 'published' as BlogPostStatus,
+      content: sampleContent('Zero-Based Budgeting Essentials'),
+      tags: 'budgeting,automation,planning',
+      meta_title: 'Master Zero-Based Budgeting | BudgetBuddy Blog',
+      meta_description: 'Step-by-step instructions to adopt zero-based budgeting and stay on top of your finances with BudgetBuddy.',
+      meta_keywords: 'budgeting, zero-based budget, automation',
+      reading_time: 6,
+      feature_embed_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      created_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+      updated_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+      published_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7).toISOString()
+    },
+    {
+      id: mockBlogAutoIncrement++,
+      admin_id: 1,
+      title: 'Build Momentum with Micro-Savings Goals',
+      slug: 'build-momentum-with-micro-savings',
+      excerpt: 'Break your goals into achievable milestones that keep motivation high.',
+      cover_image_url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
+      cover_image_alt: 'Person placing coins in a jar to save money',
+      status: 'published' as BlogPostStatus,
+      content: sampleContent('Micro-Savings Strategies that Work'),
+      tags: 'savings,goals,motivation',
+      meta_title: 'Savings Momentum with Micro Goals | BudgetBuddy Blog',
+      meta_description: 'Use BudgetBuddy micro goals to stay motivated and celebrate progress faster.',
+      meta_keywords: 'savings goals, micro-savings, money motivation',
+      reading_time: 5,
+      feature_embed_url: null,
+      created_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 20).toISOString(),
+      updated_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+      published_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 14).toISOString()
+    }
+  ] satisfies BlogPostRecord[];
+
+  mockBlogPosts.push(...posts);
+};
+
+seedDefaultAdminAccount();
+seedMockBlogPosts();
+
 // Mock database functions
 const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]> => {
   // Parse SQL to determine operation
   const sqlLower = sql.toLowerCase();
 
   if (sqlLower.includes('insert into users')) {
+    const email = params[0] as string;
+    const name = params[1] as string;
     const user = {
       id: mockUsers.length + 1,
-      email: params[0],
-      name: params[1],
+      email,
+      name,
+      username: name || (email ? email.split('@')[0] : ''),
       password_hash: params[2],
       currency: 'USD',
       is_active: true,
       email_verified: false,
+      first_name: null,
+      last_name: null,
       created_at: new Date().toISOString()
     };
     mockUsers.push(user);
@@ -36,12 +246,31 @@ const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]
     return mockUsers.filter(u => u.email === params[0]);
   }
 
-  if (sqlLower.includes('update users set')) {
-    const userId = params[params.length - 1];
+  if (sqlLower.startsWith('update users set')) {
+    const userId = Number(params[params.length - 1]);
     const user = mockUsers.find(u => u.id === userId);
     if (user) {
-      if (sql.includes('name = ?')) user.name = params[0];
-      if (sql.includes('currency = ?')) user.currency = params[1] || params[0];
+      let index = 0;
+      if (sql.includes('name = ?')) {
+        const value = params[index++] as string;
+        (user as Record<string, unknown>).name = value;
+        (user as Record<string, unknown>).username = value;
+      }
+      if (sql.includes('currency = ?')) {
+        (user as Record<string, unknown>).currency = params[index++] ?? (user as Record<string, unknown>).currency;
+      }
+      if (sql.includes('first_name = ?')) {
+        (user as Record<string, unknown>).first_name = params[index++] as string;
+      }
+      if (sql.includes('last_name = ?')) {
+        (user as Record<string, unknown>).last_name = params[index++] as string;
+      }
+      if (sql.includes('email = ?')) {
+        (user as Record<string, unknown>).email = params[index++] as string;
+      }
+      if (sql.includes('password_hash = ?')) {
+        (user as Record<string, unknown>).password_hash = params[index++] as string;
+      }
     }
     return [];
   }
@@ -300,6 +529,33 @@ const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]
     return mockAdmins;
   }
 
+  if (sqlLower.startsWith('update admins set') && !sqlLower.includes('last_login')) {
+    const adminId = Number(params[params.length - 1]);
+    const admin = mockAdmins.find(a => a.id === adminId);
+    if (admin) {
+      let index = 0;
+      if (sql.includes('name = ?')) {
+        admin.name = params[index++] as string;
+      }
+      if (sql.includes('role = ?')) {
+        admin.role = params[index++] as string;
+      }
+      if (sql.includes('is_active = ?')) {
+        const value = params[index++];
+        admin.is_active = typeof value === 'string'
+          ? value === '1' || value.toLowerCase() === 'true'
+          : Boolean(value);
+      }
+      if (sql.includes('email = ?')) {
+        admin.email = params[index++] as string;
+      }
+      if (sql.includes('password_hash = ?')) {
+        admin.password_hash = params[index++] as string;
+      }
+    }
+    return [];
+  }
+
   if (sqlLower.includes('update admins set last_login')) {
     const admin = mockAdmins.find(a => a.id === params[0]);
     if (admin) {
@@ -390,6 +646,175 @@ const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]
     return [];
   }
 
+  // Blog posts mock queries
+  if (sqlLower.startsWith('insert into blog_posts')) {
+    const [
+      adminId,
+      title,
+      slug,
+      excerpt,
+      coverImageUrl,
+      coverImageAlt,
+      status,
+      content,
+      tags,
+      metaTitle,
+      metaDescription,
+      metaKeywords,
+      readingTime,
+      featureEmbedUrl,
+      publishedAt
+    ] = params;
+
+    const nowIso = new Date().toISOString();
+    const post: BlogPostRecord = {
+      id: mockBlogAutoIncrement++,
+      admin_id: Number(adminId),
+      title: String(title),
+      slug: String(slug),
+      excerpt: excerpt ? String(excerpt) : null,
+      cover_image_url: coverImageUrl ? String(coverImageUrl) : null,
+      cover_image_alt: coverImageAlt ? String(coverImageAlt) : null,
+      status: (status as BlogPostStatus) || 'draft',
+      content: content ? String(content) : '[]',
+      tags: tags ? String(tags) : null,
+      meta_title: metaTitle ? String(metaTitle) : null,
+      meta_description: metaDescription ? String(metaDescription) : null,
+      meta_keywords: metaKeywords ? String(metaKeywords) : null,
+      reading_time: typeof readingTime === 'number' ? readingTime : Number(readingTime) || 0,
+      feature_embed_url: featureEmbedUrl ? String(featureEmbedUrl) : null,
+      created_at: nowIso,
+      updated_at: nowIso,
+      published_at: publishedAt ? new Date(publishedAt as string).toISOString() : null
+    };
+
+    mockBlogPosts.unshift(post);
+    return [{ insertId: post.id }];
+  }
+
+  if (sqlLower.startsWith('update blog_posts set title = ?')) {
+    const [
+      title,
+      slug,
+      excerpt,
+      coverImageUrl,
+      coverImageAlt,
+      status,
+      content,
+      tags,
+      metaTitle,
+      metaDescription,
+      metaKeywords,
+      readingTime,
+      featureEmbedUrl,
+      publishedAt,
+      id
+    ] = params;
+
+    const post = mockBlogPosts.find(p => p.id === Number(id));
+    if (post) {
+      post.title = String(title);
+      post.slug = String(slug);
+      post.excerpt = excerpt ? String(excerpt) : null;
+      post.cover_image_url = coverImageUrl ? String(coverImageUrl) : null;
+      post.cover_image_alt = coverImageAlt ? String(coverImageAlt) : null;
+      post.status = (status as BlogPostStatus) || 'draft';
+      post.content = content ? String(content) : '[]';
+      post.tags = tags ? String(tags) : null;
+      post.meta_title = metaTitle ? String(metaTitle) : null;
+      post.meta_description = metaDescription ? String(metaDescription) : null;
+      post.meta_keywords = metaKeywords ? String(metaKeywords) : null;
+      post.reading_time = typeof readingTime === 'number' ? readingTime : Number(readingTime) || 0;
+      post.feature_embed_url = featureEmbedUrl ? String(featureEmbedUrl) : null;
+      post.published_at = publishedAt ? new Date(publishedAt as string).toISOString() : null;
+      post.updated_at = new Date().toISOString();
+    }
+    return [];
+  }
+
+  if (sqlLower.startsWith('delete from blog_posts where id = ?')) {
+    const id = Number(params[0]);
+    const filtered = mockBlogPosts.filter(p => p.id !== id);
+    mockBlogPosts.length = 0;
+    mockBlogPosts.push(...filtered);
+    return [];
+  }
+
+  if (sqlLower.startsWith('select * from blog_posts where id = ?')) {
+    const id = Number(params[0]);
+    return mockBlogPosts.filter(p => p.id === id);
+  }
+
+  if (sqlLower.startsWith('select * from blog_posts where slug = ?')) {
+    const slug = String(params[0]);
+    return mockBlogPosts.filter(p => p.slug === slug);
+  }
+
+  if (sqlLower.startsWith('select * from blog_posts where status = ? and id != ?')) {
+    const status = params[0] as BlogPostStatus;
+    const excludeId = Number(params[1]);
+    const limit = typeof params[2] === 'number' ? params[2] : undefined;
+    const filtered = mockBlogPosts
+      .filter(p => p.status === status && p.id !== excludeId)
+      .sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
+    return typeof limit === 'number' ? filtered.slice(0, limit) : filtered;
+  }
+
+  if (sqlLower.startsWith('select * from blog_posts where status = ?')) {
+    const status = params[0] as BlogPostStatus;
+    const limit = typeof params[1] === 'number' ? params[1] : undefined;
+    const offset = typeof params[2] === 'number' ? params[2] : undefined;
+    const filtered = mockBlogPosts
+      .filter(p => p.status === status)
+      .sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
+    let results = filtered;
+    if (typeof offset === 'number') {
+      results = results.slice(offset);
+    }
+    if (typeof limit === 'number') {
+      results = results.slice(0, limit);
+    }
+    return results;
+  }
+
+  if (sqlLower.startsWith('select * from blog_posts')) {
+    let results = [...mockBlogPosts];
+
+    if (sqlLower.includes('order by created_at desc')) {
+      results.sort((a, b) => b.created_at.localeCompare(a.created_at));
+    } else if (sqlLower.includes('order by published_at desc')) {
+      results.sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
+    }
+
+    let limit: number | undefined;
+    let offset: number | undefined;
+
+    if (sqlLower.includes('limit ?') && sqlLower.includes('offset ?')) {
+      limit = typeof params[0] === 'number' ? params[0] : undefined;
+      offset = typeof params[1] === 'number' ? params[1] : undefined;
+    } else if (sqlLower.includes('limit ?')) {
+      const candidateIndex = params.length - 1;
+      const candidate = params[candidateIndex];
+      if (typeof candidate === 'number') {
+        limit = candidate;
+      }
+    } else if (sqlLower.includes('offset ?')) {
+      const candidate = params[params.length - 1];
+      if (typeof candidate === 'number') {
+        offset = candidate;
+      }
+    }
+
+    if (typeof offset === 'number') {
+      results = results.slice(offset);
+    }
+    if (typeof limit === 'number') {
+      results = results.slice(0, limit);
+    }
+
+    return results;
+  }
+
   // Default return for unhandled queries
   return [];
 };
@@ -397,6 +822,360 @@ const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]
 // Replace the database import with mock implementation
 // import { query } from './database';
 const query = mockQuery;
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+
+const splitCsv = (value: string | null) =>
+  value
+    ? value
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : [];
+
+const joinCsv = (values?: string[] | null) =>
+  values && values.length ? values.map((v) => v.trim()).filter(Boolean).join(',') : null;
+
+const normaliseBlocks = (blocks?: BlogContentBlock[]) =>
+  Array.isArray(blocks) ? blocks.filter((block): block is BlogContentBlock => Boolean(block?.type)) : [];
+
+const parseBlocks = (value: string | null): BlogContentBlock[] => {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value) as BlogContentBlock[];
+    return normaliseBlocks(parsed);
+  } catch (error) {
+    console.warn('Failed to parse blog content blocks', error);
+    return [];
+  }
+};
+
+const stringifyBlocks = (blocks?: BlogContentBlock[]) => JSON.stringify(normaliseBlocks(blocks));
+
+const computeReadingTime = (blocks: BlogContentBlock[]) => {
+  const wordsPerMinute = 220;
+  const totalWords = normaliseBlocks(blocks).reduce((wordCount, block) => {
+    if (block.type === 'list' && block.items) {
+      const itemsText = block.items.join(' ');
+      return wordCount + itemsText.trim().split(/\s+/).filter(Boolean).length;
+    }
+    if ('text' in block && block.text) {
+      return wordCount + block.text.trim().split(/\s+/).filter(Boolean).length;
+    }
+    return wordCount;
+  }, 0);
+
+  return Math.max(1, Math.ceil(totalWords / wordsPerMinute));
+};
+
+const applyPagination = <T>(items: T[], limit?: number, offset?: number) => {
+  let result = [...items];
+  if (typeof offset === 'number' && offset > 0) {
+    result = result.slice(offset);
+  }
+  if (typeof limit === 'number' && limit >= 0) {
+    result = result.slice(0, limit);
+  }
+  return result;
+};
+
+const mapRecordToSummary = (record: BlogPostRecord): BlogPostSummary => ({
+  id: record.id,
+  title: record.title,
+  slug: record.slug,
+  excerpt: record.excerpt,
+  coverImageUrl: record.cover_image_url,
+  coverImageAlt: record.cover_image_alt,
+  status: record.status,
+  tags: splitCsv(record.tags),
+  readingTime: record.reading_time,
+  publishedAt: record.published_at,
+  createdAt: record.created_at,
+  updatedAt: record.updated_at
+});
+
+const mapRecordToDetail = (record: BlogPostRecord): BlogPostDetail => {
+  const summary = mapRecordToSummary(record);
+  return {
+    ...summary,
+    contentBlocks: parseBlocks(record.content),
+    metaTitle: record.meta_title,
+    metaDescription: record.meta_description,
+    metaKeywords: splitCsv(record.meta_keywords),
+    featureEmbedUrl: record.feature_embed_url,
+    authorId: record.admin_id
+  };
+};
+
+const getBlogRecordById = async (id: number): Promise<BlogPostRecord | null> => {
+  const rows = (await query('SELECT * FROM blog_posts WHERE id = ? LIMIT 1', [id])) as BlogPostRecord[];
+  return rows[0] ?? null;
+};
+
+const getBlogRecordBySlug = async (slug: string): Promise<BlogPostRecord | null> => {
+  const rows = (await query('SELECT * FROM blog_posts WHERE slug = ? LIMIT 1', [slug])) as BlogPostRecord[];
+  return rows[0] ?? null;
+};
+
+const ensureUniqueSlug = async (desiredSlug: string, excludeId?: number) => {
+  const baseSlug = slugify(desiredSlug);
+  let candidate = baseSlug;
+  let suffix = 1;
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const existing = await getBlogRecordBySlug(candidate);
+    if (!existing || (excludeId && existing.id === excludeId)) {
+      return candidate;
+    }
+    candidate = `${baseSlug}-${suffix++}`;
+  }
+};
+
+const sortByPublishedDate = (records: BlogPostRecord[]) =>
+  [...records].sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
+
+const sortByCreatedDate = (records: BlogPostRecord[]) =>
+  [...records].sort((a, b) => b.created_at.localeCompare(a.created_at));
+
+export const blogAPI = {
+  listPublished: async (options: BlogListOptions = {}): Promise<BlogPostSummary[]> => {
+    const { limit, offset, search, tag, excludeId } = options;
+    const rows = (await query('SELECT * FROM blog_posts WHERE status = ?', ['published'])) as BlogPostRecord[];
+    let filtered = sortByPublishedDate(rows).filter((row) => row.published_at);
+
+    if (excludeId) {
+      filtered = filtered.filter((row) => row.id !== excludeId);
+    }
+
+    if (tag) {
+      const normalizedTag = tag.toLowerCase();
+      filtered = filtered.filter((row) => splitCsv(row.tags).some((item) => item.toLowerCase() === normalizedTag));
+    }
+
+    if (search) {
+      const searchTerm = search.toLowerCase();
+      filtered = filtered.filter((row) => {
+        const haystack = [
+          row.title,
+          row.excerpt ?? '',
+          row.meta_description ?? '',
+          row.tags ?? ''
+        ]
+          .join(' ')
+          .toLowerCase();
+        return haystack.includes(searchTerm);
+      });
+    }
+
+    return applyPagination(filtered.map(mapRecordToSummary), limit, offset);
+  },
+
+  listAll: async (
+    options: BlogListOptions & { status?: BlogPostStatus | 'all' } = {}
+  ): Promise<BlogPostSummary[]> => {
+    const { limit, offset, search, tag, status = 'all' } = options;
+    let rows: BlogPostRecord[];
+
+    if (status === 'all') {
+      rows = (await query('SELECT * FROM blog_posts ORDER BY created_at DESC', [])) as BlogPostRecord[];
+    } else {
+      rows = (await query('SELECT * FROM blog_posts WHERE status = ?', [status])) as BlogPostRecord[];
+    }
+
+    let filtered = status === 'published' ? sortByPublishedDate(rows) : sortByCreatedDate(rows);
+
+    if (tag) {
+      const target = tag.toLowerCase();
+      filtered = filtered.filter((row) => splitCsv(row.tags).some((item) => item.toLowerCase() === target));
+    }
+
+    if (search) {
+      const needle = search.toLowerCase();
+      filtered = filtered.filter((row) => {
+        const haystack = [
+          row.title,
+          row.excerpt ?? '',
+          row.meta_description ?? '',
+          row.tags ?? '',
+          row.meta_keywords ?? ''
+        ]
+          .join(' ')
+          .toLowerCase();
+        return haystack.includes(needle);
+      });
+    }
+
+    return applyPagination(filtered.map(mapRecordToSummary), limit, offset);
+  },
+
+  getBySlug: async (slug: string): Promise<BlogPostDetail | null> => {
+    const record = await getBlogRecordBySlug(slug);
+    if (!record || record.status !== 'published') return null;
+    return mapRecordToDetail(record);
+  },
+
+  getById: async (id: number): Promise<BlogPostDetail | null> => {
+    const record = await getBlogRecordById(id);
+    return record ? mapRecordToDetail(record) : null;
+  },
+
+  getRelated: async (postId: number, options: { limit?: number } = {}): Promise<BlogPostSummary[]> => {
+    const { limit = 3 } = options;
+    const current = await getBlogRecordById(postId);
+    if (!current) return [];
+
+    const currentTags = new Set(splitCsv(current.tags).map((tag) => tag.toLowerCase()));
+    let rows = (await query('SELECT * FROM blog_posts WHERE status = ?', ['published'])) as BlogPostRecord[];
+    rows = rows.filter((row) => row.id !== current.id && row.published_at);
+
+    const tagMatches: BlogPostRecord[] = [];
+    const fallback: BlogPostRecord[] = [];
+
+    rows.forEach((row) => {
+      const rowTags = splitCsv(row.tags).map((tag) => tag.toLowerCase());
+      if (rowTags.some((tag) => currentTags.has(tag))) {
+        tagMatches.push(row);
+      } else {
+        fallback.push(row);
+      }
+    });
+
+    const ordered = [...sortByPublishedDate(tagMatches), ...sortByPublishedDate(fallback)];
+    return applyPagination(ordered.map(mapRecordToSummary), limit, 0);
+  },
+
+  create: async (input: BlogPostCreateInput): Promise<BlogPostDetail> => {
+    const blocks = normaliseBlocks(input.contentBlocks);
+    const readingTime = computeReadingTime(blocks);
+    const slug = await ensureUniqueSlug(input.slug || input.title);
+    const status: BlogPostStatus = input.status || 'draft';
+    const tagsCsv = joinCsv(input.tags);
+    const metaKeywordsCsv = joinCsv(input.metaKeywords);
+    const contentString = stringifyBlocks(blocks);
+    const metaTitle = input.metaTitle || input.title;
+    const metaDescription = input.metaDescription || input.excerpt || null;
+    const featureEmbedUrl = input.featureEmbedUrl ?? null;
+    const publishedAt =
+      status === 'published'
+        ? input.publishedAt || new Date().toISOString()
+        : null;
+
+    const sql = `
+      INSERT INTO blog_posts (
+        admin_id, title, slug, excerpt, cover_image_url, cover_image_alt, status,
+        content, tags, meta_title, meta_description, meta_keywords, reading_time,
+        feature_embed_url, published_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const params = [
+      input.adminId,
+      input.title,
+      slug,
+      input.excerpt ?? null,
+      input.coverImageUrl ?? null,
+      input.coverImageAlt ?? null,
+      status,
+      contentString,
+      tagsCsv,
+      metaTitle,
+      metaDescription,
+      metaKeywordsCsv,
+      readingTime,
+      featureEmbedUrl,
+      publishedAt
+    ];
+
+    const result = await query(sql, params) as { insertId: number }[];
+    const insertId = result?.[0]?.insertId;
+    if (!insertId) {
+      throw new Error('Failed to create blog post');
+    }
+
+    const record = await getBlogRecordById(insertId);
+    if (!record) {
+      throw new Error('Failed to load created blog post');
+    }
+
+    return mapRecordToDetail(record);
+  },
+
+  update: async (id: number, input: BlogPostUpdateInput): Promise<BlogPostDetail> => {
+    const existing = await getBlogRecordById(id);
+    if (!existing) {
+      throw new Error('Blog post not found');
+    }
+
+    const nextTitle = input.title ?? existing.title;
+    const requestedSlug = input.slug ?? (input.title ? slugify(input.title) : existing.slug);
+    const slug = await ensureUniqueSlug(requestedSlug, id);
+
+    const blocks = input.contentBlocks ? normaliseBlocks(input.contentBlocks) : parseBlocks(existing.content);
+    const readingTime = input.contentBlocks ? computeReadingTime(blocks) : existing.reading_time;
+
+    const tagsCsv = input.tags !== undefined ? joinCsv(input.tags) : existing.tags;
+    const metaKeywordsCsv =
+      input.metaKeywords !== undefined ? joinCsv(input.metaKeywords) : existing.meta_keywords;
+
+    const status = input.status ?? existing.status;
+    let publishedAt = existing.published_at;
+    if (status === 'published') {
+      if (!publishedAt) {
+        publishedAt = input.publishedAt || new Date().toISOString();
+      } else if (input.publishedAt) {
+        publishedAt = input.publishedAt;
+      }
+    } else {
+      publishedAt = null;
+    }
+
+    const sql = `
+      UPDATE blog_posts
+      SET title = ?, slug = ?, excerpt = ?, cover_image_url = ?, cover_image_alt = ?, status = ?,
+          content = ?, tags = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, reading_time = ?,
+          feature_embed_url = ?, published_at = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `;
+
+    const params = [
+      nextTitle,
+      slug,
+      input.excerpt ?? existing.excerpt,
+      input.coverImageUrl ?? existing.cover_image_url,
+      input.coverImageAlt ?? existing.cover_image_alt,
+      status,
+      stringifyBlocks(blocks),
+      tagsCsv,
+      input.metaTitle ?? existing.meta_title ?? nextTitle,
+      input.metaDescription ?? existing.meta_description ?? existing.excerpt,
+      metaKeywordsCsv,
+      readingTime,
+      input.featureEmbedUrl === undefined ? existing.feature_embed_url : input.featureEmbedUrl,
+      publishedAt,
+      id
+    ];
+
+    await query(sql, params);
+    const updated = await getBlogRecordById(id);
+    if (!updated) {
+      throw new Error('Failed to load updated blog post');
+    }
+
+    return mapRecordToDetail(updated);
+  },
+
+  delete: async (id: number) => {
+    await query('DELETE FROM blog_posts WHERE id = ?', [id]);
+  }
+};
 
 // User API
 export const userAPI = {
@@ -829,7 +1608,7 @@ export const adminAPI = {
     return await query(sql, params);
   },
 
-  update: async (id: number, adminData: Partial<{ name: string; role: string; is_active: boolean }>) => {
+  update: async (id: number, adminData: Partial<{ name: string; role: string; is_active: boolean; email: string; passwordHash: string }>) => {
     const fields = [];
     const values = [];
 
@@ -844,6 +1623,14 @@ export const adminAPI = {
     if (adminData.is_active !== undefined) {
       fields.push('is_active = ?');
       values.push(adminData.is_active);
+    }
+    if (adminData.email !== undefined) {
+      fields.push('email = ?');
+      values.push(adminData.email);
+    }
+    if (adminData.passwordHash !== undefined) {
+      fields.push('password_hash = ?');
+      values.push(adminData.passwordHash);
     }
 
     if (fields.length === 0) return;
