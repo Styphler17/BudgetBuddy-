@@ -15,7 +15,7 @@ export function Header() {
           <span className="text-xl font-bold text-gray-900">BudgetBuddy</span>
         </Link>
 
-        {/* Main Navigation Links */}
+        {/* Main Navigation Links - Always visible */}
         <div className="hidden md:flex items-center space-x-8">
           <Link to="/" className="text-gray-600 hover:text-gray-900 transition-colors">
             Home
@@ -34,12 +34,26 @@ export function Header() {
         {/* Auth Buttons */}
         <div className="flex items-center space-x-4">
           {user ? (
-            <Button variant="ghost" onClick={() => {
-              localStorage.removeItem("user");
-              window.location.href = "/";
-            }}>
-              Sign Out
-            </Button>
+            <>
+              {/* Show nav links for logged in users too */}
+              <div className="hidden md:flex items-center space-x-8 mr-4">
+                <Link to="/app" className="text-gray-600 hover:text-gray-900 transition-colors">
+                  Dashboard
+                </Link>
+                <Link to="/app/transactions" className="text-gray-600 hover:text-gray-900 transition-colors">
+                  Transactions
+                </Link>
+                <Link to="/app/analytics" className="text-gray-600 hover:text-gray-900 transition-colors">
+                  Analytics
+                </Link>
+              </div>
+              <Button variant="ghost" onClick={() => {
+                localStorage.removeItem("user");
+                window.location.href = "/";
+              }}>
+                Sign Out
+              </Button>
+            </>
           ) : (
             <>
               <Link to="/login">
