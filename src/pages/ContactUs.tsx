@@ -79,8 +79,8 @@ export function ContactUs() {
       icon: Phone,
       title: "Phone Support",
       description: "Call us directly",
-      contact: "+1 (555) 123-4567",
-      action: "tel:+15551234567"
+      contact: "+32 467 81 47 42",
+      action: "tel:+32467814742"
     }
   ];
 
