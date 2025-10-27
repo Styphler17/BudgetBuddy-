@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Header } from "@/components/Header";
 import emailjs from '@emailjs/browser';
 import { useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -94,25 +95,7 @@ export function ContactUs() {
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-        {/* Header */}
-        <header className="container mx-auto px-4 py-6">
-          <nav className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">BudgetBuddy</span>
-            </Link>
-            <div className="flex items-center space-x-4">
-              <Link to="/login">
-                <Button variant="ghost">Sign In</Button>
-              </Link>
-              <Link to="/register">
-                <Button>Get Started</Button>
-              </Link>
-            </div>
-          </nav>
-        </header>
+        <Header />
 
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-20 text-center">
