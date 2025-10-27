@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { BackToTop } from "@/components/BackToTop";
 import {
   Search,
   Book,
@@ -84,25 +87,7 @@ export function HelpCenter() {
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-        {/* Header */}
-        <header className="container mx-auto px-4 py-6">
-          <nav className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">BudgetBuddy</span>
-            </Link>
-            <div className="flex items-center space-x-4">
-              <Link to="/login">
-                <Button variant="ghost">Sign In</Button>
-              </Link>
-              <Link to="/register">
-                <Button>Get Started</Button>
-              </Link>
-            </div>
-          </nav>
-        </header>
+        <Header />
 
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-20 text-center">
@@ -196,7 +181,7 @@ export function HelpCenter() {
               <p className="text-lg text-gray-600 mb-8">
                 Can't find what you're looking for? Our support team is here to help.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 gap-6 mb-8">
                 <Card className="text-center">
                   <CardContent className="p-6">
                     <Mail className="w-8 h-8 text-primary mx-auto mb-4" />
@@ -204,17 +189,6 @@ export function HelpCenter() {
                     <p className="text-gray-600 mb-4">Get help from our support team</p>
                     <Button variant="outline">
                       Send Email
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
-                <Card className="text-center">
-                  <CardContent className="p-6">
-                    <MessageCircle className="w-8 h-8 text-primary mx-auto mb-4" />
-                    <h3 className="font-semibold mb-2">Live Chat</h3>
-                    <p className="text-gray-600 mb-4">Chat with us in real-time</p>
-                    <Button variant="outline">
-                      Start Chat
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
                   </CardContent>
@@ -230,53 +204,8 @@ export function HelpCenter() {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-gray-900 text-gray-300 py-12">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-primary-foreground" />
-                  </div>
-                  <span className="text-xl font-bold text-white">BudgetBuddy</span>
-                </div>
-                <p className="text-gray-400">
-                  Smart budgeting made simple. Take control of your financial future.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-4">Product</h3>
-                <ul className="space-y-2">
-                  <li><Link to="/" className="hover:text-white transition-colors">Home</Link></li>
-                  <li><Link to="/help" className="hover:text-white transition-colors">Help Center</Link></li>
-                  <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-4">Support</h3>
-                <ul className="space-y-2">
-                  <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-4">Company</h3>
-                <ul className="space-y-2">
-                  <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                </ul>
-              </div>
-            </div>
-            <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-              <p className="text-gray-400">
-                © 2024 BudgetBuddy. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
+        <BackToTop />
       </div>
     </>
   );
