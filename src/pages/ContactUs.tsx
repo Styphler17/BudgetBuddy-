@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import emailjs from '@emailjs/browser';
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import {
   Mail,
@@ -17,13 +17,28 @@ import {
   Send,
   Loader2,
   CheckCircle,
-  TrendingUp
+  TrendingUp,
+  ArrowUp
 } from "lucide-react";
 
 export function ContactUs() {
   const { toast } = useToast();
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const form = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -344,6 +359,17 @@ export function ContactUs() {
             </div>
           </div>
         </footer>
+
+        {/* Back to Top Button */}
+        {showBackToTop && (
+          <Button
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 z-50 rounded-full w-12 h-12 p-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-primary hover:bg-primary/90"
+            size="icon"
+          >
+            <ArrowUp className="w-6 h-6" />
+          </Button>
+        )}
       </div>
     </>
   );
