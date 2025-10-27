@@ -12,7 +12,6 @@ import {
   Mail,
   MessageSquare,
   Phone,
-  MapPin,
   Clock,
   Send,
   Loader2,
@@ -84,18 +83,7 @@ export function ContactUs() {
     }
   ];
 
-  const offices = [
-    {
-      city: "New York",
-      address: "123 Finance Street, NY 10001",
-      phone: "+1 (555) 123-4567"
-    },
-    {
-      city: "San Francisco",
-      address: "456 Tech Boulevard, CA 94105",
-      phone: "+1 (555) 987-6543"
-    }
-  ];
+
 
   return (
     <>
@@ -170,7 +158,7 @@ export function ContactUs() {
         {/* Contact Form */}
         <section className="bg-white py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">
                   Send us a Message
@@ -180,150 +168,151 @@ export function ContactUs() {
                 </p>
               </div>
 
-              <Card>
-                <CardContent className="p-8">
-                  <form ref={form} onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {/* Contact Form */}
+                <Card>
+                  <CardContent className="p-8">
+                    <form ref={form} onSubmit={handleSubmit} className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <label htmlFor="firstName" className="block text-sm font-medium mb-2">
+                            First Name
+                          </label>
+                          <Input
+                            id="firstName"
+                            name="first_name"
+                            placeholder="John"
+                            required
+                            className="glass"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="lastName" className="block text-sm font-medium mb-2">
+                            Last Name
+                          </label>
+                          <Input
+                            id="lastName"
+                            name="last_name"
+                            placeholder="Doe"
+                            required
+                            className="glass"
+                          />
+                        </div>
+                      </div>
+
                       <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium mb-2">
-                          First Name
+                        <label htmlFor="email" className="block text-sm font-medium mb-2">
+                          Email
                         </label>
                         <Input
-                          id="firstName"
-                          name="first_name"
-                          placeholder="John"
+                          id="email"
+                          name="user_email"
+                          type="email"
+                          placeholder="john@example.com"
                           required
                           className="glass"
                         />
                       </div>
+
                       <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium mb-2">
-                          Last Name
+                        <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                          Subject
                         </label>
                         <Input
-                          id="lastName"
-                          name="last_name"
-                          placeholder="Doe"
+                          id="subject"
+                          name="subject"
+                          placeholder="How can we help you?"
                           required
                           className="glass"
                         />
                       </div>
-                    </div>
 
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2">
-                        Email
-                      </label>
-                      <Input
-                        id="email"
-                        name="user_email"
-                        type="email"
-                        placeholder="john@example.com"
-                        required
-                        className="glass"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                        Subject
-                      </label>
-                      <Input
-                        id="subject"
-                        name="subject"
-                        placeholder="How can we help you?"
-                        required
-                        className="glass"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium mb-2">
-                        Message
-                      </label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        placeholder="Tell us more about your question or issue..."
-                        rows={6}
-                        required
-                        className="glass resize-none"
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-6 rounded-xl text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2 h-5 w-5" />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Office Locations */}
-        <section className="py-20">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Our Offices
-              </h2>
-              <p className="text-lg text-gray-600">
-                Visit us at one of our locations.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {offices.map((office, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <MapPin className="w-6 h-6 text-primary mt-1" />
                       <div>
-                        <h3 className="font-semibold text-lg mb-2">{office.city}</h3>
-                        <p className="text-gray-600 mb-2">{office.address}</p>
-                        <p className="text-gray-600">{office.phone}</p>
+                        <label htmlFor="message" className="block text-sm font-medium mb-2">
+                          Message
+                        </label>
+                        <Textarea
+                          id="message"
+                          name="message"
+                          placeholder="Tell us more about your question or issue..."
+                          rows={6}
+                          required
+                          className="glass resize-none"
+                        />
                       </div>
-                    </div>
+
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-6 rounded-xl text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="mr-2 h-5 w-5" />
+                            Send Message
+                          </>
+                        )}
+                      </Button>
+                    </form>
                   </CardContent>
                 </Card>
-              ))}
+
+                {/* Business Hours */}
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-6 h-6 text-primary" />
+                        <CardTitle className="text-xl">Business Hours</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="font-medium">Monday - Friday:</span>
+                          <span>9:00 AM - 5:00 PM EST</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium">Saturday:</span>
+                          <span>10:00 AM - 2:00 PM EST</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium">Sunday:</span>
+                          <span>Closed</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-4">
+                        We typically respond to emails within 24 hours during business days.
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-6 h-6 text-green-600" />
+                        <CardTitle className="text-xl">Response Time</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">
+                        We aim to respond to all inquiries within 24 hours during business days.
+                        For urgent matters, please call us directly.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Business Hours */}
-        <section className="bg-gray-50 py-20">
-          <div className="container mx-auto px-4 text-center">
-            <div className="max-w-2xl mx-auto">
-              <Clock className="w-16 h-16 text-primary mx-auto mb-6" />
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Business Hours
-              </h2>
-              <div className="space-y-2 text-lg">
-                <p><strong>Monday - Friday:</strong> 9:00 AM - 5:00 PM EST</p>
-                <p><strong>Saturday:</strong> 10:00 AM - 2:00 PM EST</p>
-                <p><strong>Sunday:</strong> Closed</p>
-              </div>
-              <p className="text-gray-600 mt-6">
-                We typically respond to emails within 24 hours during business days.
-              </p>
-            </div>
-          </div>
-        </section>
+
 
         {/* Footer */}
         <footer className="bg-gray-900 text-gray-300 py-12">
