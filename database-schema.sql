@@ -1,0 +1,106 @@
+-- BudgetBuddy Database Schema
+-- Run this script in MySQL Workbench to create the database
+
+CREATE DATABASE IF NOT EXISTS budgetbuddy;
+USE budgetbuddy;
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  currency VARCHAR(10) DEFAULT 'USD',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Categories table
+CREATE TABLE IF NOT EXISTS categories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  emoji VARCHAR(10),
+  color VARCHAR(20) DEFAULT '#3b82f6',
+  budget DECIMAL(10,2) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_category_per_user (user_id, name)
+);
+
+-- Transactions table
+CREATE TABLE IF NOT EXISTS transactions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  category_id INT,
+  amount DECIMAL(10,2) NOT NULL,
+  description TEXT,
+  type ENUM('income', 'expense') NOT NULL,
+  date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+);
+
+-- Budgets table
+CREATE TABLE IF NOT EXISTS budgets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  period ENUM('daily', 'weekly', 'monthly', 'yearly') NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_budget_per_user_period (user_id, period, start_date)
+);
+
+-- Goals table
+CREATE TABLE IF NOT EXISTS goals (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  target_amount DECIMAL(10,2) NOT NULL,
+  current_amount DECIMAL(10,2) DEFAULT 0,
+  deadline DATE,
+  category_id INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+);
+
+-- Accounts table
+CREATE TABLE IF NOT EXISTS accounts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  type ENUM('checking', 'savings', 'credit', 'investment') NOT NULL,
+  balance DECIMAL(10,2) DEFAULT 0,
+  currency VARCHAR(10) DEFAULT 'USD',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Settings table
+CREATE TABLE IF NOT EXISTS user_settings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  setting_key VARCHAR(255) NOT NULL,
+  setting_value TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_setting_per_user (user_id, setting_key)
+);
+
+-- Sample data (optional - remove in production)
+-- INSERT INTO users (email, name, password_hash) VALUES ('demo@example.com', 'Demo User', '$2b$10$example.hash.here');
+
+-- Indexes for better performance
+CREATE INDEX idx_transactions_user_date ON transactions(user_id, date);
+CREATE INDEX idx_transactions_category ON transactions(category_id);
+CREATE INDEX idx_categories_user ON categories(user_id);
+CREATE INDEX idx_budgets_user_period ON budgets(user_id, period);
+CREATE INDEX idx_goals_user ON goals(user_id);
+CREATE INDEX idx_accounts_user ON accounts(user_id);
+CREATE INDEX idx_settings_user ON user_settings(user_id);
