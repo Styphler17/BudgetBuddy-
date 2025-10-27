@@ -17,6 +17,9 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { AdminLogin } from "./pages/AdminLogin";
 import { Landing } from "./pages/Landing";
+import { HelpCenter } from "./pages/HelpCenter";
+import { ContactUs } from "./pages/ContactUs";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +33,11 @@ const App = () => (
         <Routes>
           {/* Landing page for non-authenticated users */}
           <Route path="/" element={<Landing />} />
+
+          {/* Public pages */}
+          <Route path="/help" element={<HelpCenter />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
 
           {/* Auth routes - no dashboard layout */}
           <Route path="/login" element={<Login />} />
