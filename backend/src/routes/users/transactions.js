@@ -7,10 +7,38 @@ const router = express.Router({ mergeParams: true });
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const [rows] = await db.query(
-      "SELECT id, user_id, category_id, amount, description, type, date, created_at FROM transactions WHERE user_id = ? ORDER BY date DESC, created_at DESC",
-      [req.userId]
-    );
+    const { limit, categoryId } = req.query;
+    const params = [req.userId];
+    let sql = `
+      SELECT
+        t.id,
+        t.user_id,
+        t.category_id,
+        t.amount,
+        t.description,
+        t.type,
+        t.date,
+        t.created_at,
+        c.name AS category_name,
+        c.emoji AS category_emoji
+      FROM transactions t
+      LEFT JOIN categories c ON t.category_id = c.id
+      WHERE t.user_id = ?
+    `;
+
+    if (categoryId) {
+      sql += " AND t.category_id = ?";
+      params.push(Number(categoryId));
+    }
+
+    sql += " ORDER BY t.date DESC, t.created_at DESC";
+
+    if (limit) {
+      sql += " LIMIT ?";
+      params.push(Number(limit));
+    }
+
+    const [rows] = await db.query(sql, params);
     res.json(rows);
   })
 );
@@ -39,7 +67,22 @@ router.post(
     ]);
 
     const [rows] = await db.query(
-      "SELECT id, user_id, category_id, amount, description, type, date, created_at FROM transactions WHERE id = ?",
+      `
+        SELECT
+          t.id,
+          t.user_id,
+          t.category_id,
+          t.amount,
+          t.description,
+          t.type,
+          t.date,
+          t.created_at,
+          c.name AS category_name,
+          c.emoji AS category_emoji
+        FROM transactions t
+        LEFT JOIN categories c ON t.category_id = c.id
+        WHERE t.id = ?
+      `,
       [result.insertId]
     );
 
@@ -90,7 +133,22 @@ router.put(
     }
 
     const [rows] = await db.query(
-      "SELECT id, user_id, category_id, amount, description, type, date, created_at FROM transactions WHERE id = ?",
+      `
+        SELECT
+          t.id,
+          t.user_id,
+          t.category_id,
+          t.amount,
+          t.description,
+          t.type,
+          t.date,
+          t.created_at,
+          c.name AS category_name,
+          c.emoji AS category_emoji
+        FROM transactions t
+        LEFT JOIN categories c ON t.category_id = c.id
+        WHERE t.id = ?
+      `,
       [transactionId]
     );
 

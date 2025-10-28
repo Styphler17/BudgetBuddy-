@@ -8,7 +8,23 @@ router.get(
   "/",
   asyncHandler(async (req, res) => {
     const [rows] = await db.query(
-      "SELECT id, user_id, name, target_amount, current_amount, deadline, category_id, created_at FROM goals WHERE user_id = ? ORDER BY created_at DESC",
+      `
+        SELECT
+          g.id,
+          g.user_id,
+          g.name,
+          g.target_amount,
+          g.current_amount,
+          g.deadline,
+          g.category_id,
+          g.created_at,
+          c.name AS category_name,
+          c.emoji AS category_emoji
+        FROM goals g
+        LEFT JOIN categories c ON g.category_id = c.id
+        WHERE g.user_id = ?
+        ORDER BY g.created_at DESC
+      `,
       [req.userId]
     );
     res.json(rows);
@@ -39,7 +55,22 @@ router.post(
     ]);
 
     const [rows] = await db.query(
-      "SELECT id, user_id, name, target_amount, current_amount, deadline, category_id, created_at FROM goals WHERE id = ?",
+      `
+        SELECT
+          g.id,
+          g.user_id,
+          g.name,
+          g.target_amount,
+          g.current_amount,
+          g.deadline,
+          g.category_id,
+          g.created_at,
+          c.name AS category_name,
+          c.emoji AS category_emoji
+        FROM goals g
+        LEFT JOIN categories c ON g.category_id = c.id
+        WHERE g.id = ?
+      `,
       [result.insertId]
     );
     res.status(201).json(rows[0]);
@@ -89,7 +120,22 @@ router.put(
     }
 
     const [rows] = await db.query(
-      "SELECT id, user_id, name, target_amount, current_amount, deadline, category_id, created_at FROM goals WHERE id = ?",
+      `
+        SELECT
+          g.id,
+          g.user_id,
+          g.name,
+          g.target_amount,
+          g.current_amount,
+          g.deadline,
+          g.category_id,
+          g.created_at,
+          c.name AS category_name,
+          c.emoji AS category_emoji
+        FROM goals g
+        LEFT JOIN categories c ON g.category_id = c.id
+        WHERE g.id = ?
+      `,
       [goalId]
     );
     res.json(rows[0]);

@@ -757,6 +757,66 @@ const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]
 // import { query } from './database';
 const query = mockQuery;
 
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
+
+const buildQuery = (params: Record<string, string | number | undefined>) => {
+  const searchParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === "") return;
+    searchParams.append(key, String(value));
+  });
+  const qs = searchParams.toString();
+  return qs ? `?${qs}` : "";
+};
+
+async function apiRequest<T>(path: string, options: RequestInit = {}) {
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...(options.headers || {})
+  };
+
+  const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+
+  if (!response.ok) {
+    let message = response.statusText;
+    try {
+      const data = await response.json();
+      message = data?.message || message;
+    } catch {
+      // ignore JSON parse failure, fall back to status text
+    }
+    const error = new Error(message);
+    (error as Error & { status?: number }).status = response.status;
+    throw error;
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  return (await response.json()) as T;
+}
+
+const resolveUserId = (explicit?: number): number => {
+  if (explicit && Number.isFinite(explicit)) {
+    return explicit;
+  }
+  if (typeof window !== "undefined") {
+    try {
+      const stored = window.localStorage.getItem("user");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.id) {
+          return parsed.id;
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+  throw new Error("User context is not available");
+};
+
 const slugify = (value: string) =>
   value
     .toLowerCase()
@@ -1114,111 +1174,82 @@ export const blogAPI = {
 
 // User API
 export const userAPI = {
-  create: async (userData: { email: string; name: string; passwordHash: string }) => {
-    const sql = 'INSERT INTO users (email, name, password_hash) VALUES (?, ?, ?)';
-    const result = await query(sql, [userData.email, userData.name, userData.passwordHash]);
-    return result;
+  create: async (userData: { email: string; name: string; passwordHash: string; currency?: string }) => {
+    return apiRequest("/api/users", {
+      method: "POST",
+      body: JSON.stringify({
+        email: userData.email,
+        name: userData.name,
+        passwordHash: userData.passwordHash,
+        currency: userData.currency
+      })
+    });
   },
 
   findById: async (id: number): Promise<UserRecord | undefined> => {
-    const sql = 'SELECT * FROM users WHERE id = ?';
-    const result = await query(sql, [id]) as UserRecord[];
-    return result[0];
+    return apiRequest(`/api/users/${id}`);
   },
 
   findByEmail: async (email: string): Promise<UserRecord | undefined> => {
-    const sql = 'SELECT * FROM users WHERE email = ?';
-    const result = await query(sql, [email]) as UserRecord[];
-    return result[0];
+    return apiRequest(`/api/users/by-email${buildQuery({ email })}`);
   },
 
   update: async (id: number, userData: Partial<{ name: string; currency: string; first_name: string; last_name: string; email: string; password_hash: string }>) => {
-    const fields = [];
-    const values = [];
-
-    if (userData.name !== undefined) {
-      fields.push('name = ?');
-      values.push(userData.name);
-    }
-    if (userData.currency !== undefined) {
-      fields.push('currency = ?');
-      values.push(userData.currency);
-    }
-    if (userData.first_name !== undefined) {
-      fields.push('first_name = ?');
-      values.push(userData.first_name);
-    }
-    if (userData.last_name !== undefined) {
-      fields.push('last_name = ?');
-      values.push(userData.last_name);
-    }
-    if (userData.email !== undefined) {
-      fields.push('email = ?');
-      values.push(userData.email);
-    }
-    if (userData.password_hash !== undefined) {
-      fields.push('password_hash = ?');
-      values.push(userData.password_hash);
+    if (!Object.keys(userData).length) {
+      return;
     }
 
-    if (fields.length === 0) return;
-
-    const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
-    values.push(id);
-    return await query(sql, values);
+    return apiRequest(`/api/users/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(userData)
+    });
   }
 };
 
 // Category API
 export const categoryAPI = {
   create: async (categoryData: { userId: number; name: string; emoji?: string; budget: number }) => {
-    const sql = 'INSERT INTO categories (user_id, name, emoji, budget) VALUES (?, ?, ?, ?)';
-    const result = await query(sql, [categoryData.userId, categoryData.name, categoryData.emoji, categoryData.budget]);
-    return result;
+    return apiRequest(`/api/users/${categoryData.userId}/categories`, {
+      method: "POST",
+      body: JSON.stringify({
+        name: categoryData.name,
+        emoji: categoryData.emoji,
+        budget: categoryData.budget
+      })
+    });
   },
 
   findByUserId: async (userId: number) => {
-    const sql = 'SELECT * FROM categories WHERE user_id = ? ORDER BY created_at DESC';
-    return await query(sql, [userId]);
+    return apiRequest(`/api/users/${userId}/categories`);
   },
 
-  update: async (id: number, categoryData: Partial<{ name: string; emoji: string; budget: number }>) => {
-    const fields = [];
-    const values = [];
-
-    if (categoryData.name !== undefined) {
-      fields.push('name = ?');
-      values.push(categoryData.name);
-    }
-    if (categoryData.emoji !== undefined) {
-      fields.push('emoji = ?');
-      values.push(categoryData.emoji);
-    }
-    if (categoryData.budget !== undefined) {
-      fields.push('budget = ?');
-      values.push(categoryData.budget);
+  update: async (id: number, categoryData: Partial<{ name: string; emoji: string; budget: number }>, userId?: number) => {
+    const resolvedUserId = resolveUserId(userId);
+    if (!Object.keys(categoryData).length) {
+      return;
     }
 
-    if (fields.length === 0) return;
-
-    const sql = `UPDATE categories SET ${fields.join(', ')} WHERE id = ?`;
-    values.push(id);
-    return await query(sql, values);
+    return apiRequest(`/api/users/${resolvedUserId}/categories/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(categoryData)
+    });
   },
 
-  delete: async (id: number) => {
-    const sql = 'DELETE FROM categories WHERE id = ?';
-    return await query(sql, [id]);
+  delete: async (id: number, userId?: number) => {
+    const resolvedUserId = resolveUserId(userId);
+    return apiRequest(`/api/users/${resolvedUserId}/categories/${id}`, {
+      method: "DELETE"
+    });
   },
 
   getSpendingByCategory: async (userId: number, categoryId: number) => {
-    const sql = `
-      SELECT COALESCE(SUM(amount), 0) as spent
-      FROM transactions
-      WHERE user_id = ? AND category_id = ? AND type = 'expense'
-    `;
-    const result = await query(sql, [userId, categoryId]);
-    return result[0]?.spent || 0;
+    const data = await apiRequest(`/api/users/${userId}/transactions${buildQuery({ categoryId })}`);
+    if (Array.isArray(data)) {
+      return data
+        .filter((transaction) => transaction.type === "expense")
+        .reduce((sum, transaction) => sum + Number(transaction.amount ?? 0), 0);
+    }
+    return 0;
   }
 };
 
@@ -1229,74 +1260,53 @@ export const transactionAPI = {
     categoryId?: number;
     amount: number;
     description?: string;
-    type: 'income' | 'expense';
+    type: "income" | "expense";
     date: string;
   }) => {
-    const sql = 'INSERT INTO transactions (user_id, category_id, amount, description, type, date) VALUES (?, ?, ?, ?, ?, ?)';
-    const result = await query(sql, [
-      transactionData.userId,
-      transactionData.categoryId,
-      transactionData.amount,
-      transactionData.description,
-      transactionData.type,
-      transactionData.date
-    ]);
-    return result;
+    return apiRequest(`/api/users/${transactionData.userId}/transactions`, {
+      method: "POST",
+      body: JSON.stringify({
+        categoryId: transactionData.categoryId,
+        amount: transactionData.amount,
+        description: transactionData.description,
+        type: transactionData.type,
+        date: transactionData.date
+      })
+    });
   },
 
   findByUserId: async (userId: number, limit?: number) => {
-    let sql = 'SELECT t.*, c.name as category_name, c.emoji as category_emoji FROM transactions t LEFT JOIN categories c ON t.category_id = c.id WHERE t.user_id = ? ORDER BY t.date DESC, t.created_at DESC';
-    const params = [userId];
-
-    if (limit) {
-      sql += ' LIMIT ?';
-      params.push(limit);
-    }
-
-    return await query(sql, params);
+    const query = buildQuery({ limit });
+    return apiRequest(`/api/users/${userId}/transactions${query}`);
   },
 
-  update: async (id: number, transactionData: Partial<{
-    categoryId: number;
-    amount: number;
-    description: string;
-    type: 'income' | 'expense';
-    date: string;
-  }>) => {
-    const fields = [];
-    const values = [];
-
-    if (transactionData.categoryId !== undefined) {
-      fields.push('category_id = ?');
-      values.push(transactionData.categoryId);
-    }
-    if (transactionData.amount !== undefined) {
-      fields.push('amount = ?');
-      values.push(transactionData.amount);
-    }
-    if (transactionData.description !== undefined) {
-      fields.push('description = ?');
-      values.push(transactionData.description);
-    }
-    if (transactionData.type !== undefined) {
-      fields.push('type = ?');
-      values.push(transactionData.type);
-    }
-    if (transactionData.date !== undefined) {
-      fields.push('date = ?');
-      values.push(transactionData.date);
+  update: async (
+    id: number,
+    transactionData: Partial<{
+      categoryId: number;
+      amount: number;
+      description: string;
+      type: "income" | "expense";
+      date: string;
+    }>,
+    userId?: number
+  ) => {
+    const resolvedUserId = resolveUserId(userId);
+    if (!Object.keys(transactionData).length) {
+      return;
     }
 
-    if (fields.length === 0) return;
-
-    const sql = `UPDATE transactions SET ${fields.join(', ')} WHERE id = ?`;
-    values.push(id);
-    return await query(sql, values);
+    return apiRequest(`/api/users/${resolvedUserId}/transactions/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(transactionData)
+    });
   },
 
-  delete: async (id: number) => {
-    const sql = 'DELETE FROM transactions WHERE id = ?';
-    return await query(sql, [id]);
+  delete: async (id: number, userId?: number) => {
+    const resolvedUserId = resolveUserId(userId);
+    return apiRequest(`/api/users/${resolvedUserId}/transactions/${id}`, {
+      method: "DELETE"
+    });
   }
 };
 
@@ -1304,50 +1314,40 @@ export const transactionAPI = {
 export const budgetAPI = {
   create: async (budgetData: {
     userId: number;
-    period: 'daily' | 'weekly' | 'monthly' | 'yearly';
+    period: "daily" | "weekly" | "monthly" | "yearly";
     amount: number;
     startDate: string;
     endDate: string;
   }) => {
-    const sql = 'INSERT INTO budgets (user_id, period, amount, start_date, end_date) VALUES (?, ?, ?, ?, ?)';
-    const result = await query(sql, [
-      budgetData.userId,
-      budgetData.period,
-      budgetData.amount,
-      budgetData.startDate,
-      budgetData.endDate
-    ]);
-    return result;
+    return apiRequest(`/api/users/${budgetData.userId}/budgets`, {
+      method: "POST",
+      body: JSON.stringify({
+        period: budgetData.period,
+        amount: budgetData.amount,
+        startDate: budgetData.startDate,
+        endDate: budgetData.endDate
+      })
+    });
   },
 
   findByUserIdAndPeriod: async (userId: number, period: string) => {
-    const sql = 'SELECT * FROM budgets WHERE user_id = ? AND period = ? ORDER BY start_date DESC LIMIT 1';
-    const result = await query(sql, [userId, period]);
-    return result[0];
+    const rows = await apiRequest(`/api/users/${userId}/budgets${buildQuery({ period })}`);
+    if (Array.isArray(rows)) {
+      return rows[0];
+    }
+    return null;
   },
 
-  update: async (id: number, budgetData: Partial<{ amount: number; startDate: string; endDate: string }>) => {
-    const fields = [];
-    const values = [];
-
-    if (budgetData.amount !== undefined) {
-      fields.push('amount = ?');
-      values.push(budgetData.amount);
-    }
-    if (budgetData.startDate !== undefined) {
-      fields.push('start_date = ?');
-      values.push(budgetData.startDate);
-    }
-    if (budgetData.endDate !== undefined) {
-      fields.push('end_date = ?');
-      values.push(budgetData.endDate);
+  update: async (id: number, budgetData: Partial<{ amount: number; startDate: string; endDate: string }>, userId?: number) => {
+    const resolvedUserId = resolveUserId(userId);
+    if (!Object.keys(budgetData).length) {
+      return;
     }
 
-    if (fields.length === 0) return;
-
-    const sql = `UPDATE budgets SET ${fields.join(', ')} WHERE id = ?`;
-    values.push(id);
-    return await query(sql, values);
+    return apiRequest(`/api/users/${resolvedUserId}/budgets/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(budgetData)
+    });
   }
 };
 
@@ -1361,64 +1361,49 @@ export const goalAPI = {
     deadline?: string;
     categoryId?: number;
   }) => {
-    const sql = 'INSERT INTO goals (user_id, name, target_amount, current_amount, deadline, category_id) VALUES (?, ?, ?, ?, ?, ?)';
-    const result = await query(sql, [
-      goalData.userId,
-      goalData.name,
-      goalData.targetAmount,
-      goalData.currentAmount || 0,
-      goalData.deadline,
-      goalData.categoryId
-    ]);
-    return result;
+    return apiRequest(`/api/users/${goalData.userId}/goals`, {
+      method: "POST",
+      body: JSON.stringify({
+        name: goalData.name,
+        targetAmount: goalData.targetAmount,
+        currentAmount: goalData.currentAmount,
+        deadline: goalData.deadline,
+        categoryId: goalData.categoryId
+      })
+    });
   },
 
   findByUserId: async (userId: number) => {
-    const sql = 'SELECT g.*, c.name as category_name, c.emoji as category_emoji FROM goals g LEFT JOIN categories c ON g.category_id = c.id WHERE g.user_id = ? ORDER BY g.created_at DESC';
-    return await query(sql, [userId]);
+    return apiRequest(`/api/users/${userId}/goals`);
   },
 
-  update: async (id: number, goalData: Partial<{
-    name: string;
-    targetAmount: number;
-    currentAmount: number;
-    deadline: string;
-    categoryId: number;
-  }>) => {
-    const fields = [];
-    const values = [];
-
-    if (goalData.name !== undefined) {
-      fields.push('name = ?');
-      values.push(goalData.name);
-    }
-    if (goalData.targetAmount !== undefined) {
-      fields.push('target_amount = ?');
-      values.push(goalData.targetAmount);
-    }
-    if (goalData.currentAmount !== undefined) {
-      fields.push('current_amount = ?');
-      values.push(goalData.currentAmount);
-    }
-    if (goalData.deadline !== undefined) {
-      fields.push('deadline = ?');
-      values.push(goalData.deadline);
-    }
-    if (goalData.categoryId !== undefined) {
-      fields.push('category_id = ?');
-      values.push(goalData.categoryId);
+  update: async (
+    id: number,
+    goalData: Partial<{
+      name: string;
+      targetAmount: number;
+      currentAmount: number;
+      deadline: string;
+      categoryId: number;
+    }>,
+    userId?: number
+  ) => {
+    const resolvedUserId = resolveUserId(userId);
+    if (!Object.keys(goalData).length) {
+      return;
     }
 
-    if (fields.length === 0) return;
-
-    const sql = `UPDATE goals SET ${fields.join(', ')} WHERE id = ?`;
-    values.push(id);
-    return await query(sql, values);
+    return apiRequest(`/api/users/${resolvedUserId}/goals/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(goalData)
+    });
   },
 
-  delete: async (id: number) => {
-    const sql = 'DELETE FROM goals WHERE id = ?';
-    return await query(sql, [id]);
+  delete: async (id: number, userId?: number) => {
+    const resolvedUserId = resolveUserId(userId);
+    return apiRequest(`/api/users/${resolvedUserId}/goals/${id}`, {
+      method: "DELETE"
+    });
   }
 };
 
@@ -1427,89 +1412,77 @@ export const accountAPI = {
   create: async (accountData: {
     userId: number;
     name: string;
-    type: 'checking' | 'savings' | 'credit' | 'investment';
+    type: "checking" | "savings" | "credit" | "investment";
     balance?: number;
     currency?: string;
   }) => {
-    const sql = 'INSERT INTO accounts (user_id, name, type, balance, currency) VALUES (?, ?, ?, ?, ?)';
-    const result = await query(sql, [
-      accountData.userId,
-      accountData.name,
-      accountData.type,
-      accountData.balance || 0,
-      accountData.currency || 'USD'
-    ]);
-    return result;
+    return apiRequest(`/api/users/${accountData.userId}/accounts`, {
+      method: "POST",
+      body: JSON.stringify({
+        name: accountData.name,
+        type: accountData.type,
+        balance: accountData.balance,
+        currency: accountData.currency
+      })
+    });
   },
 
   findByUserId: async (userId: number) => {
-    const sql = 'SELECT * FROM accounts WHERE user_id = ? ORDER BY created_at DESC';
-    return await query(sql, [userId]);
+    return apiRequest(`/api/users/${userId}/accounts`);
   },
 
-  update: async (id: number, accountData: Partial<{
-    name: string;
-    type: 'checking' | 'savings' | 'credit' | 'investment';
-    balance: number;
-    currency: string;
-  }>) => {
-    const fields = [];
-    const values = [];
-
-    if (accountData.name !== undefined) {
-      fields.push('name = ?');
-      values.push(accountData.name);
-    }
-    if (accountData.type !== undefined) {
-      fields.push('type = ?');
-      values.push(accountData.type);
-    }
-    if (accountData.balance !== undefined) {
-      fields.push('balance = ?');
-      values.push(accountData.balance);
-    }
-    if (accountData.currency !== undefined) {
-      fields.push('currency = ?');
-      values.push(accountData.currency);
+  update: async (
+    id: number,
+    accountData: Partial<{
+      name: string;
+      type: "checking" | "savings" | "credit" | "investment";
+      balance: number;
+      currency: string;
+    }>,
+    userId?: number
+  ) => {
+    const resolvedUserId = resolveUserId(userId);
+    if (!Object.keys(accountData).length) {
+      return;
     }
 
-    if (fields.length === 0) return;
-
-    const sql = `UPDATE accounts SET ${fields.join(', ')} WHERE id = ?`;
-    values.push(id);
-    return await query(sql, values);
+    return apiRequest(`/api/users/${resolvedUserId}/accounts/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(accountData)
+    });
   },
 
-  delete: async (id: number) => {
-    const sql = 'DELETE FROM accounts WHERE id = ?';
-    return await query(sql, [id]);
+  delete: async (id: number, userId?: number) => {
+    const resolvedUserId = resolveUserId(userId);
+    return apiRequest(`/api/users/${resolvedUserId}/accounts/${id}`, {
+      method: "DELETE"
+    });
   }
 };
 
 // Settings API
 export const settingsAPI = {
   get: async (userId: number, key: string) => {
-    const sql = 'SELECT setting_value FROM user_settings WHERE user_id = ? AND setting_key = ?';
-    const result = await query(sql, [userId, key]);
-    return result[0]?.setting_value;
+    const settings = await settingsAPI.getAll(userId);
+    return settings?.[key];
   },
 
-  set: async (userId: number, key: string, value: string) => {
-    const sql = `
-      INSERT INTO user_settings (user_id, setting_key, setting_value)
-      VALUES (?, ?, ?)
-      ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)
-    `;
-    return await query(sql, [userId, key, value]);
+  set: async (userId: number, key: string, value: string | boolean) => {
+    return apiRequest(`/api/users/${userId}/settings/${key}`, {
+      method: "PUT",
+      body: JSON.stringify({ value })
+    });
   },
 
   getAll: async (userId: number) => {
-    const sql = 'SELECT setting_key, setting_value FROM user_settings WHERE user_id = ?';
-    const result = await query(sql, [userId]) as RowDataPacket[];
-    return result.reduce((acc: Record<string, string>, row: RowDataPacket & { setting_key: string; setting_value: string }) => {
-      acc[row.setting_key] = row.setting_value;
-      return acc;
-    }, {});
+    return apiRequest(`/api/users/${userId}/settings`);
+  },
+
+  setMany: async (userId: number, values: Record<string, string | boolean>) => {
+    return apiRequest(`/api/users/${userId}/settings`, {
+      method: "PUT",
+      body: JSON.stringify(values)
+    });
   }
 };
 

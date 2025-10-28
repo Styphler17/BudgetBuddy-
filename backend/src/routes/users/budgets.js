@@ -7,10 +7,23 @@ const router = express.Router({ mergeParams: true });
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const [rows] = await db.query(
-      "SELECT id, user_id, period, amount, start_date, end_date, created_at FROM budgets WHERE user_id = ? ORDER BY created_at DESC",
-      [req.userId]
-    );
+    const { period } = req.query;
+    const params = [req.userId];
+    let sql =
+      "SELECT id, user_id, period, amount, start_date, end_date, created_at FROM budgets WHERE user_id = ?";
+
+    if (period) {
+      sql += " AND period = ?";
+      params.push(period);
+    }
+
+    sql += " ORDER BY start_date DESC, created_at DESC";
+
+    if (period) {
+      sql += " LIMIT 1";
+    }
+
+    const [rows] = await db.query(sql, params);
     res.json(rows);
   })
 );
