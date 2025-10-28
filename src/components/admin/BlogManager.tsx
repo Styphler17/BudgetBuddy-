@@ -828,93 +828,154 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
                 </div>
               </div>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Reading</TableHead>
-                    <TableHead>Updated</TableHead>
-                    <TableHead>Tags</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <>
+                <div className="grid gap-4 p-4 md:hidden">
                   {posts.map((post) => (
-                    <TableRow key={post.id}>
-                      <TableCell>
-                        <div className="flex flex-col">
-                          <span className="font-medium">{post.title}</span>
+                    <div key={post.id} className="rounded-lg border bg-muted/40 p-4 space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="space-y-1">
+                          <p className="font-semibold text-foreground">{post.title}</p>
                           {post.excerpt && (
-                            <span className="text-sm text-muted-foreground line-clamp-1">
-                              {post.excerpt}
-                            </span>
+                            <p className="text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
                           )}
+                          <p className="text-xs text-muted-foreground">
+                            ID: {post.id} • Author #{post.authorId}
+                          </p>
                         </div>
-                      </TableCell>
-                      <TableCell>
                         <Badge variant={statusBadgeVariant[post.status]}>{post.status}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{post.readingTime || 1} min</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm text-muted-foreground">
-                          {formatDate(post.updatedAt || post.publishedAt)}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
-                          {post.tags.length === 0 ? (
-                            <span className="text-xs text-muted-foreground">—</span>
-                          ) : (
-                            post.tags.map((tag) => (
-                              <Badge key={tag} variant="outline" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))
-                          )}
+                      </div>
+                      <div className="grid gap-2 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{post.readingTime || 1} min read</Badge>
+                          <span>{formatDate(post.updatedAt || post.publishedAt)}</span>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
-                          {post.status === "published" && (
-                            <Button
-                              asChild
-                              size="icon"
-                              variant="ghost"
-                              className="h-8 w-8"
-                              title="View live post"
-                            >
-                              <Link to={`/blog/${post.slug}`} target="_blank" rel="noreferrer">
-                                <Eye className="h-4 w-4" />
-                              </Link>
-                            </Button>
-                          )}
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-8 w-8"
-                            onClick={() => handleEditPost(post.id)}
-                            title="Edit post"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-8 w-8 text-destructive hover:text-destructive"
-                            onClick={() => setDeleteTarget(post)}
-                            title="Delete post"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        <div>
+                          <p className="font-medium text-foreground">Tags</p>
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {post.tags.length === 0 ? (
+                              <span className="text-xs text-muted-foreground">None</span>
+                            ) : (
+                              post.tags.map((tag) => (
+                                <Badge key={tag} variant="outline" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))
+                            )}
+                          </div>
                         </div>
-                      </TableCell>
-                    </TableRow>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {post.status === "published" && (
+                          <Button asChild variant="secondary" className="flex-1">
+                            <Link to={`/blog/${post.slug}`} target="_blank" rel="noreferrer">
+                              View live
+                            </Link>
+                          </Button>
+                        )}
+                        <Button className="flex-1" variant="outline" onClick={() => handleEditPost(post.id)}>
+                          Edit
+                        </Button>
+                        <Button
+                          className="flex-1"
+                          variant="destructive"
+                          onClick={() => setDeleteTarget(post)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
                   ))}
-                </TableBody>
-              </Table>
+                </div>
+                <div className="hidden md:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Reading</TableHead>
+                        <TableHead>Updated</TableHead>
+                        <TableHead>Tags</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {posts.map((post) => (
+                        <TableRow key={post.id}>
+                          <TableCell>
+                            <div className="flex flex-col">
+                              <span className="font-medium">{post.title}</span>
+                              {post.excerpt && (
+                                <span className="text-sm text-muted-foreground line-clamp-1">
+                                  {post.excerpt}
+                                </span>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant={statusBadgeVariant[post.status]}>{post.status}</Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline">{post.readingTime || 1} min</Badge>
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-sm text-muted-foreground">
+                              {formatDate(post.updatedAt || post.publishedAt)}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex flex-wrap gap-1">
+                              {post.tags.length === 0 ? (
+                                <span className="text-xs text-muted-foreground">-</span>
+                              ) : (
+                                post.tags.map((tag) => (
+                                  <Badge key={tag} variant="outline" className="text-xs">
+                                    {tag}
+                                  </Badge>
+                                ))
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex justify-end gap-1">
+                              {post.status === "published" && (
+                                <Button
+                                  asChild
+                                  size="icon"
+                                  variant="ghost"
+                                  className="h-8 w-8"
+                                  title="View live post"
+                                >
+                                  <Link to={`/blog/${post.slug}`} target="_blank" rel="noreferrer">
+                                    <Eye className="h-4 w-4" />
+                                  </Link>
+                                </Button>
+                              )}
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8"
+                                onClick={() => handleEditPost(post.id)}
+                                title="Edit post"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-destructive hover:text-destructive"
+                                onClick={() => setDeleteTarget(post)}
+                                title="Delete post"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </>
             )}
           </div>
         </CardContent>
