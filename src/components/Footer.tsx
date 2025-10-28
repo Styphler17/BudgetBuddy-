@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { TrendingUp } from "lucide-react";
+import logo from "@/assets/BudgetBuddy.png";
 
 export function Footer() {
   return (
@@ -7,10 +7,8 @@ export function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-primary-foreground" />
-              </div>
+            <div className="flex items-center space-x-3 mb-4">
+              <img src={logo} alt="BudgetBuddy" className="h-10 w-10 rounded-lg object-cover" />
               <span className="text-xl font-bold text-white">BudgetBuddy</span>
             </div>
             <p className="text-gray-400">

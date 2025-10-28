@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/BudgetBuddy.png";
 
 export function Header() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
@@ -15,12 +16,10 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
       <div className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="text-xl font-bold text-gray-900">BudgetBuddy</span>
-        </Link>
+          <Link to="/" className="flex items-center space-x-3">
+            <img src={logo} alt="BudgetBuddy" className="h-10 w-10 rounded-lg object-cover" />
+            <span className="text-xl font-bold text-gray-900">BudgetBuddy</span>
+          </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">

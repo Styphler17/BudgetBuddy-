@@ -1,6 +1,6 @@
 import { LayoutDashboard, TrendingUp, Wallet, Settings, FileText, PieChart, Bell, LogOut, User } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
-import budgetBuddyLogo from "@/assets/budget-buddy-logo.webp";
+import budgetBuddyLogo from "@/assets/BudgetBuddy.png";
 import { useToast } from "@/hooks/use-toast";
 import {
   Sidebar,
