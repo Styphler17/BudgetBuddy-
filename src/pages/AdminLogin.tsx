@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Mail, Lock, Shield } from "lucide-react";
 import { adminAPI } from "@/lib/api";
+import storageService from "@/lib/storage";
 import { useToast } from "@/hooks/use-toast";
 
 export function AdminLogin() {
@@ -50,7 +51,7 @@ export function AdminLogin() {
       await adminAPI.updateLastLogin(admin.id);
 
       // Store admin session
-      localStorage.setItem("admin", JSON.stringify({
+      storageService.setItem("admin", JSON.stringify({
         id: admin.id,
         email: admin.email,
         name: admin.name,

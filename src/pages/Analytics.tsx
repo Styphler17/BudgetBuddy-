@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { transactionAPI, categoryAPI } from "@/lib/api";
+import storageService from "@/lib/storage";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -57,7 +58,7 @@ export default function Analytics({ period }: AnalyticsProps) {
   // Fetch live data from database
   useEffect(() => {
     const fetchAnalyticsData = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const user = JSON.parse(storageService.getItem("user") || "null");
       if (!user) return;
 
       try {

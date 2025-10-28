@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { User, Bell, Shield, Coins, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { settingsAPI, userAPI } from "@/lib/api";
+import storageService from "@/lib/storage";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -70,7 +71,7 @@ export default function Settings({ period }: SettingsProps) {
   // Fetch user data and settings on mount
   useEffect(() => {
     const fetchUserData = async () => {
-      const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+      const currentUser = JSON.parse(storageService.getItem("user") || "null");
       if (!currentUser) return;
 
       try {
@@ -79,7 +80,7 @@ export default function Settings({ period }: SettingsProps) {
         try {
           userData = await userAPI.findById(currentUser.id) as DatabaseUser;
         } catch (error) {
-          console.error('Database fetch failed, using localStorage:', error);
+          console.error("Database fetch failed, using cached user data:", error);
         }
 
         // If no database data, fall back to localStorage
@@ -112,7 +113,7 @@ export default function Settings({ period }: SettingsProps) {
 
         // Get user settings from localStorage, backend, or create defaults
         const userSettingsKey = `settings_${currentUser.id}`;
-        const storedSettings = localStorage.getItem(userSettingsKey);
+        const storedSettings = storageService.getItem(userSettingsKey);
         const timestamp = new Date().toISOString();
         const defaultSettings: DatabaseSettings = {
           id: Date.now(),
@@ -153,7 +154,7 @@ export default function Settings({ period }: SettingsProps) {
           console.error("Failed to fetch user settings from server:", error);
         }
 
-        localStorage.setItem(userSettingsKey, JSON.stringify(userSettings));
+        storageService.setItem(userSettingsKey, JSON.stringify(userSettings));
 
         setUser(finalUserData);
         setSettings(userSettings);

@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { accountAPI } from "@/lib/api";
+import storageService from "@/lib/storage";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -65,7 +66,7 @@ export default function Accounts({ period }: AccountsProps) {
   // Fetch live data from database
   useEffect(() => {
     const fetchAccountsData = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const user = JSON.parse(storageService.getItem("user") || "null");
       if (!user) return;
 
       try {
@@ -103,7 +104,7 @@ export default function Accounts({ period }: AccountsProps) {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to add accounts");
       return;
@@ -162,7 +163,7 @@ export default function Accounts({ period }: AccountsProps) {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to update accounts");
       return;
@@ -202,7 +203,7 @@ export default function Accounts({ period }: AccountsProps) {
   };
 
   const handleDeleteAccount = async (accountId: string) => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to delete accounts");
       return;

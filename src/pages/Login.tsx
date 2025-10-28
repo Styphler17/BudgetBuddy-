@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/BudgetBuddy.png";
 import pattern from "@/assets/login-pattern.svg";
 import { Header } from "@/components/Header";
+import storageService from "@/lib/storage";
 
 export function Login() {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ export function Login() {
       }
 
       // Store user session (in a real app, use JWT or session management)
-      localStorage.setItem("user", JSON.stringify({
+      storageService.setItem("user", JSON.stringify({
         id: user.id,
         email: user.email,
         name: user.name,

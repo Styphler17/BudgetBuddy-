@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LogOut, Menu, UserPlus } from "lucide-react";
 import { BackToTop } from "@/components/BackToTop";
+import storageService from "@/lib/storage";
 
 export function AdminProfile() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export function AdminProfile() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const storedAdmin = localStorage.getItem("admin");
+    const storedAdmin = storageService.getItem("admin");
     if (!storedAdmin) {
       navigate("/admin-login");
       return;
@@ -53,13 +54,13 @@ export function AdminProfile() {
   }, [navigate]);
 
   const resetAdminProfileForm = () => {
-    const storedAdmin = JSON.parse(localStorage.getItem("admin") || "null");
+    const storedAdmin = JSON.parse(storageService.getItem("admin") || "null");
     setAdminProfileName(storedAdmin?.name || "");
     setAdminProfileEmail(storedAdmin?.email || "");
   };
 
   const handleAdminProfileSave = async () => {
-    const storedAdmin = JSON.parse(localStorage.getItem("admin") || "null");
+    const storedAdmin = JSON.parse(storageService.getItem("admin") || "null");
     if (!storedAdmin) return;
 
     const trimmedName = adminProfileName.trim();
@@ -94,7 +95,7 @@ export function AdminProfile() {
         name: trimmedName,
         email: trimmedEmail
       };
-      localStorage.setItem("admin", JSON.stringify(updatedAdmin));
+      storageService.setItem("admin", JSON.stringify(updatedAdmin));
       setAdminProfileName(trimmedName);
       setAdminProfileEmail(trimmedEmail);
       setIsEditingAdminProfile(false);
@@ -114,7 +115,7 @@ export function AdminProfile() {
   };
 
   const handleAdminPasswordSave = async () => {
-    const storedAdmin = JSON.parse(localStorage.getItem("admin") || "null");
+    const storedAdmin = JSON.parse(storageService.getItem("admin") || "null");
     if (!storedAdmin) return;
 
     const trimmedPassword = adminPassword.trim();
@@ -156,7 +157,7 @@ export function AdminProfile() {
         ...storedAdmin,
         password_hash: trimmedPassword
       };
-      localStorage.setItem("admin", JSON.stringify(updatedAdmin));
+      storageService.setItem("admin", JSON.stringify(updatedAdmin));
 
       toast({
         title: "Password updated",
@@ -202,7 +203,7 @@ export function AdminProfile() {
   };
 
   const handleAdminLogout = () => {
-    localStorage.removeItem("admin");
+    storageService.removeItem("admin");
     toast({
       title: "Admin logged out",
       description: "You have been successfully logged out from admin panel."

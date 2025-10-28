@@ -1,3 +1,5 @@
+import storageService from "./storage";
+
 type RowDataPacket = Record<string, unknown>;
 
 // Mock data storage
@@ -801,18 +803,16 @@ const resolveUserId = (explicit?: number): number => {
   if (explicit && Number.isFinite(explicit)) {
     return explicit;
   }
-  if (typeof window !== "undefined") {
-    try {
-      const stored = window.localStorage.getItem("user");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed?.id) {
-          return parsed.id;
-        }
+  try {
+    const stored = storageService.getItem("user");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed?.id) {
+        return parsed.id;
       }
-    } catch {
-      // ignore
     }
+  } catch {
+    // ignore
   }
   throw new Error("User context is not available");
 };

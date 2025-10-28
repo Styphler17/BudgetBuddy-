@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Bell, CheckCircle, AlertCircle, Info, Target, FileText, TrendingUp } from "lucide-react";
 import { transactionAPI, goalAPI, categoryAPI } from "@/lib/api";
+import storageService from "@/lib/storage";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -90,7 +91,7 @@ export default function Notifications({ period }: NotificationsProps) {
   // Fetch live data from database every 5 seconds
   useEffect(() => {
     const fetchData = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const user = JSON.parse(storageService.getItem("user") || "null");
       if (!user) return;
 
       try {

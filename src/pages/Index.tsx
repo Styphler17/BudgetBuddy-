@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { exportToCSV } from "@/utils/exportData";
 import { transactionAPI, categoryAPI } from "@/lib/api";
+import storageService from "@/lib/storage";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -47,7 +48,7 @@ const Index = ({ period }: IndexProps) => {
   // Fetch live data from database based on logged in user
   useEffect(() => {
     const fetchDashboardData = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const user = JSON.parse(storageService.getItem("user") || "null");
       if (!user) return;
 
       try {
@@ -155,9 +156,9 @@ const Index = ({ period }: IndexProps) => {
 
     setCategories(prev => [...prev, newCategory]);
     // Store categories in localStorage
-    const stored = localStorage.getItem('budgetbuddy-categories');
+    const stored = storageService.getItem("budgetbuddy-categories");
     const existing = stored ? JSON.parse(stored) : [];
-    localStorage.setItem('budgetbuddy-categories', JSON.stringify([...existing, newCategory]));
+    storageService.setItem("budgetbuddy-categories", JSON.stringify([...existing, newCategory]));
 
     toast.success("Category added successfully!");
     setCategoryDialogOpen(false);

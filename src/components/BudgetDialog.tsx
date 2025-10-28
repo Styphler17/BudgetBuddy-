@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { toast } from "sonner";
+import storageService from "@/lib/storage";
 
 interface BudgetDialogProps {
   trigger: React.ReactNode;
@@ -20,8 +21,7 @@ export const BudgetDialog = ({ trigger, onSave }: BudgetDialogProps) => {
       toast.error("Please enter a valid amount");
       return;
     }
-    // Store budget in localStorage for analytics
-    localStorage.setItem('budgetbuddy-budget', numAmount.toString());
+    storageService.setItem("budgetbuddy-budget", numAmount.toString());
     onSave?.(numAmount);
     toast.success(`Budget set to $${numAmount.toFixed(2)}`);
     setOpen(false);

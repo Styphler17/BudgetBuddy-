@@ -4,9 +4,10 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/BudgetBuddy.png";
+import storageService from "@/lib/storage";
 
 export function Header() {
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const user = JSON.parse(storageService.getItem("user") || "null");
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -100,10 +101,10 @@ export function Header() {
           {user ? (
             <Button
               variant="ghost"
-              onClick={() => {
-                localStorage.removeItem("user");
-                window.location.href = "/";
-              }}
+                onClick={() => {
+                  storageService.removeItem("user");
+                  window.location.href = "/";
+                }}
             >
               Sign Out
             </Button>

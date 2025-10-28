@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { User, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import storageService from "@/lib/storage";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -16,10 +17,10 @@ export const TopBar = ({ onPeriodChange }: TopBarProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const user = JSON.parse(storageService.getItem("user") || "null");
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    storageService.removeItem("user");
     toast({
       title: "Logged out",
       description: "You have been successfully logged out."

@@ -2,6 +2,7 @@ import { LayoutDashboard, TrendingUp, Wallet, Settings, FileText, PieChart, Bell
 import { NavLink, useNavigate } from "react-router-dom";
 import budgetBuddyLogo from "@/assets/BudgetBuddy.png";
 import { useToast } from "@/hooks/use-toast";
+import storageService from "@/lib/storage";
 import {
   Sidebar,
   SidebarContent,
@@ -32,7 +33,7 @@ export function AppSidebar() {
   const { toast } = useToast();
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    storageService.removeItem("user");
     toast({
       title: "Logged out",
       description: "You have been successfully logged out."
@@ -40,7 +41,7 @@ export function AppSidebar() {
     navigate("/");
   };
 
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const user = JSON.parse(storageService.getItem("user") || "null");
 
   return (
     <Sidebar collapsible="icon">

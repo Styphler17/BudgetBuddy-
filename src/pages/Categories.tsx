@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Plus, Edit, Trash2, TrendingUp, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
 import { categoryAPI, transactionAPI } from "@/lib/api";
+import storageService from "@/lib/storage";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -61,7 +62,7 @@ export default function Categories({ period }: CategoriesProps) {
   // Fetch live data from database
   useEffect(() => {
     const fetchCategoriesData = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const user = JSON.parse(storageService.getItem("user") || "null");
       if (!user) return;
 
       try {
@@ -109,7 +110,7 @@ export default function Categories({ period }: CategoriesProps) {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to add categories");
       return;
@@ -176,7 +177,7 @@ export default function Categories({ period }: CategoriesProps) {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to update categories");
       return;
@@ -232,7 +233,7 @@ export default function Categories({ period }: CategoriesProps) {
   const confirmDelete = async () => {
     if (!deletingCategory) return;
 
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to delete categories");
       return;

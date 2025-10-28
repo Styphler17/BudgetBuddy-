@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { goalAPI, categoryAPI } from "@/lib/api";
+import storageService from "@/lib/storage";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -62,7 +63,7 @@ export default function Goals({ period }: GoalsProps) {
   // Fetch live data from database
   useEffect(() => {
     const fetchGoalsData = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const user = JSON.parse(storageService.getItem("user") || "null");
       if (!user) return;
 
       try {
@@ -106,7 +107,7 @@ export default function Goals({ period }: GoalsProps) {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to add goals");
       return;
@@ -182,7 +183,7 @@ export default function Goals({ period }: GoalsProps) {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+      const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to update goals");
       return;
@@ -223,7 +224,7 @@ export default function Goals({ period }: GoalsProps) {
   };
 
   const handleDeleteGoal = async (goalId: string) => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to delete goals");
       return;
@@ -252,7 +253,7 @@ export default function Goals({ period }: GoalsProps) {
   };
 
   const handleMarkComplete = async (goalId: string) => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to update goals");
       return;

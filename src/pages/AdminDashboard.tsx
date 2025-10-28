@@ -18,6 +18,7 @@ import { AdminLayout } from "@/layouts/AdminLayout";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { BackToTop } from "@/components/BackToTop";
+import storageService from "@/lib/storage";
 
 interface Admin {
   id: number;
@@ -73,7 +74,7 @@ export function AdminDashboard() {
 
   // Check if admin is logged in
   useEffect(() => {
-    const admin = localStorage.getItem("admin");
+    const admin = storageService.getItem("admin");
     if (!admin) {
       navigate("/admin-login");
       return;
@@ -103,7 +104,7 @@ export function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    const storedAdmin = JSON.parse(localStorage.getItem("admin") || "null");
+    const storedAdmin = JSON.parse(storageService.getItem("admin") || "null");
     if (storedAdmin) {
       setAdminProfileName(storedAdmin.name || "");
       setAdminProfileEmail(storedAdmin.email || "");
@@ -224,7 +225,7 @@ export function AdminDashboard() {
   }
 
   const handleAdminLogout = () => {
-    localStorage.removeItem("admin");
+    storageService.removeItem("admin");
     toast({
       title: "Admin logged out",
       description: "You have been successfully logged out from admin panel."
@@ -237,7 +238,7 @@ export function AdminDashboard() {
     window.location.reload();
   };
 
-  const admin = JSON.parse(localStorage.getItem("admin") || "null");
+  const admin = JSON.parse(storageService.getItem("admin") || "null");
 
   const navItems = [
     { value: "overview", label: "Overview", icon: BarChart3 },
