@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import type { BlogPostDetail } from "@/lib/api";
+import type { BlogPostDetail } from "@/lib/blogApi";
 
 interface BlogArticleHeroProps {
   post: BlogPostDetail;

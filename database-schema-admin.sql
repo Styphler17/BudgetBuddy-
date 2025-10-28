@@ -1,8 +1,8 @@
 -- BudgetBuddy Database Schema with Admin Tables
 -- Run this script in phpMyAdmin (XAMPP) to create the database
 
-CREATE DATABASE IF NOT EXISTS budgetbuddy;
-USE budgetbuddy;
+CREATE DATABASE IF NOT EXISTS u509059322_budgetbuddy202;
+USE u509059322_budgetbuddy202;
 
 -- Admins table
 CREATE TABLE IF NOT EXISTS admins (
@@ -163,9 +163,6 @@ CREATE TABLE IF NOT EXISTS blog_posts (
   published_at TIMESTAMP NULL,
   FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE CASCADE
 );
-
--- Sample data (optional - remove in production)
--- INSERT INTO admins (email, name, password_hash, role) VALUES ('admin@budgetbuddy.com', 'Super Admin', '$2b$10$example.hash.here', 'super_admin');
 
 -- Indexes for better performance
 CREATE INDEX idx_transactions_user_date ON transactions(user_id, date);

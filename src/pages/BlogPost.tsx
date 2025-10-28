@@ -10,7 +10,7 @@ import { Loader2, ArrowLeft } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
-import { blogAPI, type BlogPostDetail, type BlogPostSummary } from "@/lib/api";
+import { blogAPI, type BlogPostDetail, type BlogPostSummary } from "@/lib/blogApi";
 import { useToast } from "@/hooks/use-toast";
 import { ROUTE_PATHS } from "@/config/site";
 

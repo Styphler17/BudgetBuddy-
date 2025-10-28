@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { Seo } from "@/components/Seo";
 import { BlogCard } from "@/components/blog/BlogCard";
-import { blogAPI, type BlogPostSummary } from "@/lib/api";
+import { blogAPI, type BlogPostSummary } from "@/lib/blogApi";
 import { ROUTE_PATHS, DEFAULT_SEO_KEYWORDS } from "@/config/site";
 import {
   TrendingUp,

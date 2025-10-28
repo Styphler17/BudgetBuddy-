@@ -1,5 +1,5 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import type { BlogContentBlock } from "@/lib/api";
+import type { BlogContentBlock } from "@/lib/blogApi";
 import { cn } from "@/lib/utils";
 
 interface BlogContentRendererProps {

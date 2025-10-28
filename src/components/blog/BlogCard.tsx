@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import type { BlogPostSummary } from "@/lib/api";
+import type { BlogPostSummary } from "@/lib/blogApi";
 
 interface BlogCardProps {
   post: BlogPostSummary;

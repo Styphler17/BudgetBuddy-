@@ -1,4 +1,4 @@
-import type { RowDataPacket } from 'mysql2/promise';
+type RowDataPacket = Record<string, unknown>;
 
 // Mock data storage
 const mockUsers: Record<string, unknown>[] = [];
@@ -134,86 +134,9 @@ const mockBlogPosts: BlogPostRecord[] = [];
 let mockBlogAutoIncrement = 1;
 
 const seedMockBlogPosts = () => {
-  if (mockBlogPosts.length > 0) return;
-
-  const now = new Date();
-  const sampleContent = (title: string) => JSON.stringify([
-    { type: 'heading', level: 2, text: title },
-    {
-      type: 'paragraph',
-      text: 'Discover practical strategies to make the most out of your income. This guide walks through actionable budgeting tactics, proven savings frameworks, and smart tools inside BudgetBuddy that keep your goals on track.'
-    },
-    {
-      type: 'image',
-      url: 'https://images.unsplash.com/photo-1454165205744-3b78555e5572?auto=format&fit=crop&w=1200&q=80',
-      alt: 'Person reviewing financial documents with a laptop',
-      caption: 'BudgetBuddy keeps your financial plans organised in one command centre.'
-    },
-    {
-      type: 'list',
-      items: [
-        'Start with a realistic baseline budget that reflects your lifestyle',
-        'Automate your bill payments and transfers to savings',
-        'Use category caps and alerts to prevent overspending',
-        'Review monthly analytics to spot trends early'
-      ]
-    },
-    {
-      type: 'paragraph',
-      text: 'Ready to go deeper? Inside the BudgetBuddy app you can simulate different saving scenarios, collaborate with partners, and plug in future goals to see their long-term impact.'
-    },
-    {
-      type: 'embed',
-      url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      caption: 'Watch a quick rundown of creating a goal-driven budget.'
-    }
-  ] satisfies BlogContentBlock[]);
-
-  const posts = [
-    {
-      id: mockBlogAutoIncrement++,
-      admin_id: 1,
-      title: 'Mastering Zero-Based Budgeting with BudgetBuddy',
-      slug: 'mastering-zero-based-budgeting',
-      excerpt: 'Learn how to give every dollar a job using BudgetBuddy’s automation and analytics.',
-      cover_image_url: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1200&q=80',
-      cover_image_alt: 'Notebook and calculator representing financial planning',
-      status: 'published' as BlogPostStatus,
-      content: sampleContent('Zero-Based Budgeting Essentials'),
-      tags: 'budgeting,automation,planning',
-      meta_title: 'Master Zero-Based Budgeting | BudgetBuddy Blog',
-      meta_description: 'Step-by-step instructions to adopt zero-based budgeting and stay on top of your finances with BudgetBuddy.',
-      meta_keywords: 'budgeting, zero-based budget, automation',
-      reading_time: 6,
-      feature_embed_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      created_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7).toISOString(),
-      updated_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 5).toISOString(),
-      published_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7).toISOString()
-    },
-    {
-      id: mockBlogAutoIncrement++,
-      admin_id: 1,
-      title: 'Build Momentum with Micro-Savings Goals',
-      slug: 'build-momentum-with-micro-savings',
-      excerpt: 'Break your goals into achievable milestones that keep motivation high.',
-      cover_image_url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
-      cover_image_alt: 'Person placing coins in a jar to save money',
-      status: 'published' as BlogPostStatus,
-      content: sampleContent('Micro-Savings Strategies that Work'),
-      tags: 'savings,goals,motivation',
-      meta_title: 'Savings Momentum with Micro Goals | BudgetBuddy Blog',
-      meta_description: 'Use BudgetBuddy micro goals to stay motivated and celebrate progress faster.',
-      meta_keywords: 'savings goals, micro-savings, money motivation',
-      reading_time: 5,
-      feature_embed_url: null,
-      created_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 20).toISOString(),
-      updated_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 2).toISOString(),
-      published_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 14).toISOString()
-    }
-  ] satisfies BlogPostRecord[];
-
-  mockBlogPosts.push(...posts);
+  // Real data is served by the backend; no mock seeding required.
 };
+
 
 seedDefaultAdminAccount();
 

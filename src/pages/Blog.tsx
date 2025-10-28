@@ -8,7 +8,7 @@ import { Loader2, Search } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
-import { blogAPI, type BlogPostSummary } from "@/lib/api";
+import { blogAPI, type BlogPostSummary } from "@/lib/blogApi";
 import { ROUTE_PATHS } from "@/config/site";
 import { useToast } from "@/hooks/use-toast";
 
