@@ -510,75 +510,143 @@ export function AdminDashboard() {
                 <CardTitle>User Management</CardTitle>
                 <CardDescription>Manage registered users and their account status</CardDescription>
               </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Currency</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Verified</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {users.map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell>{user.name}</TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>{user.currency}</TableCell>
-                        <TableCell>
-                          <Badge variant={user.is_active ? "default" : "secondary"}>
-                            {user.is_active ? "Active" : "Inactive"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
+              <CardContent className="space-y-6">
+                <div className="grid gap-4 md:hidden">
+                  {users.map((user) => (
+                    <div key={user.id} className="rounded-lg border bg-muted/40 p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-foreground">{user.name}</p>
+                          <p className="text-sm text-muted-foreground">{user.email}</p>
+                        </div>
+                        <Badge variant={user.is_active ? "default" : "secondary"}>
+                          {user.is_active ? "Active" : "Inactive"}
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                        <div>
+                          <p className="font-medium text-foreground">Currency</p>
+                          <p>{user.currency}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground">Verified</p>
                           <Badge variant={user.email_verified ? "default" : "outline"}>
                             {user.email_verified ? "Verified" : "Unverified"}
                           </Badge>
-                        </TableCell>
-                        <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                setEditingUser(user);
-                                setShowEditUser(true);
-                              }}
-                            >
-                              <Edit className="h-4 w-4" />
+                        </div>
+                        <div className="col-span-2">
+                          <p className="font-medium text-foreground">Joined</p>
+                          <p>{new Date(user.created_at).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          className="flex-1"
+                          variant="secondary"
+                          onClick={() => {
+                            setEditingUser(user);
+                            setShowEditUser(true);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button className="flex-1" variant="outline">
+                              Delete
                             </Button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                  <Trash2 className="h-4 w-4" />
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete User</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete {user.name}? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDeleteUser(user.id)}>
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="hidden md:block">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Currency</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Verified</TableHead>
+                          <TableHead>Created</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {users.map((user) => (
+                          <TableRow key={user.id}>
+                            <TableCell>{user.name}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>{user.currency}</TableCell>
+                            <TableCell>
+                              <Badge variant={user.is_active ? "default" : "secondary"}>
+                                {user.is_active ? "Active" : "Inactive"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={user.email_verified ? "default" : "outline"}>
+                                {user.email_verified ? "Verified" : "Unverified"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                              <div className="flex space-x-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    setEditingUser(user);
+                                    setShowEditUser(true);
+                                  }}
+                                >
+                                  <Edit className="h-4 w-4" />
                                 </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete User</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete {user.name}? This action cannot be undone.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={() => handleDeleteUser(user.id)}>
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button variant="outline" size="sm">
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Delete User</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        Are you sure you want to delete {user.name}? This action cannot be undone.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => handleDeleteUser(user.id)}>
+                                        Delete
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -592,39 +660,72 @@ export function AdminDashboard() {
                 <CardTitle>Admin Management</CardTitle>
                 <CardDescription>Manage system administrators and their permissions</CardDescription>
               </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Last Login</TableHead>
-                      <TableHead>Created</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {admins.map((admin) => (
-                      <TableRow key={admin.id}>
-                        <TableCell>{admin.name}</TableCell>
-                        <TableCell>{admin.email}</TableCell>
-                        <TableCell>
+              <CardContent className="space-y-6">
+                <div className="grid gap-4 md:hidden">
+                  {admins.map((admin) => (
+                    <div key={admin.id} className="rounded-lg border bg-muted/40 p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-foreground">{admin.name}</p>
+                          <p className="text-sm text-muted-foreground">{admin.email}</p>
+                        </div>
+                        <Badge variant={admin.is_active ? "default" : "secondary"}>
+                          {admin.is_active ? "Active" : "Inactive"}
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                        <div>
+                          <p className="font-medium text-foreground">Role</p>
                           <Badge variant="outline">{admin.role}</Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={admin.is_active ? "default" : "secondary"}>
-                            {admin.is_active ? "Active" : "Inactive"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          {admin.last_login ? new Date(admin.last_login).toLocaleDateString() : "Never"}
-                        </TableCell>
-                        <TableCell>{new Date(admin.created_at).toLocaleDateString()}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground">Last login</p>
+                          <p>{admin.last_login ? new Date(admin.last_login).toLocaleDateString() : "Never"}</p>
+                        </div>
+                        <div className="col-span-2">
+                          <p className="font-medium text-foreground">Joined</p>
+                          <p>{new Date(admin.created_at).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="hidden md:block">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Role</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Last Login</TableHead>
+                          <TableHead>Created</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {admins.map((admin) => (
+                          <TableRow key={admin.id}>
+                            <TableCell>{admin.name}</TableCell>
+                            <TableCell>{admin.email}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline">{admin.role}</Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={admin.is_active ? "default" : "secondary"}>
+                                {admin.is_active ? "Active" : "Inactive"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              {admin.last_login ? new Date(admin.last_login).toLocaleDateString() : "Never"}
+                            </TableCell>
+                            <TableCell>{new Date(admin.created_at).toLocaleDateString()}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -645,31 +746,59 @@ export function AdminDashboard() {
                 <CardTitle>Activity Logs</CardTitle>
                 <CardDescription>View system activity and admin actions</CardDescription>
               </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Admin</TableHead>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Target</TableHead>
-                      <TableHead>Details</TableHead>
-                      <TableHead>Timestamp</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {logs.map((log) => (
-                      <TableRow key={log.id}>
-                        <TableCell>{log.admin_name}</TableCell>
-                        <TableCell>{log.action}</TableCell>
-                        <TableCell>
+              <CardContent className="space-y-6">
+                <div className="grid gap-4 md:hidden">
+                  {logs.map((log) => (
+                    <div key={log.id} className="rounded-lg border bg-muted/40 p-4 space-y-2 text-sm">
+                      <div className="flex items-center justify-between">
+                        <p className="font-medium text-foreground">{log.admin_name}</p>
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(log.created_at).toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="grid gap-1">
+                        <p>
+                          <span className="font-medium text-foreground">Action:</span> {log.action}
+                        </p>
+                        <p>
+                          <span className="font-medium text-foreground">Target:</span>{" "}
                           {log.target_type} {log.target_id ? `#${log.target_id}` : ""}
-                        </TableCell>
-                        <TableCell className="max-w-xs truncate">{log.details || "-"}</TableCell>
-                        <TableCell>{new Date(log.created_at).toLocaleString()}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                        </p>
+                        <p className="text-muted-foreground">
+                          {log.details || "No additional details recorded."}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="hidden md:block">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Admin</TableHead>
+                          <TableHead>Action</TableHead>
+                          <TableHead>Target</TableHead>
+                          <TableHead>Details</TableHead>
+                          <TableHead>Timestamp</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {logs.map((log) => (
+                          <TableRow key={log.id}>
+                            <TableCell>{log.admin_name}</TableCell>
+                            <TableCell>{log.action}</TableCell>
+                            <TableCell>
+                              {log.target_type} {log.target_id ? `#${log.target_id}` : ""}
+                            </TableCell>
+                            <TableCell className="max-w-xs truncate">{log.details || "-"}</TableCell>
+                            <TableCell>{new Date(log.created_at).toLocaleString()}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
