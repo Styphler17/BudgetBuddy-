@@ -14,10 +14,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-2">
         <nav className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-3">
-            <img src={logo} alt="BudgetBuddy" className="h-10 w-10 rounded-lg object-cover" />
+            <img src={logo} alt="BudgetBuddy" className="h-14 w-14 rounded-lg object-cover" />
             <span className="text-xl font-bold text-gray-900">BudgetBuddy</span>
           </Link>
 
