@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LogOut, Menu, UserPlus } from "lucide-react";
+import { BackToTop } from "@/components/BackToTop";
 
 export function AdminProfile() {
   const navigate = useNavigate();
@@ -522,6 +523,7 @@ export function AdminProfile() {
             </CardContent>
           </Card>
         </div>
+        <BackToTop />
       </div>
     </AdminLayout>
   );

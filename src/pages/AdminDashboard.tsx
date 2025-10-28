@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { BackToTop } from "@/components/BackToTop";
 
 interface Admin {
   id: number;
@@ -833,6 +834,7 @@ export function AdminDashboard() {
 
           <div>{renderContent()}</div>
 
+          <BackToTop />
         </div>
       </AdminLayout>
 
