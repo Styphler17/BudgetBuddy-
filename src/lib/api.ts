@@ -77,6 +77,7 @@ export interface BlogPostSummary {
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  authorId: number;
 }
 
 export interface BlogPostDetail extends BlogPostSummary {
@@ -897,7 +898,8 @@ const mapRecordToSummary = (record: BlogPostRecord): BlogPostSummary => ({
   readingTime: record.reading_time,
   publishedAt: record.published_at,
   createdAt: record.created_at,
-  updatedAt: record.updated_at
+  updatedAt: record.updated_at,
+  authorId: record.admin_id
 });
 
 const mapRecordToDetail = (record: BlogPostRecord): BlogPostDetail => {
