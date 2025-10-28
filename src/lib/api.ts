@@ -12,6 +12,17 @@ const mockUserSettings: Record<string, unknown>[] = [];
 const mockAdminLogs: Record<string, unknown>[] = [];
 const mockSystemSettings: Record<string, unknown>[] = [];
 
+export interface UserRecord {
+  id: number;
+  email: string;
+  name: string;
+  password_hash: string;
+  username?: string | null;
+  currency?: string;
+  first_name?: string | null;
+  last_name?: string | null;
+}
+
 const seedDefaultAdminAccount = () => {
   if (mockAdmins.some(admin => admin.email === 'temp.admin@budgetbuddy.com')) {
     return;
@@ -1109,15 +1120,15 @@ export const userAPI = {
     return result;
   },
 
-  findById: async (id: number) => {
+  findById: async (id: number): Promise<UserRecord | undefined> => {
     const sql = 'SELECT * FROM users WHERE id = ?';
-    const result = await query(sql, [id]);
+    const result = await query(sql, [id]) as UserRecord[];
     return result[0];
   },
 
-  findByEmail: async (email: string) => {
+  findByEmail: async (email: string): Promise<UserRecord | undefined> => {
     const sql = 'SELECT * FROM users WHERE email = ?';
-    const result = await query(sql, [email]);
+    const result = await query(sql, [email]) as UserRecord[];
     return result[0];
   },
 

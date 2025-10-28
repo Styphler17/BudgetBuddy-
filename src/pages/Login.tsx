@@ -10,6 +10,7 @@ import { userAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/BudgetBuddy.png";
 import pattern from "@/assets/login-pattern.svg";
+import { Header } from "@/components/Header";
 
 export function Login() {
   const [formData, setFormData] = useState({
@@ -74,6 +75,9 @@ export function Login() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950">
+      <div className="relative z-20">
+        <Header />
+      </div>
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-teal-900 via-slate-950 to-emerald-950" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.35),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(34,197,94,0.3),transparent_60%)]" />
@@ -85,7 +89,7 @@ export function Login() {
         <div className="absolute -right-16 -top-16 h-80 w-80 rounded-full bg-sky-400/25 blur-[140px]" />
       </div>
 
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12 pt-24 lg:pt-28">
         <div className="grid w-full max-w-6xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16">
           <div className="flex flex-col justify-center space-y-10 text-center text-slate-100 lg:text-left">
             <div className="flex flex-col items-center gap-6 lg:items-start">
@@ -115,11 +119,6 @@ export function Login() {
 
           <Card className="w-full border-white/20 bg-white/10 shadow-[0_30px_60px_rgba(8,47,73,0.45)] backdrop-blur-2xl">
             <CardHeader className="flex flex-col items-center space-y-4 text-center text-slate-100">
-              <img
-                src={logo}
-                alt="BudgetBuddy logo"
-                className="h-16 w-16 rounded-2xl object-cover shadow-[0_18px_45px_rgba(16,185,129,0.45)]"
-              />
               <CardTitle className="text-2xl font-semibold">Welcome Back</CardTitle>
               <CardDescription className="text-slate-200/80">
                 Sign in to your BudgetBuddy account
