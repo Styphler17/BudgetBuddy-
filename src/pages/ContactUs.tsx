@@ -11,6 +11,7 @@ import { BackToTop } from "@/components/BackToTop";
 import emailjs from '@emailjs/browser';
 import { useRef, useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { ROUTE_PATHS } from "@/config/site";
 import {
   Mail,
   MessageSquare,
@@ -108,7 +109,7 @@ export function ContactUs() {
       <Seo
         title="Contact BudgetBuddy Support"
         description="Get in touch with the BudgetBuddy team for customer support, media inquiries, or partnership opportunities."
-        canonical={typeof window !== "undefined" ? `${window.location.origin}/contact` : undefined}
+        path={ROUTE_PATHS.contact}
         keywords={[
           "contact BudgetBuddy",
           "budget app support",

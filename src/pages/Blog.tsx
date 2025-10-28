@@ -9,16 +9,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { blogAPI, type BlogPostSummary } from "@/lib/api";
+import { ROUTE_PATHS } from "@/config/site";
 import { useToast } from "@/hooks/use-toast";
 
 const BLOG_PAGE_TITLE = "BudgetBuddy Blog | Money Moves That Matter";
 const BLOG_PAGE_DESCRIPTION =
   "Actionable budgeting tactics, savings playbooks, and product tips written by the BudgetBuddy team to help you master your money.";
-
-const getCanonical = (path: string) => {
-  if (typeof window === "undefined") return undefined;
-  return `${window.location.origin}${path}`;
-};
 
 const extractTags = (posts: BlogPostSummary[]) => {
   const tagSet = new Set<string>();
@@ -92,7 +88,7 @@ const Blog = () => {
       <Seo
         title={BLOG_PAGE_TITLE}
         description={BLOG_PAGE_DESCRIPTION}
-        canonical={getCanonical("/blog")}
+        path={ROUTE_PATHS.blog}
         keywords={[
           "budgeting tips",
           "money management",

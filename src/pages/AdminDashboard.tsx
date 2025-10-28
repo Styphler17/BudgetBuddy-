@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,13 +11,13 @@ import { BlogManager } from "@/components/admin/BlogManager";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Users, Shield, Activity, Settings, UserPlus, Edit, Trash2, Eye, BarChart3 } from "lucide-react";
+import { Users, Shield, Activity, Settings, UserPlus, Edit, Trash2, BarChart3 } from "lucide-react";
 import { adminAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 interface Admin {
   id: number;
@@ -93,13 +93,10 @@ export function AdminDashboard() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [showEditUser, setShowEditUser] = useState(false);
 
-  // Admin profile state
-  const [isEditingAdminProfile, setIsEditingAdminProfile] = useState(false);
+  // Admin profile state (display only)
   const [adminProfileName, setAdminProfileName] = useState("");
   const [adminProfileEmail, setAdminProfileEmail] = useState("");
-  const [isEditingAdminPassword, setIsEditingAdminPassword] = useState(false);
-  const [adminPassword, setAdminPassword] = useState("");
-  const [adminPasswordConfirm, setAdminPasswordConfirm] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -136,130 +133,6 @@ export function AdminDashboard() {
       });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const resetAdminProfileForm = () => {
-    const storedAdmin = JSON.parse(localStorage.getItem("admin") || "null");
-    setAdminProfileName(storedAdmin?.name || "");
-    setAdminProfileEmail(storedAdmin?.email || "");
-  };
-
-  const handleAdminProfileSave = async () => {
-    const storedAdmin = JSON.parse(localStorage.getItem("admin") || "null");
-    if (!storedAdmin) return;
-
-    const trimmedName = adminProfileName.trim();
-    const trimmedEmail = adminProfileEmail.trim();
-
-    if (!trimmedName) {
-      toast({
-        title: "Display name required",
-        description: "Please enter a display name.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!trimmedEmail) {
-      toast({
-        title: "Email required",
-        description: "Please enter an email address.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      await adminAPI.update(storedAdmin.id, {
-        name: trimmedName,
-        email: trimmedEmail
-      });
-
-      const updatedAdmin = {
-        ...storedAdmin,
-        name: trimmedName,
-        email: trimmedEmail
-      };
-      localStorage.setItem("admin", JSON.stringify(updatedAdmin));
-      setAdminProfileName(trimmedName);
-      setAdminProfileEmail(trimmedEmail);
-
-      toast({
-        title: "Profile updated",
-        description: "Your admin details have been saved."
-      });
-      setIsEditingAdminProfile(false);
-      loadData();
-    } catch (error) {
-      console.error("Error updating admin profile:", error);
-      toast({
-        title: "Update failed",
-        description: "Could not update admin profile.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleAdminPasswordSave = async () => {
-    const storedAdmin = JSON.parse(localStorage.getItem("admin") || "null");
-    if (!storedAdmin) return;
-
-    const trimmedPassword = adminPassword.trim();
-    const trimmedConfirm = adminPasswordConfirm.trim();
-
-    if (!trimmedPassword) {
-      toast({
-        title: "New password required",
-        description: "Please enter a new password.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (trimmedPassword.length < 8) {
-      toast({
-        title: "Password too short",
-        description: "Use at least 8 characters for your admin password.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (trimmedPassword !== trimmedConfirm) {
-      toast({
-        title: "Passwords do not match",
-        description: "Make sure the confirmation matches the new password.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      await adminAPI.update(storedAdmin.id, {
-        passwordHash: trimmedPassword
-      });
-
-      const updatedAdmin = {
-        ...storedAdmin,
-        password_hash: trimmedPassword
-      };
-      localStorage.setItem("admin", JSON.stringify(updatedAdmin));
-
-      toast({
-        title: "Password updated",
-        description: "Your admin password has been updated."
-      });
-      setIsEditingAdminPassword(false);
-      setAdminPassword("");
-      setAdminPasswordConfirm("");
-    } catch (error) {
-      console.error("Error updating admin password:", error);
-      toast({
-        title: "Update failed",
-        description: "Could not update admin password.",
-        variant: "destructive"
-      });
     }
   };
 
@@ -403,15 +276,69 @@ export function AdminDashboard() {
 
   const topbarContent = (
     <div className="flex flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Admin Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Manage users, admins, and system settings</p>
+      <div className="flex items-center justify-between gap-3 md:justify-start">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">Admin Dashboard</h1>
+          <p className="text-sm text-muted-foreground">Manage users, admins, and system settings</p>
+        </div>
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="md:hidden">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Open admin actions</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+            <SheetHeader>
+              <SheetTitle>Admin controls</SheetTitle>
+            </SheetHeader>
+            <div className="mt-6 space-y-4">
+              <div className="rounded-lg border bg-muted/40 p-4 text-sm">
+                <p className="font-medium text-foreground">{adminProfileName || admin?.name || "Admin"}</p>
+                <p className="text-muted-foreground">{adminProfileEmail || admin?.email || "temp.admin@budgetbuddy.com"}</p>
+              </div>
+              <Button asChild variant="outline" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link to="/">Back to site</Link>
+              </Button>
+              <Button asChild className="w-full" variant="secondary" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link to="/admin/profile">Profile settings</Link>
+              </Button>
+              <Button
+                className="w-full gap-2"
+                onClick={() => {
+                  setShowCreateAdmin(true);
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                <UserPlus className="h-4 w-4" />
+                Add Admin
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleAdminLogout();
+                }}
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="hidden flex-wrap items-center gap-2 md:flex">
         <div className="text-left text-xs text-muted-foreground md:text-sm">
           <p className="font-medium text-foreground">{adminProfileName || admin?.name || "Admin"}</p>
           <p>{adminProfileEmail || admin?.email || "temp.admin@budgetbuddy.com"}</p>
         </div>
+        <Button asChild variant="outline" size="sm">
+          <Link to="/">Back to site</Link>
+        </Button>
+        <Button asChild variant="secondary" size="sm">
+          <Link to="/admin/profile">Profile settings</Link>
+        </Button>
         <Dialog open={showCreateAdmin} onOpenChange={setShowCreateAdmin}>
           <DialogTrigger asChild>
             <Button size="sm" className="gap-2">
@@ -507,140 +434,6 @@ export function AdminDashboard() {
             </Select>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>My Admin Profile</CardTitle>
-                <CardDescription>Update the details used across the dashboard.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {isEditingAdminProfile ? (
-                  <>
-                    <div className="space-y-2">
-                      <Label htmlFor="admin-profile-name">Display Name</Label>
-                      <Input
-                        id="admin-profile-name"
-                        value={adminProfileName}
-                        onChange={(e) => setAdminProfileName(e.target.value)}
-                        placeholder="e.g. Temporary Admin"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="admin-profile-email">Email</Label>
-                      <Input
-                        id="admin-profile-email"
-                        type="email"
-                        value={adminProfileEmail}
-                        onChange={(e) => setAdminProfileEmail(e.target.value)}
-                        placeholder="admin@example.com"
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" onClick={handleAdminProfileSave}>
-                        Save
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          resetAdminProfileForm();
-                          setIsEditingAdminProfile(false);
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="space-y-1">
-                      <Label>Display Name</Label>
-                      <p className="text-sm text-muted-foreground">{adminProfileName || "Not set"}</p>
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Email</Label>
-                      <p className="text-sm text-muted-foreground">{adminProfileEmail || "Not set"}</p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsEditingAdminProfile(true)}
-                      className="w-full md:w-auto"
-                    >
-                      Edit Profile
-                    </Button>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Login &amp; Security</CardTitle>
-                <CardDescription>Change your admin password whenever you need.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {isEditingAdminPassword ? (
-                  <>
-                    <div className="space-y-2">
-                      <Label htmlFor="admin-new-password">New Password</Label>
-                      <Input
-                        id="admin-new-password"
-                        type="password"
-                        value={adminPassword}
-                        onChange={(e) => setAdminPassword(e.target.value)}
-                        placeholder="Enter new password"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="admin-confirm-password">Confirm Password</Label>
-                      <Input
-                        id="admin-confirm-password"
-                        type="password"
-                        value={adminPasswordConfirm}
-                        onChange={(e) => setAdminPasswordConfirm(e.target.value)}
-                        placeholder="Re-enter new password"
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" onClick={handleAdminPasswordSave}>
-                        Update Password
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setIsEditingAdminPassword(false);
-                          setAdminPassword("");
-                          setAdminPasswordConfirm("");
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-sm text-muted-foreground">
-                      Use a strong, unique password to protect sensitive admin tools.
-                    </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setIsEditingAdminPassword(true);
-                        setAdminPassword("");
-                        setAdminPasswordConfirm("");
-                      }}
-                      className="w-full md:w-auto"
-                    >
-                      Update Password
-                    </Button>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          </div>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="hidden gap-2 md:grid md:grid-cols-5 md:w-full">
               {navItems.map((item) => (

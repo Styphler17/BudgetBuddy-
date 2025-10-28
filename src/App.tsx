@@ -14,6 +14,7 @@ import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import Categories from "./pages/Categories";
 import { AdminDashboard } from "./pages/AdminDashboard";
+import { AdminProfile } from "./pages/AdminProfile";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { AdminLogin } from "./pages/AdminLogin";
@@ -52,6 +53,7 @@ const App = () => (
 
           {/* Admin routes - no dashboard layout */}
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/profile" element={<AdminProfile />} />
 
           {/* Protected app routes - with dashboard layout */}
           <Route path="/app/*" element={

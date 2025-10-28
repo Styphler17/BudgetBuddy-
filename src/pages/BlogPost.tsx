@@ -12,11 +12,7 @@ import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { blogAPI, type BlogPostDetail, type BlogPostSummary } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
-
-const getCanonical = (slug: string) => {
-  if (typeof window === "undefined") return undefined;
-  return `${window.location.origin}/blog/${slug}`;
-};
+import { ROUTE_PATHS } from "@/config/site";
 
 const extractYouTubeId = (url: string) => {
   try {
@@ -133,7 +129,7 @@ const BlogPost = () => {
       <Seo
         title={seoTitle}
         description={seoDescription}
-        canonical={slug ? getCanonical(slug) : undefined}
+        path={slug ? `${ROUTE_PATHS.blog}/${slug}` : undefined}
         keywords={keywords}
         image={post?.coverImageUrl ?? undefined}
         type="article"

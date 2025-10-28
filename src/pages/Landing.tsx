@@ -8,6 +8,7 @@ import { BackToTop } from "@/components/BackToTop";
 import { Seo } from "@/components/Seo";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { blogAPI, type BlogPostSummary } from "@/lib/api";
+import { ROUTE_PATHS, DEFAULT_SEO_KEYWORDS } from "@/config/site";
 import {
   TrendingUp,
   Shield,
@@ -90,19 +91,19 @@ export function Landing() {
 
   const testimonials = [
     {
-      name: "Sarah Johnson",
+      name: "Anonymous",
       role: "Small Business Owner",
       content: "BudgetBuddy has transformed how I manage my business finances. The analytics are incredible!",
       rating: 5
     },
     {
-      name: "Mike Chen",
+      name: "Anonymous",
       role: "Freelancer",
       content: "Finally, a budgeting app that understands freelancers. The goal tracking is a game-changer.",
       rating: 5
     },
     {
-      name: "Emily Davis",
+      name: "Anonymous",
       role: "Student",
       content: "Simple, intuitive, and helps me stay on top of my student loans and expenses.",
       rating: 5
@@ -114,14 +115,8 @@ export function Landing() {
       <Seo
         title="BudgetBuddy | Smart Budgeting & Personal Finance Platform"
         description="Track spending, crush savings goals, and manage every account in one command center. BudgetBuddy puts real-time insights and automation in your pocket."
-        canonical={typeof window !== "undefined" ? `${window.location.origin}/` : undefined}
-        keywords={[
-          "budgeting app",
-          "personal finance",
-          "expense tracking",
-          "savings goals",
-          "BudgetBuddy"
-        ]}
+        path={ROUTE_PATHS.home}
+        keywords={DEFAULT_SEO_KEYWORDS}
       />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <Header />

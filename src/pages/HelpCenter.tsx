@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { Seo } from "@/components/Seo";
+import { ROUTE_PATHS } from "@/config/site";
 import {
   Search,
   Book,
@@ -83,7 +84,7 @@ export function HelpCenter() {
       <Seo
         title="BudgetBuddy Help Center"
         description="Get help with BudgetBuddy. Browse tutorials, FAQs, and financial guidance to make the most of your budgeting workspace."
-        canonical={typeof window !== "undefined" ? `${window.location.origin}/help` : undefined}
+        path={ROUTE_PATHS.help}
         keywords={[
           "BudgetBuddy help",
           "budgeting tutorials",

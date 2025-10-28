@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { Seo } from "@/components/Seo";
+import { ROUTE_PATHS } from "@/config/site";
 import {
   Shield,
   Lock,
@@ -80,7 +81,7 @@ export function PrivacyPolicy() {
       <Seo
         title="BudgetBuddy Privacy Policy"
         description="Understand how BudgetBuddy protects your financial data, respects your privacy, and keeps your information secure."
-        canonical={typeof window !== "undefined" ? `${window.location.origin}/privacy` : undefined}
+        path={ROUTE_PATHS.privacy}
         keywords={[
           "BudgetBuddy privacy policy",
           "financial data protection",
