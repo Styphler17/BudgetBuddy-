@@ -1636,6 +1636,9 @@ export const adminAPI = {
     };
 
     // Get counts
+    const getCount = (rows: any[]) =>
+      rows && rows.length > 0 && typeof rows[0]?.count === "number" ? rows[0].count : 0;
+
     const userCount = await query('SELECT COUNT(*) as count FROM users');
     const adminCount = await query('SELECT COUNT(*) as count FROM admins');
     const transactionCount = await query('SELECT COUNT(*) as count FROM transactions');
@@ -1643,12 +1646,12 @@ export const adminAPI = {
     const goalCount = await query('SELECT COUNT(*) as count FROM goals');
     const accountCount = await query('SELECT COUNT(*) as count FROM accounts');
 
-    stats.totalUsers = userCount[0].count;
-    stats.totalAdmins = adminCount[0].count;
-    stats.totalTransactions = transactionCount[0].count;
-    stats.totalCategories = categoryCount[0].count;
-    stats.totalGoals = goalCount[0].count;
-    stats.totalAccounts = accountCount[0].count;
+    stats.totalUsers = getCount(userCount as any[]);
+    stats.totalAdmins = getCount(adminCount as any[]);
+    stats.totalTransactions = getCount(transactionCount as any[]);
+    stats.totalCategories = getCount(categoryCount as any[]);
+    stats.totalGoals = getCount(goalCount as any[]);
+    stats.totalAccounts = getCount(accountCount as any[]);
 
     return stats;
   },
