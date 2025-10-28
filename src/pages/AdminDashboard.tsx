@@ -232,6 +232,11 @@ export function AdminDashboard() {
     navigate("/admin-login");
   };
 
+  const handleBackToSite = () => {
+    window.open("/", "_blank", "noopener,noreferrer");
+    window.location.reload();
+  };
+
   const admin = JSON.parse(localStorage.getItem("admin") || "null");
 
   const navItems = [
@@ -313,8 +318,15 @@ export function AdminDashboard() {
                   </Button>
                 ))}
               </div>
-              <Button asChild variant="outline" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
-                <Link to="/">Back to site</Link>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleBackToSite();
+                }}
+              >
+                Back to site
               </Button>
               <Button asChild className="w-full" variant="secondary" onClick={() => setIsMobileMenuOpen(false)}>
                 <Link to="/admin/profile">Profile settings</Link>
@@ -349,8 +361,8 @@ export function AdminDashboard() {
           <p className="font-medium text-foreground">{adminProfileName || admin?.name || "Admin"}</p>
           <p>{adminProfileEmail || admin?.email || "temp.admin@budgetbuddy.com"}</p>
         </div>
-        <Button asChild variant="outline" size="sm">
-          <Link to="/">Back to site</Link>
+        <Button variant="outline" size="sm" onClick={handleBackToSite}>
+          Back to site
         </Button>
         <Button asChild variant="secondary" size="sm">
           <Link to="/admin/profile">Profile settings</Link>
