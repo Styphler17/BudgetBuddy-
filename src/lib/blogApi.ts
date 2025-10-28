@@ -116,7 +116,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     return undefined as T;
   }
 
-  return response.json() as Promise<T>;
+  const data = (await response.json()) as T;
+  return data;
 }
 
 export const blogAPI = {
@@ -129,7 +130,7 @@ export const blogAPI = {
       tag: options.tag,
       excludeId: options.excludeId
     });
-    return request(`/api/blogs${query}`);
+    return request<BlogPostSummary[]>(`/api/blogs${query}`);
   },
 
   listAll: (options: ListAllOptions = {}): Promise<BlogPostSummary[]> => {
@@ -140,15 +141,15 @@ export const blogAPI = {
       search: options.search,
       tag: options.tag
     });
-    return request(`/api/blogs${query}`);
+    return request<BlogPostSummary[]>(`/api/blogs${query}`);
   },
 
   getById: (id: number): Promise<BlogPostDetail> => {
-    return request(`/api/blogs/${id}`);
+    return request<BlogPostDetail>(`/api/blogs/${id}`);
   },
 
   getBySlug: (slug: string): Promise<BlogPostDetail | null> => {
-    return request(`/api/blogs/slug/${slug}`).catch((error: Error & { status?: number }) => {
+    return request<BlogPostDetail>(`/api/blogs/slug/${slug}`).catch((error: Error & { status?: number }) => {
       if (error.status === 404) {
         return null;
       }
@@ -158,25 +159,25 @@ export const blogAPI = {
 
   getRelated: (id: number, options: { limit?: number } = {}): Promise<BlogPostSummary[]> => {
     const query = buildQuery({ limit: options.limit });
-    return request(`/api/blogs/${id}/related${query}`);
+    return request<BlogPostSummary[]>(`/api/blogs/${id}/related${query}`);
   },
 
   create: (input: BlogPostCreateInput): Promise<BlogPostDetail> => {
-    return request(`/api/blogs`, {
+    return request<BlogPostDetail>(`/api/blogs`, {
       method: "POST",
       body: JSON.stringify(input)
     });
   },
 
   update: (id: number, input: BlogPostUpdateInput): Promise<BlogPostDetail> => {
-    return request(`/api/blogs/${id}`, {
+    return request<BlogPostDetail>(`/api/blogs/${id}`, {
       method: "PUT",
       body: JSON.stringify(input)
     });
   },
 
   delete: (id: number): Promise<void> => {
-    return request(`/api/blogs/${id}`, {
+    return request<void>(`/api/blogs/${id}`, {
       method: "DELETE"
     });
   }
