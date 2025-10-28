@@ -216,7 +216,6 @@ const seedMockBlogPosts = () => {
 };
 
 seedDefaultAdminAccount();
-seedMockBlogPosts();
 
 // Mock database functions
 const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]> => {

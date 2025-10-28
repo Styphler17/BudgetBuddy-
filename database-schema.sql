@@ -179,3 +179,88 @@ CREATE INDEX idx_system_settings_key ON system_settings(setting_key);
 CREATE INDEX idx_blog_posts_status_published_at ON blog_posts(status, published_at);
 CREATE INDEX idx_blog_posts_slug ON blog_posts(slug);
 CREATE INDEX idx_blog_posts_tags ON blog_posts(tags(191));
+
+-- Seed optimized blog posts for launch
+INSERT INTO blog_posts (
+  admin_id,
+  title,
+  slug,
+  excerpt,
+  cover_image_url,
+  cover_image_alt,
+  status,
+  content,
+  tags,
+  meta_title,
+  meta_description,
+  meta_keywords,
+  reading_time,
+  feature_embed_url,
+  published_at
+)
+VALUES
+  (
+    1,
+    'Zero-Based Budget Blueprint for 2025',
+    'zero-based-budget-blueprint-2025',
+    'Give every dollar a job with a zero-based plan that keeps cash flow predictable and goals funded.',
+    'https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1400&q=80',
+    'Table with laptop, budgeting journal, and coffee cup',
+    'published',
+    '[{"type":"heading","level":2,"text":"Kickstart Your Zero-Based Budget"},{"type":"paragraph","text":"BudgetBuddy helps you route every incoming dollar toward a precise job so nothing leaks through the cracks. Start by capturing your true monthly income, then allocate funds into must-have expenses, savings buckets, and intentional splurge categories."},{"type":"list","items":["Log baseline expenses for the last 90 days to set realistic caps","Direct your paycheck into BudgetBuddy''s envelope automation","Create guardrails with category alerts before overspending happens","Schedule a 30-minute monthly reset to reconcile and rebalance"]},{"type":"paragraph","text":"Once the core framework is live, use BudgetBuddy''s scenario planner to test what-if situations. You can simulate moving rent, increasing side-income, or accelerating a savings goal and instantly see downstream impact."}]',
+    'budgeting,cash flow,planning',
+    'Zero-Based Budget Blueprint | BudgetBuddy Blog',
+    'Follow this zero-based budgeting workflow to align income, expenses, and savings inside BudgetBuddy.',
+    'budgeting, zero-based budget, cash flow, planning',
+    7,
+    'https://www.youtube.com/watch?v=z2X2HaTvkl8',
+    DATE_SUB(NOW(), INTERVAL 28 DAY)
+  ),
+  (
+    1,
+    'Automate Your Cash Flow in Under an Hour',
+    'automate-your-cash-flow-in-under-an-hour',
+    'Build a dependable money system with smart automations that keep bills current and savings growing.',
+    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1400&q=80',
+    'Smartphone banking app showing recurring transfers',
+    'published',
+    '[{"type":"heading","level":2,"text":"Build a Dependable Automation Stack"},{"type":"paragraph","text":"Set recurring transfers once, then let BudgetBuddy push money to bills, sinking funds, and investments with zero manual effort. Automation protects your goals from procrastination and makes saving the path of least resistance."},{"type":"list","items":["Group fixed expenses by due date and pay them two days early","Route 5% of each paycheck into an emergency buffer before spending","Create quarterly sinking funds for insurance premiums and annual software renewals","Turn on smart nudges so BudgetBuddy warns you before balances dip low"]},{"type":"quote","text":"Simple automation beats heroic willpower every time.","caption":"BudgetBuddy success coach"}]',
+    'automation,cash flow,habits',
+    'Cash Flow Automation Checklist | BudgetBuddy Blog',
+    'Use this automation checklist to keep every bill current while your savings climb in the background.',
+    'cash flow automation, financial habits, budgeting checklist',
+    6,
+    NULL,
+    DATE_SUB(NOW(), INTERVAL 18 DAY)
+  ),
+  (
+    1,
+    'Smart Savings Playbook: From Micro Wins to Mega Goals',
+    'smart-savings-playbook-micro-to-mega',
+    'Stack small savings wins into major milestones using BudgetBuddy''s goal templates and progress analytics.',
+    'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80',
+    'Jar filled with labelled savings envelopes',
+    'published',
+    '[{"type":"heading","level":2,"text":"Stack Micro Wins Into Long-Term Momentum"},{"type":"paragraph","text":"Break intimidating goals into micro-milestones, then celebrate each win to keep motivation high. BudgetBuddy''s goal templates make it effortless to see how today''s deposits accelerate tomorrow''s dreams."},{"type":"list","items":["Give every goal a clear why, target amount, and deadline","Automate weekly micro-deposits so progress never stalls","Visualise momentum with BudgetBuddy''s trajectory charts","Bundle accountability by sharing dashboards with partners"]},{"type":"paragraph","text":"As each milestone locks in, reallocate the freed-up cash toward the next priority. This compounding effect keeps your savings engine accelerating instead of starting from zero every January."}]',
+    'savings,goals,motivation',
+    'Smart Savings Playbook | BudgetBuddy Blog',
+    'Learn how to convert bite-sized deposits into game-changing results with BudgetBuddy goal automation.',
+    'savings goals, micro-savings, financial motivation',
+    8,
+    'https://www.youtube.com/watch?v=3X9lT9Y4QWc',
+    DATE_SUB(NOW(), INTERVAL 9 DAY)
+  )
+ON DUPLICATE KEY UPDATE
+  title = VALUES(title),
+  excerpt = VALUES(excerpt),
+  cover_image_url = VALUES(cover_image_url),
+  cover_image_alt = VALUES(cover_image_alt),
+  status = VALUES(status),
+  content = VALUES(content),
+  tags = VALUES(tags),
+  meta_title = VALUES(meta_title),
+  meta_description = VALUES(meta_description),
+  meta_keywords = VALUES(meta_keywords),
+  reading_time = VALUES(reading_time),
+  feature_embed_url = VALUES(feature_embed_url),
+  published_at = VALUES(published_at);

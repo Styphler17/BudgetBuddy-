@@ -509,9 +509,9 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
     }
   };
 
-  const handleToggleStatus = async (post: BlogPostSummary) => {
-    const nextStatus: BlogPostStatus = post.status === "published" ? "draft" : "published";
-    const publishNow = nextStatus === "published";
+const handleToggleStatus = async (post: BlogPostSummary, publish?: boolean) => {
+  const publishNow = typeof publish === "boolean" ? publish : post.status !== "published";
+  const nextStatus: BlogPostStatus = publishNow ? "published" : "draft";
 
     try {
       await blogAPI.update(post.id, {
@@ -873,6 +873,19 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
                         <Badge variant={statusBadgeVariant[post.status]}>{post.status}</Badge>
                       </div>
                       <div className="grid gap-2 text-sm text-muted-foreground">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">Published</p>
+                            <p className="text-xs text-muted-foreground">
+                              Toggle to control visibility on the public site.
+                            </p>
+                          </div>
+                          <Switch
+                            checked={post.status === "published"}
+                            onCheckedChange={(checked) => handleToggleStatus(post, checked)}
+                            aria-label={`Toggle publish status for ${post.title}`}
+                          />
+                        </div>
                         <div className="flex items-center gap-2">
                           <Badge variant="outline">{post.readingTime || 1} min read</Badge>
                           <span>{formatDate(post.updatedAt || post.publishedAt)}</span>
@@ -893,13 +906,6 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
                         </div>
                       </div>
                       <div className="grid gap-2 sm:grid-cols-2">
-                        <Button
-                          className="flex w-full"
-                          variant={post.status === "published" ? "outline" : "secondary"}
-                          onClick={() => handleToggleStatus(post)}
-                        >
-                          {post.status === "published" ? "Unpublish" : "Publish"}
-                        </Button>
                         <Button className="flex w-full" variant="outline" onClick={() => handleEditPost(post.id)}>
                           Edit
                         </Button>
@@ -978,14 +984,17 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
                             </div>
                           </TableCell>
                           <TableCell className="text-right">
-                            <div className="flex flex-wrap justify-end gap-2">
-                              <Button
-                                size="sm"
-                                variant={post.status === "published" ? "outline" : "secondary"}
-                                onClick={() => handleToggleStatus(post)}
-                              >
-                                {post.status === "published" ? "Unpublish" : "Publish"}
-                              </Button>
+                            <div className="flex flex-wrap items-center justify-end gap-2">
+                              <div className="flex items-center gap-2">
+                                <Switch
+                                  checked={post.status === "published"}
+                                  onCheckedChange={(checked) => handleToggleStatus(post, checked)}
+                                  aria-label={`Toggle publish status for ${post.title}`}
+                                />
+                                <span className="text-xs font-medium uppercase text-muted-foreground">
+                                  {post.status === "published" ? "Live" : "Draft"}
+                                </span>
+                              </div>
                               {post.status === "published" && (
                                 <Button
                                   asChild
