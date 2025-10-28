@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { userAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import logo from "@/assets/BudgetBuddy.png";
 
 export function Login() {
   const [formData, setFormData] = useState({
@@ -73,9 +74,10 @@ export function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Welcome Back</CardTitle>
-          <CardDescription className="text-center">
+        <CardHeader className="flex flex-col items-center space-y-3 text-center">
+          <img src={logo} alt="BudgetBuddy logo" className="h-16 w-16 rounded-xl object-cover shadow-sm" />
+          <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+          <CardDescription>
             Sign in to your BudgetBuddy account
           </CardDescription>
         </CardHeader>
@@ -140,12 +142,6 @@ export function Login() {
                 Sign up
               </Link>
             </p>
-          </div>
-
-          <div className="mt-4 text-center">
-            <Link to="/admin-login" className="text-sm text-muted-foreground hover:text-foreground">
-              Admin Login
-            </Link>
           </div>
         </CardContent>
       </Card>

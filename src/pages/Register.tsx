@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { userAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import logo from "@/assets/BudgetBuddy.png";
 
 export function Register() {
   const [formData, setFormData] = useState({
@@ -84,9 +85,10 @@ export function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Create Account</CardTitle>
-          <CardDescription className="text-center">
+        <CardHeader className="flex flex-col items-center space-y-3 text-center">
+          <img src={logo} alt="BudgetBuddy logo" className="h-16 w-16 rounded-xl object-cover shadow-sm" />
+          <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+          <CardDescription>
             Join BudgetBuddy to start managing your finances
           </CardDescription>
         </CardHeader>
