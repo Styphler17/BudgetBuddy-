@@ -509,6 +509,34 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
     }
   };
 
+  const handleToggleStatus = async (post: BlogPostSummary) => {
+    const nextStatus: BlogPostStatus = post.status === "published" ? "draft" : "published";
+    const publishNow = nextStatus === "published";
+
+    try {
+      await blogAPI.update(post.id, {
+        status: nextStatus,
+        publishedAt: publishNow ? new Date().toISOString() : null
+      });
+
+      toast({
+        title: publishNow ? "Post published" : "Post unpublished",
+        description: publishNow
+          ? `"${post.title}" is now live on the blog.`
+          : `"${post.title}" has been moved back to drafts.`
+      });
+
+      await fetchPosts(filters);
+    } catch (error) {
+      console.error("Failed to toggle publish status", error);
+      toast({
+        title: "Update failed",
+        description: "We couldn't update the publish status. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const renderBlockEditor = (block: BlogContentBlock, index: number) => (
     <Card key={`${block.type}-${index}`} className="border-dashed">
       <CardHeader className="flex flex-col gap-2 space-y-0 sm:flex-row sm:items-center sm:justify-between">
@@ -864,19 +892,31 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <Button
+                          className="flex w-full"
+                          variant={post.status === "published" ? "outline" : "secondary"}
+                          onClick={() => handleToggleStatus(post)}
+                        >
+                          {post.status === "published" ? "Unpublish" : "Publish"}
+                        </Button>
+                        <Button className="flex w-full" variant="outline" onClick={() => handleEditPost(post.id)}>
+                          Edit
+                        </Button>
                         {post.status === "published" && (
-                          <Button asChild variant="secondary" className="flex-1">
+                          <Button
+                            asChild
+                            variant="ghost"
+                            className="flex w-full sm:col-span-2"
+                            title="View live post"
+                          >
                             <Link to={`/blog/${post.slug}`} target="_blank" rel="noreferrer">
                               View live
                             </Link>
                           </Button>
                         )}
-                        <Button className="flex-1" variant="outline" onClick={() => handleEditPost(post.id)}>
-                          Edit
-                        </Button>
                         <Button
-                          className="flex-1"
+                          className="flex w-full sm:col-span-2"
                           variant="destructive"
                           onClick={() => setDeleteTarget(post)}
                         >
@@ -936,7 +976,14 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
                             </div>
                           </TableCell>
                           <TableCell className="text-right">
-                            <div className="flex justify-end gap-1">
+                            <div className="flex flex-wrap justify-end gap-2">
+                              <Button
+                                size="sm"
+                                variant={post.status === "published" ? "outline" : "secondary"}
+                                onClick={() => handleToggleStatus(post)}
+                              >
+                                {post.status === "published" ? "Unpublish" : "Publish"}
+                              </Button>
                               {post.status === "published" && (
                                 <Button
                                   asChild
