@@ -5,7 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { User, Bell, Shield, Palette, Eye, EyeOff } from "lucide-react";
+import { User, Bell, Shield, Coins, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { settingsAPI, userAPI } from "@/lib/api";
 
@@ -33,11 +33,13 @@ interface DatabaseSettings {
   email_notifications: boolean;
   budget_alerts: boolean;
   goal_reminders: boolean;
-  dark_mode: boolean;
+  dark_mode?: boolean;
   currency: string;
   created_at: string;
   updated_at: string;
 }
+
+type PreferenceKey = "email_notifications" | "budget_alerts" | "goal_reminders" | "currency";
 
 export default function Settings({ period }: SettingsProps) {
   const [user, setUser] = useState<DatabaseUser | null>(null);
@@ -53,6 +55,17 @@ export default function Settings({ period }: SettingsProps) {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const parseBooleanSetting = (value: unknown, fallback: boolean): boolean => {
+    if (value === undefined || value === null) return fallback;
+    if (typeof value === "boolean") return value;
+    if (typeof value === "string") {
+      const normalized = value.trim().toLowerCase();
+      if (["true", "1", "yes", "on"].includes(normalized)) return true;
+      if (["false", "0", "no", "off"].includes(normalized)) return false;
+    }
+    return fallback;
+  };
 
   // Fetch user data and settings on mount
   useEffect(() => {
@@ -92,32 +105,55 @@ export default function Settings({ period }: SettingsProps) {
           ? {
               ...userData,
               username: (userData as DatabaseUser).username || (userData as DatabaseUser).name || fallbackDisplayName,
-              name: (userData as DatabaseUser).name || (userData as DatabaseUser).username || fallbackDisplayName
+              name: (userData as DatabaseUser).name || (userData as DatabaseUser).username || fallbackDisplayName,
+              currency: (userData as DatabaseUser).currency || fallbackUserData.currency
             }
           : fallbackUserData;
 
-        // Get user settings from localStorage or create defaults
+        // Get user settings from localStorage, backend, or create defaults
         const userSettingsKey = `settings_${currentUser.id}`;
         const storedSettings = localStorage.getItem(userSettingsKey);
-        let userSettings: DatabaseSettings;
+        const timestamp = new Date().toISOString();
+        const defaultSettings: DatabaseSettings = {
+          id: Date.now(),
+          user_id: currentUser.id,
+          email_notifications: true,
+          budget_alerts: true,
+          goal_reminders: false,
+          dark_mode: false,
+          currency: finalUserData.currency || fallbackUserData.currency || "USD",
+          created_at: timestamp,
+          updated_at: timestamp
+        };
+
+        let userSettings: DatabaseSettings = defaultSettings;
 
         if (storedSettings) {
-          userSettings = JSON.parse(storedSettings);
-        } else {
-          // Create default settings
-          userSettings = {
-            id: Date.now(),
-            user_id: currentUser.id,
-            email_notifications: true,
-            budget_alerts: true,
-            goal_reminders: false,
-            dark_mode: false,
-            currency: userData.currency,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          };
-          localStorage.setItem(userSettingsKey, JSON.stringify(userSettings));
+          try {
+            const parsed = JSON.parse(storedSettings);
+            userSettings = { ...defaultSettings, ...parsed };
+          } catch (error) {
+            console.error("Failed to parse stored settings:", error);
+          }
         }
+
+        try {
+          const persistedSettings = await settingsAPI.getAll(currentUser.id) as Record<string, string>;
+          if (persistedSettings && Object.keys(persistedSettings).length > 0) {
+            userSettings = {
+              ...userSettings,
+              email_notifications: parseBooleanSetting(persistedSettings.email_notifications, userSettings.email_notifications),
+              budget_alerts: parseBooleanSetting(persistedSettings.budget_alerts, userSettings.budget_alerts),
+              goal_reminders: parseBooleanSetting(persistedSettings.goal_reminders, userSettings.goal_reminders),
+              currency: persistedSettings.currency ?? userSettings.currency,
+              updated_at: new Date().toISOString()
+            };
+          }
+        } catch (error) {
+          console.error("Failed to fetch user settings from server:", error);
+        }
+
+        localStorage.setItem(userSettingsKey, JSON.stringify(userSettings));
 
         setUser(finalUserData);
         setSettings(userSettings);
@@ -259,8 +295,18 @@ export default function Settings({ period }: SettingsProps) {
     }
   };
 
-  const handleUpdateSettings = async (key: keyof DatabaseSettings, value: boolean | string) => {
+  const handleUpdateSettings = async (key: PreferenceKey, value: boolean | string) => {
     if (!settings || !user) return;
+
+    const stringValue = typeof value === "boolean" ? String(value) : value;
+    let syncSucceeded = true;
+
+    try {
+      await settingsAPI.set(user.id, key, stringValue);
+    } catch (error) {
+      syncSucceeded = false;
+      console.error('Error syncing settings to server:', error);
+    }
 
     try {
       const updatedSettings = { ...settings, [key]: value, updated_at: new Date().toISOString() };
@@ -268,7 +314,11 @@ export default function Settings({ period }: SettingsProps) {
       localStorage.setItem(userSettingsKey, JSON.stringify(updatedSettings));
 
       setSettings(updatedSettings);
-      toast.success("Settings updated successfully!");
+      if (syncSucceeded) {
+        toast.success("Settings updated successfully!");
+      } else {
+        toast.warning("Updated locally, but syncing to the server failed. We'll retry next time.");
+      }
     } catch (error) {
       console.error('Error updating settings:', error);
       toast.error("Failed to update settings");
@@ -535,36 +585,34 @@ export default function Settings({ period }: SettingsProps) {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="font-heading flex items-center gap-2 text-base sm:text-lg">
-              <Palette className="h-4 w-4 sm:h-5 sm:w-5 text-warning flex-shrink-0" />
-              <span className="truncate">Appearance</span>
+              <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-warning flex-shrink-0" />
+              <span className="truncate">Currency Preferences</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 sm:space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <Label htmlFor="dark-mode">Dark Mode</Label>
-              <Switch
-                id="dark-mode"
-                checked={settings?.dark_mode ?? false}
-                onCheckedChange={(checked) => handleUpdateSettings('dark_mode', checked)}
-              />
-            </div>
+            <p className="text-sm text-muted-foreground">
+              Choose the currency BudgetBuddy should display for your budgets, analytics, and reports.
+            </p>
             <div className="space-y-2">
-              <Label htmlFor="currency-select">Currency</Label>
+              <Label htmlFor="currency-select">Preferred Currency</Label>
               <select
                 id="currency-select"
                 name="currency"
                 className="w-full p-2 border border-input rounded-md bg-background text-sm"
-                value={settings?.currency ?? user?.currency ?? 'USD'}
-                onChange={(e) => handleUpdateSettings('currency', e.target.value)}
+                value={settings?.currency ?? user?.currency ?? "USD"}
+                onChange={(e) => handleUpdateSettings("currency", e.target.value)}
                 aria-label="Select currency"
               >
                 <option value="USD">USD ($) - US Dollar</option>
                 <option value="EUR">EUR (€) - Euro</option>
+                <option value="GBP">GBP (£) - British Pound</option>
+                <option value="JPY">JPY (¥) - Japanese Yen</option>
+                <option value="CAD">CAD ($) - Canadian Dollar</option>
+                <option value="AUD">AUD ($) - Australian Dollar</option>
                 <option value="GHS">GHS (₵) - Ghanaian Cedi</option>
                 <option value="NGN">NGN (₦) - Nigerian Naira</option>
               </select>
             </div>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">Customize Theme</Button>
           </CardContent>
         </Card>
       </div>
@@ -594,4 +642,5 @@ export default function Settings({ period }: SettingsProps) {
     </div>
   );
 }
+
 
