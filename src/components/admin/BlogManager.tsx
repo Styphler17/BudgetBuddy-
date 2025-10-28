@@ -915,13 +915,15 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
                             </Link>
                           </Button>
                         )}
-                        <Button
-                          className="flex w-full sm:col-span-2"
-                          variant="destructive"
-                          onClick={() => setDeleteTarget(post)}
-                        >
-                          Delete
-                        </Button>
+                        <div className="flex flex-col gap-2 sm:col-span-2 sm:flex-row">
+                          <Button
+                            className="flex-1"
+                            variant="destructive"
+                            onClick={() => setDeleteTarget(post)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
