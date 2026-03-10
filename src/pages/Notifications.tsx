@@ -257,12 +257,12 @@ export default function Notifications({ period }: NotificationsProps) {
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <Badge variant={notification.badgeVariant} className={
                       notification.badgeVariant === 'default' ? 'bg-primary text-primary-foreground' :
-                      notification.badgeVariant === 'secondary' ? 'bg-secondary text-secondary-foreground' :
-                      'bg-destructive text-destructive-foreground'
+                        notification.badgeVariant === 'secondary' ? 'bg-secondary text-secondary-foreground' :
+                          'bg-destructive text-destructive-foreground'
                     }>
                       {notification.badge}
                     </Badge>
-                    <span className="text-xs sm:text-sm text-muted-foreground truncate">{notification.timestamp}</span>
+                    <span className="text-xs sm:text-sm text-muted-foreground truncate">{new Date(notification.timestamp).toLocaleString()}</span>
                   </div>
                   <p className="text-sm font-body text-foreground">{notification.message}</p>
                 </div>

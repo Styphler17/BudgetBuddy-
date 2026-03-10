@@ -11,6 +11,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { toast } from "sonner";
 import { accountAPI } from "@/lib/api";
 import storageService from "@/lib/storage";
+import { getCurrencySymbol } from "@/utils/currency";
+import { useCurrency } from "@/hooks/useCurrency";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -62,6 +64,7 @@ export default function Accounts({ period }: AccountsProps) {
   const [newAccountType, setNewAccountType] = useState<Account["type"]>("checking");
   const [newAccountBalance, setNewAccountBalance] = useState("");
   const [newAccountNumber, setNewAccountNumber] = useState("");
+  const { currencySymbol } = useCurrency();
 
   // Fetch live data from database
   useEffect(() => {
@@ -70,6 +73,7 @@ export default function Accounts({ period }: AccountsProps) {
       if (!user) return;
 
       try {
+        const symbol = currencySymbol;
         const userAccounts = await accountAPI.findByUserId(user.id) as DatabaseAccount[];
         const displayAccounts = userAccounts.map((account: DatabaseAccount) => ({
           id: account.id.toString(),
@@ -87,11 +91,11 @@ export default function Accounts({ period }: AccountsProps) {
 
     fetchAccountsData();
 
-    // Set up polling for live updates (every 5 seconds)
-    const interval = setInterval(fetchAccountsData, 5000);
+    // Set up polling for live updates (every 30 seconds)
+    const interval = setInterval(fetchAccountsData, 30000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currencySymbol]);
 
   const handleAddAccount = async () => {
     if (!newAccountName || !newAccountBalance) {
@@ -111,17 +115,19 @@ export default function Accounts({ period }: AccountsProps) {
     }
 
     try {
+      const apiType = (newAccountType === "cash" ? "savings" : newAccountType) as "checking" | "savings" | "credit" | "investment";
+
       await accountAPI.create({
         userId: user.id,
         name: newAccountName,
-        type: newAccountType as "checking" | "savings" | "credit" | "investment",
+        type: apiType,
         balance: balanceAmount
       });
 
       toast.success("Account added successfully!");
       setDialogOpen(false);
       setNewAccountName("");
-      setNewAccountType("checking" as Account["type"]);
+      setNewAccountType("checking");
       setNewAccountBalance("");
       setNewAccountNumber("");
 
@@ -130,7 +136,7 @@ export default function Accounts({ period }: AccountsProps) {
       const displayAccounts = userAccounts.map((account: DatabaseAccount) => ({
         id: account.id.toString(),
         name: account.name,
-        type: account.type,
+        type: account.type, // DB will return 'savings' for cash accounts
         balance: parseFloat(account.balance) || 0,
         accountNumber: account.account_number || undefined,
         isActive: account.is_active
@@ -170,9 +176,11 @@ export default function Accounts({ period }: AccountsProps) {
     }
 
     try {
+      const apiType = (newAccountType === "cash" ? "savings" : newAccountType) as "checking" | "savings" | "credit" | "investment";
+
       await accountAPI.update(parseInt(editingAccount.id), {
         name: newAccountName,
-        type: newAccountType as "checking" | "savings" | "credit" | "investment",
+        type: apiType,
         balance: balanceAmount
       });
 
@@ -180,7 +188,7 @@ export default function Accounts({ period }: AccountsProps) {
       setEditDialogOpen(false);
       setEditingAccount(null);
       setNewAccountName("");
-      setNewAccountType("checking" as Account["type"]);
+      setNewAccountType("checking");
       setNewAccountBalance("");
       setNewAccountNumber("");
 
@@ -252,7 +260,7 @@ export default function Accounts({ period }: AccountsProps) {
     <div className="p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">Accounts</h1>
+          <h1 className="text-3xl font-heading font-bold text-foreground">Accounts</h1>
           <p className="text-muted-foreground font-body text-sm sm:text-base">Manage your financial accounts for {period} period</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -304,7 +312,7 @@ export default function Accounts({ period }: AccountsProps) {
                   Initial Balance
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol}</span>
                   <Input
                     id="account-balance"
                     type="number"
@@ -383,7 +391,7 @@ export default function Accounts({ period }: AccountsProps) {
                   Balance
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol}</span>
                   <Input
                     id="edit-account-balance"
                     type="number"
@@ -420,7 +428,7 @@ export default function Accounts({ period }: AccountsProps) {
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-1">
         {accounts.length === 0 ? (
           <div className="col-span-full text-center py-12">
             <Wallet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -458,7 +466,7 @@ export default function Accounts({ period }: AccountsProps) {
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
                 <div className="text-xl sm:text-2xl font-bold text-foreground">
-                  ${account.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {currencySymbol}{account.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <Badge
                   variant="secondary"

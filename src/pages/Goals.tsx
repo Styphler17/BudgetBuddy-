@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { goalAPI, categoryAPI } from "@/lib/api";
 import storageService from "@/lib/storage";
+import { getCurrencySymbol } from "@/utils/currency";
+import { useCurrency } from "@/hooks/useCurrency";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -59,6 +61,7 @@ export default function Goals({ period }: GoalsProps) {
   const [newGoalTarget, setNewGoalTarget] = useState("");
   const [newGoalDeadline, setNewGoalDeadline] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const { currencySymbol } = useCurrency();
 
   // Fetch live data from database
   useEffect(() => {
@@ -67,6 +70,9 @@ export default function Goals({ period }: GoalsProps) {
       if (!user) return;
 
       try {
+        // Get user name and currency preference
+        const symbol = currencySymbol;
+
         // Get user's goals
         const userGoals = await goalAPI.findByUserId(user.id) as DatabaseGoal[];
         const displayGoals = userGoals.map((goal: DatabaseGoal) => ({
@@ -90,11 +96,11 @@ export default function Goals({ period }: GoalsProps) {
 
     fetchGoalsData();
 
-    // Set up polling for live updates (every 5 seconds)
-    const interval = setInterval(fetchGoalsData, 5000);
+    // Set up polling for live updates (every 30 seconds)
+    const interval = setInterval(fetchGoalsData, 30000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currencySymbol]);
 
   const handleAddGoal = async () => {
     if (!newGoalName || !newGoalTarget || !newGoalDeadline) {
@@ -160,7 +166,7 @@ export default function Goals({ period }: GoalsProps) {
     setNewGoalTarget(goal.target.toString());
     setNewGoalDeadline(goal.deadline);
     // Find the category ID for this goal
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (user) {
       goalAPI.findByUserId(user.id).then((userGoals: DatabaseGoal[]) => {
         const dbGoal = userGoals.find((g: DatabaseGoal) => g.id.toString() === goal.id);
@@ -183,7 +189,7 @@ export default function Goals({ period }: GoalsProps) {
       return;
     }
 
-      const user = JSON.parse(storageService.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to update goals");
       return;
@@ -293,7 +299,7 @@ export default function Goals({ period }: GoalsProps) {
     <div className="p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">Budget Goals</h1>
+          <h1 className="text-3xl font-heading font-bold text-foreground">Budget Goals</h1>
           <p className="text-muted-foreground font-body text-sm sm:text-base">Track your financial goals for {period} period</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -328,7 +334,7 @@ export default function Goals({ period }: GoalsProps) {
                   Target Amount
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol}</span>
                   <Input
                     id="goal-target"
                     type="number"
@@ -347,8 +353,7 @@ export default function Goals({ period }: GoalsProps) {
                 </Label>
                 <Input
                   id="goal-deadline"
-                  type="text"
-                  placeholder="e.g. December 2024"
+                  type="date"
                   value={newGoalDeadline}
                   onChange={(e) => setNewGoalDeadline(e.target.value)}
                   className="font-body"
@@ -358,14 +363,14 @@ export default function Goals({ period }: GoalsProps) {
                 <Label htmlFor="goal-category" className="font-body font-medium">
                   Category (Optional)
                 </Label>
-                <Select value={selectedCategoryId?.toString() || ""} onValueChange={(value) => setSelectedCategoryId(value ? parseInt(value) : null)}>
+                <Select value={selectedCategoryId?.toString() || "none"} onValueChange={(value) => setSelectedCategoryId(value === "none" ? null : parseInt(value))}>
                   <SelectTrigger className="font-body">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">No category</SelectItem>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id.toString()}>
+                    <SelectItem value="none">No category</SelectItem>
+                    {categories && categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id?.toString() || ""}>
                         {category.emoji} {category.name}
                       </SelectItem>
                     ))}
@@ -410,7 +415,7 @@ export default function Goals({ period }: GoalsProps) {
                   Target Amount
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol}</span>
                   <Input
                     id="edit-goal-target"
                     type="number"
@@ -429,8 +434,7 @@ export default function Goals({ period }: GoalsProps) {
                 </Label>
                 <Input
                   id="edit-goal-deadline"
-                  type="text"
-                  placeholder="e.g. December 2024"
+                  type="date"
                   value={newGoalDeadline}
                   onChange={(e) => setNewGoalDeadline(e.target.value)}
                   className="font-body"
@@ -440,14 +444,14 @@ export default function Goals({ period }: GoalsProps) {
                 <Label htmlFor="edit-goal-category" className="font-body font-medium">
                   Category (Optional)
                 </Label>
-                <Select value={selectedCategoryId?.toString() || ""} onValueChange={(value) => setSelectedCategoryId(value ? parseInt(value) : null)}>
+                <Select value={selectedCategoryId?.toString() || "none"} onValueChange={(value) => setSelectedCategoryId(value === "none" ? null : parseInt(value))}>
                   <SelectTrigger className="font-body">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">No category</SelectItem>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id.toString()}>
+                    <SelectItem value="none">No category</SelectItem>
+                    {categories && categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id?.toString() || ""}>
                         {category.emoji} {category.name}
                       </SelectItem>
                     ))}
@@ -505,11 +509,11 @@ export default function Goals({ period }: GoalsProps) {
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
                 <div className="flex justify-between text-xs sm:text-sm">
-                  <span className="font-medium">${goal.current.toLocaleString()} / ${goal.target.toLocaleString()}</span>
+                  <span className="font-medium">{currencySymbol}{goal.current.toLocaleString()} / {currencySymbol}{goal.target.toLocaleString()}</span>
                   <span className={getProgressColor(progress, goal.completed)}>{progress.toFixed(0)}%</span>
                 </div>
                 <Progress value={goal.completed ? 100 : progress} className="h-2 sm:h-3" />
-                <p className="text-xs text-muted-foreground">Target: {goal.deadline}</p>
+                <p className="text-xs text-muted-foreground">Target: {new Date(goal.deadline).toLocaleDateString()}</p>
               </CardContent>
             </Card>
           );

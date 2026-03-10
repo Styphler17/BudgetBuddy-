@@ -6,6 +6,9 @@ import { TransactionDialog } from "@/components/TransactionDialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { categoryAPI, transactionAPI } from "@/lib/api";
+import { getCurrencySymbol } from "@/utils/currency";
+import storageService from "@/lib/storage";
+import { useCurrency } from "@/hooks/useCurrency";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -60,6 +63,7 @@ export default function Transactions({ period }: TransactionsProps) {
   const [categories, setCategories] = useState<Array<{ id: number; name: string; emoji: string | null }>>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const { currencySymbol } = useCurrency();
   const [loading, setLoading] = useState(true);
 
   const categoryMap = useMemo(() => {
@@ -79,9 +83,9 @@ export default function Transactions({ period }: TransactionsProps) {
       record.category_id !== null
         ? record.category_name || record.category_emoji
           ? {
-              name: record.category_name ?? "Uncategorised",
-              emoji: record.category_emoji ?? null
-            }
+            name: record.category_name ?? "Uncategorised",
+            emoji: record.category_emoji ?? null
+          }
           : map.get(record.category_id) ?? { name: "Uncategorised", emoji: null }
         : { name: "Uncategorised", emoji: null };
 
@@ -98,7 +102,7 @@ export default function Transactions({ period }: TransactionsProps) {
   };
 
   const loadData = async () => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       setLoading(false);
       return;
@@ -138,11 +142,15 @@ export default function Transactions({ period }: TransactionsProps) {
 
   useEffect(() => {
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // Set up polling for live updates (every 30 seconds)
+    const interval = setInterval(loadData, 30000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleSaveTransaction = async (values: TransactionFormValues) => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to manage transactions");
       return;
@@ -197,7 +205,7 @@ export default function Transactions({ period }: TransactionsProps) {
   };
 
   const handleDeleteTransaction = async (transactionId: number) => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(storageService.getItem("user") || "null");
     if (!user) {
       toast.error("Please log in to delete transactions");
       return;
@@ -227,20 +235,20 @@ export default function Transactions({ period }: TransactionsProps) {
 
   const dialogTransaction = editingTransaction
     ? {
-        id: editingTransaction.id,
-        categoryId: editingTransaction.categoryId,
-        amount: editingTransaction.amount,
-        type: editingTransaction.type,
-        date: editingTransaction.date,
-        description: editingTransaction.description
-      }
+      id: editingTransaction.id,
+      categoryId: editingTransaction.categoryId,
+      amount: editingTransaction.amount,
+      type: editingTransaction.type,
+      date: editingTransaction.date,
+      description: editingTransaction.description
+    }
     : undefined;
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">Transactions</h1>
+          <h1 className="text-3xl font-heading font-bold text-foreground">Transactions</h1>
           <p className="text-muted-foreground font-body text-sm sm:text-base">Manage your financial transactions for {period} period</p>
         </div>
         <TransactionDialog
@@ -282,9 +290,8 @@ export default function Transactions({ period }: TransactionsProps) {
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-3 h-3 rounded-full ${
-                        transaction.type === "income" ? "bg-success" : "bg-destructive"
-                      }`}
+                      className={`w-3 h-3 rounded-full ${transaction.type === "income" ? "bg-success" : "bg-destructive"
+                        }`}
                     />
                     <div className="min-w-0 flex-1">
                       <p className="font-body font-medium truncate">
@@ -301,14 +308,14 @@ export default function Transactions({ period }: TransactionsProps) {
                   </div>
                   <div className="flex items-center justify-between sm:justify-end gap-2">
                     <div
-                      className={`font-body font-semibold ${
-                        transaction.type === "income" ? "text-success" : "text-destructive"
-                      }`}
+                      className={`font-body font-semibold ${transaction.type === "income" ? "text-success" : "text-destructive"
+                        }`}
                     >
                       {transaction.type === "income" ? "+" : "-"}
+                      {currencySymbol}
                       {transaction.amount.toLocaleString(undefined, {
-                        style: "currency",
-                        currency: "USD"
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
                       })}
                     </div>
                     <DropdownMenu>

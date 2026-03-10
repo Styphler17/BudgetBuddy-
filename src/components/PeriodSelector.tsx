@@ -23,15 +23,15 @@ export const PeriodSelector = ({ onPeriodChange }: PeriodSelectorProps) => {
   };
 
   return (
-    <div className="inline-flex items-center gap-1 p-1 bg-muted rounded-full overflow-x-auto scrollbar-hide">
+    <div className="flex items-center gap-0 p-0.5 bg-muted rounded-full overflow-x-auto scrollbar-hide max-w-full">
       {periods.map((period) => (
         <button
           key={period.value}
           onClick={() => handleSelect(period.value)}
           className={cn(
-            "px-3 sm:px-6 py-2.5 rounded-full font-body font-medium text-sm transition-all duration-200 whitespace-nowrap",
+            "flex-shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full font-body font-medium text-xs transition-all duration-200 whitespace-nowrap",
             selected === period.value
-              ? "bg-primary text-primary-foreground shadow-md"
+              ? "bg-primary text-primary-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground"
           )}
         >

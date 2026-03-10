@@ -9,6 +9,7 @@ import { User, Bell, Shield, Coins, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { settingsAPI, userAPI } from "@/lib/api";
 import storageService from "@/lib/storage";
+import { SUPPORTED_CURRENCIES } from "@/utils/currency";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -104,11 +105,11 @@ export default function Settings({ period }: SettingsProps) {
 
         const finalUserData: DatabaseUser = userData
           ? {
-              ...userData,
-              username: (userData as DatabaseUser).username || (userData as DatabaseUser).name || fallbackDisplayName,
-              name: (userData as DatabaseUser).name || (userData as DatabaseUser).username || fallbackDisplayName,
-              currency: (userData as DatabaseUser).currency || fallbackUserData.currency
-            }
+            ...userData,
+            username: (userData as DatabaseUser).username || (userData as DatabaseUser).name || fallbackDisplayName,
+            name: (userData as DatabaseUser).name || (userData as DatabaseUser).username || fallbackDisplayName,
+            currency: (userData as DatabaseUser).currency || fallbackUserData.currency
+          }
           : fallbackUserData;
 
         // Get user settings from localStorage, backend, or create defaults
@@ -273,8 +274,6 @@ export default function Settings({ period }: SettingsProps) {
       };
 
       localStorage.setItem("user", JSON.stringify(updatedUser));
-      setEditUsername(trimmedUsername);
-      setEditEmail(trimmedEmail);
 
 
       // Update state
@@ -315,6 +314,23 @@ export default function Settings({ period }: SettingsProps) {
       localStorage.setItem(userSettingsKey, JSON.stringify(updatedSettings));
 
       setSettings(updatedSettings);
+
+      // If the setting is currency, also update the main user object for application-wide sync
+      if (key === "currency") {
+        // Read from whichever store has the user (try both)
+        const rawUser = localStorage.getItem("user") || sessionStorage.getItem("user");
+        if (rawUser) {
+          const currentUser = JSON.parse(rawUser);
+          const updatedUser = { ...currentUser, currency: value };
+          const serialized = JSON.stringify(updatedUser);
+          // Write to BOTH stores so all readers stay in sync
+          localStorage.setItem("user", serialized);
+          sessionStorage.setItem("user", serialized);
+          // Notify all useCurrency hooks in the same tab to re-render
+          window.dispatchEvent(new Event("currency-changed"));
+        }
+      }
+
       if (syncSucceeded) {
         toast.success("Settings updated successfully!");
       } else {
@@ -604,14 +620,11 @@ export default function Settings({ period }: SettingsProps) {
                 onChange={(e) => handleUpdateSettings("currency", e.target.value)}
                 aria-label="Select currency"
               >
-                <option value="USD">USD ($) - US Dollar</option>
-                <option value="EUR">EUR (€) - Euro</option>
-                <option value="GBP">GBP (£) - British Pound</option>
-                <option value="JPY">JPY (¥) - Japanese Yen</option>
-                <option value="CAD">CAD ($) - Canadian Dollar</option>
-                <option value="AUD">AUD ($) - Australian Dollar</option>
-                <option value="GHS">GHS (₵) - Ghanaian Cedi</option>
-                <option value="NGN">NGN (₦) - Nigerian Naira</option>
+                {SUPPORTED_CURRENCIES.map((currency) => (
+                  <option key={currency.code} value={currency.code}>
+                    {currency.code} ({currency.symbol}) - {currency.name}
+                  </option>
+                ))}
               </select>
             </div>
           </CardContent>
@@ -623,20 +636,20 @@ export default function Settings({ period }: SettingsProps) {
           <CardTitle className="font-heading text-base sm:text-lg">Data Management</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 sm:space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 flex-wrap">
+            <div className="flex-1 min-w-[200px]">
               <Label>Export Data</Label>
               <p className="text-sm text-muted-foreground">Download all your financial data</p>
             </div>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">Export</Button>
+            <Button variant="outline" size="sm" className="w-full sm:w-auto flex-shrink-0">Export</Button>
           </div>
           <Separator />
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 flex-wrap">
+            <div className="flex-1 min-w-[200px]">
               <Label className="text-destructive">Delete Account</Label>
               <p className="text-sm text-muted-foreground">Permanently delete your account and all data</p>
             </div>
-            <Button variant="destructive" size="sm" className="w-full sm:w-auto">Delete</Button>
+            <Button variant="destructive" size="sm" className="w-full sm:w-auto flex-shrink-0">Delete</Button>
           </div>
         </CardContent>
       </Card>

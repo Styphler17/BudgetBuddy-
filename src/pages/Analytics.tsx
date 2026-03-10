@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { transactionAPI, categoryAPI } from "@/lib/api";
 import storageService from "@/lib/storage";
+import { getCurrencySymbol } from "@/utils/currency";
+import { useCurrency } from "@/hooks/useCurrency";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -54,6 +56,7 @@ export default function Analytics({ period }: AnalyticsProps) {
     budgetPerformance: 0
   });
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const { currencySymbol } = useCurrency();
 
   // Fetch live data from database
   useEffect(() => {
@@ -62,11 +65,14 @@ export default function Analytics({ period }: AnalyticsProps) {
       if (!user) return;
 
       try {
+        // Get user name and currency preference
+        const symbol = currencySymbol;
+
         // Get all transactions for the user
         const userTransactions = await transactionAPI.findByUserId(user.id) as DatabaseTransaction[];
         const displayTransactions = userTransactions.map((transaction: DatabaseTransaction) => ({
           category: transaction.category_name || transaction.description || 'Unknown',
-          amount: `$${parseFloat(transaction.amount).toFixed(2)}`,
+          amount: `${symbol}${parseFloat(transaction.amount).toFixed(2)}`,
           timestamp: transaction.date,
           type: transaction.type as "expense" | "income"
         }));
@@ -79,7 +85,7 @@ export default function Analytics({ period }: AnalyticsProps) {
         let totalExpenses = 0;
 
         displayTransactions.forEach(transaction => {
-          const amount = parseFloat(transaction.amount.replace('$', ''));
+          const amount = parseFloat(transaction.amount.replace(/[^0-9.-]+/g, ""));
           if (transaction.type === 'expense') {
             totalExpenses += amount;
             spendingByCategory[transaction.category] = (spendingByCategory[transaction.category] || 0) + amount;
@@ -110,11 +116,11 @@ export default function Analytics({ period }: AnalyticsProps) {
 
     fetchAnalyticsData();
 
-    // Set up polling for live updates (every 5 seconds)
-    const interval = setInterval(fetchAnalyticsData, 5000);
+    // Set up polling for live updates (every 30 seconds)
+    const interval = setInterval(fetchAnalyticsData, 30000);
 
     return () => clearInterval(interval);
-  }, [period]);
+  }, [period, currencySymbol]);
 
   const getCategoryProgress = (amount: number) => {
     const maxSpending = Math.max(...Object.values(analyticsData.spendingByCategory));
@@ -122,13 +128,13 @@ export default function Analytics({ period }: AnalyticsProps) {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       <div>
         <h1 className="text-3xl font-heading font-bold text-foreground">Analytics</h1>
-        <p className="text-muted-foreground font-body">Financial insights and trends for {period} period</p>
+        <p className="text-muted-foreground font-body text-sm sm:text-base">Financial insights and trends for {period} period</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 [&>*:last-child:nth-child(2n+1)]:md:col-span-2 [&>*:last-child:nth-child(2n+1)]:lg:col-span-1">
         <Card>
           <CardHeader>
             <CardTitle className="font-heading">Spending by Category</CardTitle>
@@ -136,12 +142,12 @@ export default function Analytics({ period }: AnalyticsProps) {
           <CardContent className="space-y-4">
             {Object.entries(analyticsData.spendingByCategory).length > 0 ? (
               Object.entries(analyticsData.spendingByCategory)
-                .sort(([,a], [,b]) => b - a)
+                .sort(([, a], [, b]) => b - a)
                 .map(([category, amount]) => (
                   <div key={category} className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>{category}</span>
-                      <span>${amount.toFixed(2)}</span>
+                      <span>{currencySymbol}{amount.toFixed(2)}</span>
                     </div>
                     <Progress value={getCategoryProgress(amount)} className="h-2" />
                   </div>
@@ -159,16 +165,16 @@ export default function Analytics({ period }: AnalyticsProps) {
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium">Total Income</span>
-              <span className="text-lg font-bold text-success">${analyticsData.totalIncome.toFixed(2)}</span>
+              <span className="text-lg font-bold text-success">{currencySymbol}{analyticsData.totalIncome.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium">Total Expenses</span>
-              <span className="text-lg font-bold text-destructive">${analyticsData.totalExpenses.toFixed(2)}</span>
+              <span className="text-lg font-bold text-destructive">{currencySymbol}{analyticsData.totalExpenses.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center pt-2 border-t">
               <span className="text-sm font-medium">Net Balance</span>
               <span className={`text-lg font-bold ${analyticsData.totalIncome - analyticsData.totalExpenses >= 0 ? 'text-success' : 'text-destructive'}`}>
-                ${(analyticsData.totalIncome - analyticsData.totalExpenses).toFixed(2)}
+                {currencySymbol}{(analyticsData.totalIncome - analyticsData.totalExpenses).toFixed(2)}
               </span>
             </div>
           </CardContent>

@@ -16,7 +16,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <div className="flex-1 flex flex-col w-full">
+        <div className="flex-1 flex flex-col w-full min-w-0">
           <TopBar onPeriodChange={setCurrentPeriod} />
           <main className="flex-1">
             {children(currentPeriod)}

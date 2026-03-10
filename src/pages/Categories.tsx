@@ -11,6 +11,8 @@ import { Plus, Edit, Trash2, TrendingUp, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
 import { categoryAPI, transactionAPI } from "@/lib/api";
 import storageService from "@/lib/storage";
+import { getCurrencySymbol } from "@/utils/currency";
+import { useCurrency } from "@/hooks/useCurrency";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -58,6 +60,7 @@ export default function Categories({ period }: CategoriesProps) {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryBudget, setNewCategoryBudget] = useState("");
   const [newCategoryEmoji, setNewCategoryEmoji] = useState("");
+  const { currencySymbol } = useCurrency();
 
   // Fetch live data from database
   useEffect(() => {
@@ -66,6 +69,7 @@ export default function Categories({ period }: CategoriesProps) {
       if (!user) return;
 
       try {
+        const symbol = currencySymbol;
         const userCategories = await categoryAPI.findByUserId(user.id) as DatabaseCategory[];
         const userTransactions = await transactionAPI.findByUserId(user.id) as DatabaseTransaction[];
 
@@ -93,11 +97,11 @@ export default function Categories({ period }: CategoriesProps) {
 
     fetchCategoriesData();
 
-    // Set up polling for live updates (every 5 seconds)
-    const interval = setInterval(fetchCategoriesData, 5000);
+    // Set up polling for live updates (every 30 seconds)
+    const interval = setInterval(fetchCategoriesData, 30000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currencySymbol]);
 
   const handleAddCategory = async () => {
     if (!newCategoryName || !newCategoryBudget || !newCategoryEmoji) {
@@ -289,7 +293,7 @@ export default function Categories({ period }: CategoriesProps) {
     <div className="p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">Category Management</h1>
+          <h1 className="text-3xl font-heading font-bold text-foreground">Category Management</h1>
           <p className="text-muted-foreground font-body text-sm sm:text-base">Manage your budget categories for {period} period</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -324,7 +328,7 @@ export default function Categories({ period }: CategoriesProps) {
                   Budget Amount
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol}</span>
                   <Input
                     id="category-budget"
                     type="number"
@@ -402,7 +406,7 @@ export default function Categories({ period }: CategoriesProps) {
                   Budget Amount
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol}</span>
                   <Input
                     id="edit-category-budget"
                     type="number"
@@ -455,7 +459,7 @@ export default function Categories({ period }: CategoriesProps) {
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 px-1">
         {categories.map((category) => {
           const percentage = category.budget > 0 ? (category.spent / category.budget) * 100 : 0;
           const remaining = category.budget - category.spent;
@@ -464,28 +468,28 @@ export default function Categories({ period }: CategoriesProps) {
           return (
             <Card key={category.id} className={isOverBudget ? "border-destructive/50 bg-destructive/5" : ""}>
               <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="font-heading flex items-center gap-2 text-base sm:text-lg">
-                    <span className="text-xl sm:text-2xl">{category.emoji}</span>
-                    <span className="truncate">{category.name}</span>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <span className="text-xl flex-shrink-0">{category.emoji}</span>
+                    <span className="font-heading font-semibold text-base truncate min-w-0 flex-1">{category.name}</span>
+                  </div>
+                  <div className="flex items-center gap-1 flex-shrink-0">
                     {getStatusBadge(percentage)}
-                  </CardTitle>
-                  <div className="flex gap-1">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEditCategory(category)}
-                      className="h-8 w-8 p-0"
+                      className="h-7 w-7 p-0"
                     >
-                      <Edit className="h-4 w-4" />
+                      <Edit className="h-3.5 w-3.5" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteCategory(category)}
-                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                      className="h-7 w-7 p-0 text-destructive hover:text-destructive"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   </div>
                 </div>
@@ -493,7 +497,7 @@ export default function Categories({ period }: CategoriesProps) {
               <CardContent className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="font-medium">${category.spent.toFixed(2)} / ${category.budget.toFixed(2)}</span>
+                    <span className="font-medium">{currencySymbol}{category.spent.toFixed(2)} / {currencySymbol}{category.budget.toFixed(2)}</span>
                     <span className={percentage >= 100 ? "text-destructive" : percentage >= 80 ? "text-warning" : "text-primary"}>
                       {percentage.toFixed(0)}%
                     </span>
@@ -509,12 +513,12 @@ export default function Categories({ period }: CategoriesProps) {
                     {remaining >= 0 ? (
                       <>
                         <TrendingDown className="h-3 w-3 text-success" />
-                        <span className="text-success">${remaining.toFixed(2)} remaining</span>
+                        <span className="text-success">{currencySymbol}{remaining.toFixed(2)} remaining</span>
                       </>
                     ) : (
                       <>
                         <TrendingUp className="h-3 w-3 text-destructive" />
-                        <span className="text-destructive">${Math.abs(remaining).toFixed(2)} over</span>
+                        <span className="text-destructive">{currencySymbol}{Math.abs(remaining).toFixed(2)} over</span>
                       </>
                     )}
                   </div>

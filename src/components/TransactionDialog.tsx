@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import storageService from "@/lib/storage";
+import { getCurrencySymbol } from "@/utils/currency";
 
 interface TransactionFormValues {
   id?: number;
@@ -60,6 +62,11 @@ export const TransactionDialog = ({
     }
   }, [transaction]);
 
+  const currencySymbol = useMemo(() => {
+    const user = JSON.parse(storageService.getItem("user") || "null");
+    return getCurrencySymbol(user?.currency);
+  }, []);
+
   const categoryOptions = useMemo(() => {
     const base = [
       {
@@ -67,7 +74,7 @@ export const TransactionDialog = ({
         label: "Uncategorised"
       }
     ];
-    const mapped = categories.map((category) => ({
+    const mapped = (categories || []).map((category) => ({
       value: String(category.id),
       label: category.emoji ? `${category.emoji} ${category.name}` : category.name
     }));
@@ -165,16 +172,19 @@ export const TransactionDialog = ({
             <Label htmlFor="amount" className="font-body font-medium">
               Amount
             </Label>
-            <Input
-              id="amount"
-              type="number"
-              placeholder="0.00"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="font-body"
-              step="0.01"
-              min="0"
-            />
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol}</span>
+              <Input
+                id="amount"
+                type="number"
+                placeholder="0.00"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="pl-7 font-body"
+                step="0.01"
+                min="0"
+              />
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="date" className="font-body font-medium">
