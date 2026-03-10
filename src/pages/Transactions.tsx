@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Trash2, Search, Filter, ArrowUpDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TransactionDialog } from "@/components/TransactionDialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
@@ -65,6 +67,11 @@ export default function Transactions({ period }: TransactionsProps) {
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const { currencySymbol } = useCurrency();
   const [loading, setLoading] = useState(true);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("date-desc");
 
   const categoryMap = useMemo(() => {
     const map = new Map<number, { name: string; emoji: string | null }>();
@@ -244,6 +251,38 @@ export default function Transactions({ period }: TransactionsProps) {
     }
     : undefined;
 
+  const filteredTransactions = useMemo(() => {
+    let result = [...transactions];
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(t =>
+        (t.description?.toLowerCase().includes(q)) ||
+        (t.categoryName.toLowerCase().includes(q))
+      );
+    }
+
+    if (typeFilter !== 'all') {
+      result = result.filter(t => t.type === typeFilter);
+    }
+
+    if (categoryFilter !== 'all') {
+      result = result.filter(t => t.categoryId === Number(categoryFilter));
+    }
+
+    result.sort((a, b) => {
+      switch (sortBy) {
+        case 'date-desc': return new Date(b.date).getTime() - new Date(a.date).getTime();
+        case 'date-asc': return new Date(a.date).getTime() - new Date(b.date).getTime();
+        case 'amount-desc': return b.amount - a.amount;
+        case 'amount-asc': return a.amount - b.amount;
+        default: return 0;
+      }
+    });
+
+    return result;
+  }, [transactions, searchQuery, typeFilter, categoryFilter, sortBy]);
+
   return (
     <div className="p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -270,20 +309,70 @@ export default function Transactions({ period }: TransactionsProps) {
         />
       </div>
 
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search transactions..."
+            className="pl-9 font-body"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="grid grid-cols-2 lg:flex sm:flex-nowrap gap-2 sm:gap-4 lg:w-auto">
+          <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <SelectTrigger className="w-full lg:w-[130px] font-body">
+              <SelectValue placeholder="Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="income">Income</SelectItem>
+              <SelectItem value="expense">Expense</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="w-full lg:w-[150px] font-body">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {categories.map(c => (
+                <SelectItem key={c.id} value={String(c.id)}>
+                  {c.emoji} {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-full col-span-2 sm:col-span-1 lg:w-[150px] font-body">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="date-desc">Newest First</SelectItem>
+              <SelectItem value="date-asc">Oldest First</SelectItem>
+              <SelectItem value="amount-desc">Highest Amount</SelectItem>
+              <SelectItem value="amount-asc">Lowest Amount</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       <Card>
         <CardHeader>
-          <CardTitle className="font-heading">Recent Transactions</CardTitle>
+          <CardTitle className="font-heading">Transaction List</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
             <p className="text-muted-foreground font-body">Loading transactions...</p>
-          ) : transactions.length === 0 ? (
+          ) : filteredTransactions.length === 0 ? (
             <p className="text-muted-foreground font-body">
-              No transactions yet. Click &quot;Add Transaction&quot; to get started.
+              {transactions.length === 0 ? 'No transactions yet. Click "Add Transaction" to get started.' : 'No transactions match your filters.'}
             </p>
           ) : (
             <div className="space-y-3">
-              {transactions.map((transaction, index) => (
+              {filteredTransactions.map((transaction, index) => (
                 <div
                   key={transaction.id}
                   className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg group gap-3"

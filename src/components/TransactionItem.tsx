@@ -32,7 +32,7 @@ export const TransactionItem = ({
       </div>
 
       <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
-        <span className={`text-sm sm:text-lg font-heading font-bold whitespace-nowrap ${type === "expense" ? "text-destructive" : "text-secondary"
+        <span className={`text-sm sm:text-lg font-heading font-bold whitespace-nowrap ${type === "expense" ? "text-destructive" : "text-success"
           }`}>
           {type === "expense" ? "-" : "+"}{amount}
         </span>

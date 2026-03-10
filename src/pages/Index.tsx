@@ -75,10 +75,12 @@ const Index = ({ period }: IndexProps) => {
         setUserName(user.name);
         const symbol = currencySymbol;
 
-        // Get transactions for the user
-        const userTransactions = (await transactionAPI.findByUserId(user.id, 10)) as any[];
-        setDbTransactions(userTransactions);
-        const displayTransactions = userTransactions.map((transaction: any) => ({
+        // Get all transactions to calculate income and get recent ones
+        const userTransactionsAll = (await transactionAPI.findByUserId(user.id)) as any[];
+        const recentTransactions = userTransactionsAll.slice(0, 10);
+
+        setDbTransactions(recentTransactions);
+        const displayTransactions = recentTransactions.map((transaction: any) => ({
           category: transaction.category_name || transaction.description || 'Unknown',
           amount: `${symbol}${parseFloat(transaction.amount).toFixed(2)}`,
           timestamp: new Date(transaction.date).toLocaleDateString(),
@@ -117,13 +119,19 @@ const Index = ({ period }: IndexProps) => {
           return sum + (isNaN(val) ? 0 : val);
         }, 0);
 
-        const remaining = totalBudget - totalSpent;
+        const totalIncome = userTransactionsAll
+          .filter(t => t.type === 'income')
+          .reduce((sum, t) => sum + parseFloat(t.amount || '0'), 0);
+
+        const netBalance = totalIncome - totalSpent;
         const percentage = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
 
         setBudgetData({
           total: `${symbol}${totalBudget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
           spent: `${symbol}${totalSpent.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-          remaining: `${symbol}${Math.max(0, remaining).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+          income: `${symbol}${totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+          netBalance: `${symbol}${netBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+          isNetPositive: netBalance >= 0,
           percentage: Math.min(percentage, 100),
         });
 
@@ -336,10 +344,10 @@ const Index = ({ period }: IndexProps) => {
       {/* Budget Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <BudgetCard
-          title="Total Budget"
-          amount={budgetData.total}
-          icon={<span className="text-lg font-bold">{currencySymbol}</span>}
-          variant="default"
+          title="Total Income"
+          amount={budgetData.income || `${currencySymbol}0.00`}
+          icon={<TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />}
+          variant="success"
         />
         <BudgetCard
           title="Total Spent"
@@ -349,17 +357,16 @@ const Index = ({ period }: IndexProps) => {
           variant="warning"
         />
         <BudgetCard
-          title="Remaining"
-          amount={budgetData.remaining}
+          title="Net Balance"
+          amount={budgetData.netBalance || `${currencySymbol}0.00`}
           icon={<span className="text-lg font-bold">{currencySymbol}</span>}
-          variant="success"
+          variant={budgetData.isNetPositive ? "success" : "destructive"}
         />
         <BudgetCard
-          title="Budget Used"
-          amount={`${budgetData.percentage}%`}
-          percentage={budgetData.percentage}
-          icon={<TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />}
-          variant="accent"
+          title="Total Budget"
+          amount={budgetData.total}
+          icon={<span className="text-lg font-bold">{currencySymbol}</span>}
+          variant="default"
         />
       </div>
 
