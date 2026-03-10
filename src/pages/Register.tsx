@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/BudgetBuddy.png";
 import pattern from "@/assets/login-pattern.svg";
 import { Header } from "@/components/Header";
+import { SUPPORTED_CURRENCIES } from "@/utils/currency";
 
 export function Register() {
   const [formData, setFormData] = useState({
@@ -60,7 +61,8 @@ export function Register() {
       await userAPI.create({
         email: formData.email,
         name: formData.name,
-        passwordHash: formData.password // In production: hash this with bcrypt
+        passwordHash: formData.password, // In production: hash this with bcrypt
+        currency: formData.currency
       });
 
       toast({
@@ -113,7 +115,7 @@ export function Register() {
               </div>
               <div className="max-w-xl space-y-4">
                 <p className="text-sm uppercase tracking-[0.35em] text-emerald-200/80">Join BudgetBuddy</p>
-                <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
+                <h1 className="text-4xl font-semibold leading-tight">
                   Start building better money habits with tailored insights.
                 </h1>
                 <p className="text-base text-slate-200/85 sm:text-lg">
@@ -129,7 +131,7 @@ export function Register() {
 
           <Card className="w-full border-white/20 bg-white/10 shadow-[0_30px_60px_rgba(8,47,73,0.45)] backdrop-blur-2xl">
             <CardHeader className="flex flex-col items-center space-y-3 text-center text-slate-100">
-              <CardTitle className="text-2xl font-semibold">Create Account</CardTitle>
+              <CardTitle className="text-3xl font-semibold">Create Account</CardTitle>
               <CardDescription className="text-slate-200/80">
                 Join BudgetBuddy to start managing your finances
               </CardDescription>
@@ -241,14 +243,11 @@ export function Register() {
                       <SelectValue placeholder="Select currency" />
                     </SelectTrigger>
                     <SelectContent className="bg-white text-slate-900">
-                      <SelectItem value="USD">USD - US Dollar</SelectItem>
-                      <SelectItem value="EUR">EUR - Euro</SelectItem>
-                      <SelectItem value="GBP">GBP - British Pound</SelectItem>
-                      <SelectItem value="JPY">JPY - Japanese Yen</SelectItem>
-                      <SelectItem value="CAD">CAD - Canadian Dollar</SelectItem>
-                      <SelectItem value="AUD">AUD - Australian Dollar</SelectItem>
-                      <SelectItem value="GHS">GHS - Ghanaian Cedi</SelectItem>
-                      <SelectItem value="NGN">NGN - Nigerian Naira</SelectItem>
+                      {SUPPORTED_CURRENCIES.map((currency) => (
+                        <SelectItem key={currency.code} value={currency.code}>
+                          {currency.code} - {currency.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>

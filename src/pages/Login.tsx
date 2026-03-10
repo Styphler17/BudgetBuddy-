@@ -103,7 +103,7 @@ export function Login() {
               </div>
               <div className="max-w-xl space-y-4">
                 <p className="text-sm uppercase tracking-[0.35em] text-emerald-200/80">BudgetBuddy</p>
-                <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
+                <h1 className="text-4xl font-semibold leading-tight">
                   Empower your finances with clarity and confidence.
                 </h1>
                 <p className="text-base text-slate-200/85 sm:text-lg">
@@ -120,7 +120,7 @@ export function Login() {
 
           <Card className="w-full border-white/20 bg-white/10 shadow-[0_30px_60px_rgba(8,47,73,0.45)] backdrop-blur-2xl">
             <CardHeader className="flex flex-col items-center space-y-4 text-center text-slate-100">
-              <CardTitle className="text-2xl font-semibold">Welcome Back</CardTitle>
+              <CardTitle className="text-3xl font-semibold">Welcome Back</CardTitle>
               <CardDescription className="text-slate-200/80">
                 Sign in to your BudgetBuddy account
               </CardDescription>

@@ -34,46 +34,51 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          }}
+        >
           <Routes>
-          {/* Landing page for non-authenticated users */}
-          <Route path="/" element={<Landing />} />
+            {/* Landing page for non-authenticated users */}
+            <Route path="/" element={<Landing />} />
 
-          {/* Public pages */}
-          <Route path="/help" element={<HelpCenter />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
+            {/* Public pages */}
+            <Route path="/help" element={<HelpCenter />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
 
-          {/* Auth routes - no dashboard layout */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
+            {/* Auth routes - no dashboard layout */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
 
-          {/* Admin routes - no dashboard layout */}
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/profile" element={<AdminProfile />} />
+            {/* Admin routes - no dashboard layout */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/profile" element={<AdminProfile />} />
 
-          {/* Protected app routes - with dashboard layout */}
-          <Route path="/app/*" element={
-            <DashboardLayout>
-              {(period) => (
-                <Routes>
-                  <Route path="/dashboard" element={<Index period={period} />} />
-                  <Route path="/transactions" element={<Transactions period={period} />} />
-                  <Route path="/analytics" element={<Analytics period={period} />} />
-                  <Route path="/goals" element={<Goals period={period} />} />
-                  <Route path="/accounts" element={<Accounts period={period} />} />
-                  <Route path="/categories" element={<Categories period={period} />} />
-                  <Route path="/notifications" element={<Notifications period={period} />} />
-                  <Route path="/settings" element={<Settings period={period} />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              )}
-            </DashboardLayout>
-          } />
+            {/* Protected app routes - with dashboard layout */}
+            <Route path="/app/*" element={
+              <DashboardLayout>
+                {(period) => (
+                  <Routes>
+                    <Route path="/dashboard" element={<Index period={period} />} />
+                    <Route path="/transactions" element={<Transactions period={period} />} />
+                    <Route path="/analytics" element={<Analytics period={period} />} />
+                    <Route path="/goals" element={<Goals period={period} />} />
+                    <Route path="/accounts" element={<Accounts period={period} />} />
+                    <Route path="/categories" element={<Categories period={period} />} />
+                    <Route path="/notifications" element={<Notifications period={period} />} />
+                    <Route path="/settings" element={<Settings period={period} />} />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                )}
+              </DashboardLayout>
+            } />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
