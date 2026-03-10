@@ -17,6 +17,7 @@ import { AdminDashboard } from "./pages/AdminDashboard";
 import { AdminProfile } from "./pages/AdminProfile";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
+import { ForgotPassword } from "./pages/ForgotPassword";
 import { AdminLogin } from "./pages/AdminLogin";
 import { Landing } from "./pages/Landing";
 import { HelpCenter } from "./pages/HelpCenter";
@@ -54,6 +55,7 @@ const App = () => (
             {/* Auth routes - no dashboard layout */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/admin-login" element={<AdminLogin />} />
 
             {/* Admin routes - no dashboard layout */}

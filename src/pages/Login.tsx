@@ -153,9 +153,17 @@ export function Login() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-slate-100">
-                    Password
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password" className="text-slate-100">
+                      Password
+                    </Label>
+                    <Link
+                      to="/forgot-password"
+                      className="text-sm font-medium text-emerald-200 hover:text-emerald-100"
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-300" />
                     <Input
