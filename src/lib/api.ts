@@ -759,6 +759,7 @@ const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]
 // import { query } from './database';
 const query = mockQuery;
 
+export const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : "http://localhost:5000/api";
 const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
 
 const buildQuery = (params: Record<string, string | number | undefined>) => {
@@ -828,9 +829,9 @@ const slugify = (value: string) =>
 const splitCsv = (value: string | null) =>
   value
     ? value
-        .split(',')
-        .map((item) => item.trim())
-        .filter(Boolean)
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
     : [];
 
 const joinCsv = (values?: string[] | null) =>
