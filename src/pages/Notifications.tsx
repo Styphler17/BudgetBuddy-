@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Bell, CheckCircle, AlertCircle, Info, Target, FileText, TrendingUp } from "lucide-react";
 import { transactionAPI, goalAPI, categoryAPI } from "@/lib/api";
 import storageService from "@/lib/storage";
+import { useCurrency } from "@/hooks/useCurrency";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -87,6 +88,7 @@ export default function Notifications({ period }: NotificationsProps) {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [userCategories, setUserCategories] = useState<DatabaseCategory[]>([]);
+  const { currencySymbol } = useCurrency();
 
   // Fetch live data from database every 5 seconds
   useEffect(() => {
@@ -151,7 +153,7 @@ export default function Notifications({ period }: NotificationsProps) {
           id: `transaction-${transaction.id}`,
           type: "transaction",
           title: "New Transaction",
-          message: `${transaction.type === 'income' ? 'Received' : 'Spent'} $${transaction.amount} on ${transaction.category}`,
+          message: `${transaction.type === 'income' ? 'Received' : 'Spent'} ${currencySymbol}${transaction.amount} on ${transaction.category}`,
           timestamp: transaction.timestamp,
           icon: FileText,
           badge: "Transaction",
