@@ -111,7 +111,7 @@ export function Header() {
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="ghost">Sign In</Button>
+                  <Button variant={isActive("/login") ? "secondary" : "ghost"}>Sign In</Button>
                 </Link>
                 <Link to="/register">
                   <Button>Get Started</Button>
@@ -216,7 +216,7 @@ export function Header() {
               ) : (
                 <div className="flex flex-col gap-4 pt-4">
                   <Link to="/login" className="w-full" onClick={() => setIsMenuOpen(false)}>
-                    <Button variant="outline" className="w-full text-lg h-12">Sign In</Button>
+                    <Button variant={isActive("/login") ? "secondary" : "outline"} className="w-full text-lg h-12">Sign In</Button>
                   </Link>
                   <Link to="/register" className="w-full" onClick={() => setIsMenuOpen(false)}>
                     <Button className="w-full text-lg h-12">Get Started</Button>

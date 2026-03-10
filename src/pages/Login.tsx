@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, Loader2, Chrome, ShieldCheck } from "lucide-react";
 import { userAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/BudgetBuddy.png";
@@ -110,15 +110,33 @@ export function Login() {
                   BudgetBuddy helps you visualize spending, plan smarter budgets, and stay in control with real-time
                   insights designed for peace of mind.
                 </p>
+
+                <div className="flex flex-wrap gap-3 pt-2 justify-center lg:justify-start">
+                  <div className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur border border-white/5">
+                    📊 Analytics
+                  </div>
+                  <div className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur border border-white/5">
+                    🎯 Goals
+                  </div>
+                  <div className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur border border-white/5">
+                    🌍 Multi-currency
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="mx-auto flex w-fit flex-col items-center gap-2 rounded-full bg-white/10 px-7 py-3 text-sm font-medium text-slate-100 backdrop-blur xl:mx-0">
-              <span className="uppercase tracking-[0.25em] text-emerald-200/90">Trusted Guidance</span>
-              <span className="text-slate-200/90">“Every budget is a step toward financial freedom.”</span>
+
+            <div className="mx-auto flex w-fit flex-col items-start gap-2 rounded-2xl bg-white/5 border border-white/10 p-5 text-sm font-medium text-slate-100 backdrop-blur xl:mx-0 max-w-sm text-left">
+              <div className="flex gap-1 text-yellow-400 text-lg">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+              <span className="text-slate-200/90 leading-relaxed font-body">
+                "BudgetBuddy completely changed how I manage my finances. The visual analytics make it incredibly easy to see exactly where my money is going."
+              </span>
+              <span className="text-emerald-300 font-semibold mt-1">— Sarah Jenkins, Designer</span>
             </div>
           </div>
 
-          <Card className="w-full border-white/20 bg-white/10 shadow-[0_30px_60px_rgba(8,47,73,0.45)] backdrop-blur-2xl">
+          <Card className="w-full h-fit border-white/20 bg-white/10 shadow-[0_30px_60px_rgba(8,47,73,0.45)] backdrop-blur-2xl">
             <CardHeader className="flex flex-col items-center space-y-4 text-center text-slate-100">
               <CardTitle className="text-3xl font-semibold">Welcome Back</CardTitle>
               <CardDescription className="text-slate-200/80">
@@ -143,10 +161,11 @@ export function Login() {
                       id="email"
                       name="email"
                       type="email"
+                      autoComplete="email"
                       placeholder="Enter your email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="border-white/20 bg-white/85 pl-10 text-slate-900 placeholder:text-slate-500"
+                      className={`border-white/20 bg-white/85 pl-10 text-slate-900 placeholder:text-slate-500 focus-visible:ring-emerald-500 ${error ? 'border-red-500/50 ring-1 ring-red-500/50' : ''}`}
                       required
                     />
                   </div>
@@ -170,10 +189,11 @@ export function Login() {
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
                       placeholder="Enter your password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="border-white/20 bg-white/85 pl-10 pr-10 text-slate-900 placeholder:text-slate-500"
+                      className={`border-white/20 bg-white/85 pl-10 pr-10 text-slate-900 placeholder:text-slate-500 focus-visible:ring-emerald-500 ${error ? 'border-red-500/50 ring-1 ring-red-500/50' : ''}`}
                       required
                     />
                     <button
@@ -186,14 +206,47 @@ export function Login() {
                   </div>
                 </div>
 
+                <div className="flex items-center space-x-2 pt-1 pb-2">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    className="h-4 w-4 rounded border-white/20 bg-white/10 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900"
+                  />
+                  <label htmlFor="remember" className="text-sm font-medium leading-none text-slate-200/90 peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Remember me for 30 days
+                  </label>
+                </div>
+
                 <Button
                   type="submit"
-                  className="w-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 focus-visible:ring-emerald-200"
+                  className="w-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 focus-visible:ring-emerald-200 h-11"
                   disabled={loading}
                 >
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {loading ? "Signing in..." : "Sign In"}
                 </Button>
               </form>
+
+              <div className="mt-8 space-y-4">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-white/10" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-[#0b1a20] px-2 text-slate-400 rounded-md">Or continue with</span>
+                  </div>
+                </div>
+
+                <Button variant="outline" className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white h-11">
+                  <Chrome className="mr-2 h-4 w-4" />
+                  Google
+                </Button>
+
+                <div className="flex items-center justify-center gap-1.5 pt-2 text-xs text-slate-400 font-medium">
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Your data is end-to-end encrypted</span>
+                </div>
+              </div>
 
               <div className="mt-6 text-center">
                 <p className="text-sm text-slate-200/85">
