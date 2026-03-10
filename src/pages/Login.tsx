@@ -237,7 +237,12 @@ export function Login() {
                   </div>
                 </div>
 
-                <Button variant="outline" className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white h-11">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white h-11"
+                  onClick={() => toast({ title: "Demo Environment", description: "Google OAuth is not configured in this demo application." })}
+                >
                   <Chrome className="mr-2 h-4 w-4" />
                   Google
                 </Button>
