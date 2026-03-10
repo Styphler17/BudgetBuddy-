@@ -54,6 +54,7 @@ export default function Settings({ period }: SettingsProps) {
   const [editPassword, setEditPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -571,13 +572,36 @@ export default function Settings({ period }: SettingsProps) {
               </>
             ) : (
               <>
-                <div className="space-y-2">
+                <div className="space-y-2 pb-2">
                   <Label>Password</Label>
-                  <p className="text-sm text-muted-foreground">
-                    {user?.password_hash
-                      ? "Keep your password up to date to protect your account."
-                      : "You haven't set a password yet. Create one to secure your account."}
-                  </p>
+                  {user?.password_hash ? (
+                    <div className="relative max-w-md">
+                      <Input
+                        type={showCurrentPassword ? "text" : "password"}
+                        value={user.password_hash}
+                        readOnly
+                        className="pr-10 bg-muted/50 focus-visible:ring-0"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                        aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+                      >
+                        {showCurrentPassword ? (
+                          <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      You haven't set a password yet. Create one to secure your account.
+                    </p>
+                  )}
                 </div>
                 <Button
                   variant="outline"
