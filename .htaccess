@@ -1,16 +1,19 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /
+  RewriteBase /budgetbuddy/
   
-  # Redirect root to dist/index.html
+  # Redirect root of subdirectory to dist/index.html
   RewriteRule ^$ dist/index.html [L]
   
-  # If the file exists in dist, serve it
-  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f
+  # Check if the request is for a file inside the dist folder
+  # We use the relative path since RewriteBase is set
+  RewriteCond %{REQUEST_URI} !^/budgetbuddy/dist/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^(.*)$ dist/$1 [L]
   
   # Route all other requests to dist/index.html (Single Page App)
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /dist/index.html [L]
+  RewriteRule . dist/index.html [L]
 </IfModule>
