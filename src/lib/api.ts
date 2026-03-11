@@ -119,8 +119,9 @@ const buildQuery = (params: Record<string, string | number | undefined>) => {
 };
 
 async function apiRequest<T>(path: string, options: RequestInit = {}) {
+  const isFormData = options.body instanceof FormData;
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
+    ...(!isFormData && { "Content-Type": "application/json" }),
     ...(options.headers || {})
   };
 
@@ -214,6 +215,15 @@ export const blogAPI = {
   delete: async (id: number) => {
     return apiRequest(`/api/blogs/${id}`, {
       method: 'DELETE'
+    });
+  },
+
+  uploadImage: async (file: File): Promise<{ url: string }> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return apiRequest('/api/blogs/upload', {
+      method: 'POST',
+      body: formData
     });
   }
 };

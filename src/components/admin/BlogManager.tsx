@@ -70,6 +70,7 @@ import {
   Save,
   Trash2,
   Type,
+  Upload,
   X
 } from "lucide-react";
 
@@ -244,6 +245,32 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<BlogPostSummary | null>(null);
   const [form, setForm] = useState<BlogEditorState>(defaultEditorState());
+  const [uploadingImage, setUploadingImage] = useState<string | null>(null);
+
+  const handleImageUpload = async (file: File, target: "cover" | number) => {
+    const targetKey = target === "cover" ? "cover" : `block-${target}`;
+    setUploadingImage(targetKey);
+    try {
+      const { url } = await blogAPI.uploadImage(file);
+      if (target === "cover") {
+        setForm((prev) => ({ ...prev, coverImageUrl: url }));
+      } else {
+        handleUpdateBlock(target as number, { url });
+      }
+      toast({
+        title: "Success",
+        description: "Image uploaded and path saved correctly."
+      });
+    } catch (error: any) {
+      toast({
+        title: "Upload failed",
+        description: error.message || "Failed to upload image. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setUploadingImage(null);
+    }
+  };
 
   const fetchPosts = useCallback(
     async (activeFilters: BlogFilters) => {
@@ -712,13 +739,47 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
         {block.type === "image" && (
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor={`block-${index}-image-url`}>Image URL</Label>
-              <Input
-                id={`block-${index}-image-url`}
-                value={block.url ?? ""}
-                onChange={(e) => handleUpdateBlock(index, { url: e.target.value })}
-                placeholder="https://..."
-              />
+              <Label htmlFor={`block-${index}-image-url`}>
+                Image {uploadingImage === `block-${index}` && "(uploading...)"}
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  id={`block-${index}-image-url`}
+                  value={block.url ?? ""}
+                  onChange={(e) => handleUpdateBlock(index, { url: e.target.value })}
+                  placeholder="https://... or click upload"
+                  className="flex-1"
+                />
+                <div className="relative">
+                  <input
+                    type="file"
+                    id={`image-upload-${index}`}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) void handleImageUpload(file, index);
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    disabled={uploadingImage === `block-${index}`}
+                    onClick={() => {
+                      const input = document.getElementById(`image-upload-${index}`);
+                      if (input) input.click();
+                    }}
+                    title="Upload image"
+                  >
+                    {uploadingImage === `block-${index}` ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Upload className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor={`block-${index}-image-alt`}>Alt text</Label>
@@ -1158,13 +1219,42 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="blog-cover">Cover image URL</Label>
-                        <Input
-                          id="blog-cover"
-                          value={form.coverImageUrl}
-                          onChange={(e) => setForm((prev) => ({ ...prev, coverImageUrl: e.target.value }))}
-                          placeholder="https://images.unsplash.com/..."
-                        />
+                        <Label htmlFor="blog-cover">Cover Image {uploadingImage === "cover" && "(uploading...)"}</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="blog-cover"
+                            value={form.coverImageUrl}
+                            onChange={(e) => setForm((prev) => ({ ...prev, coverImageUrl: e.target.value }))}
+                            placeholder="https://... or click upload"
+                            className="flex-1"
+                          />
+                          <div className="relative">
+                            <input
+                              type="file"
+                              id="cover-upload"
+                              className="hidden"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) void handleImageUpload(file, "cover");
+                              }}
+                            />
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="icon"
+                              disabled={uploadingImage === "cover"}
+                              onClick={() => document.getElementById("cover-upload")?.click()}
+                              title="Upload cover image"
+                            >
+                              {uploadingImage === "cover" ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <Upload className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="blog-cover-alt">Cover image alt text</Label>
