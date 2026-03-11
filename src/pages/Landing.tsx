@@ -9,6 +9,7 @@ import { Seo } from "@/components/Seo";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { blogAPI, type BlogPostSummary } from "@/lib/blogApi";
 import storageService from "@/lib/storage";
+import { motion } from "framer-motion";
 import { ROUTE_PATHS, DEFAULT_SEO_KEYWORDS } from "@/config/site";
 import {
   TrendingUp,
@@ -125,8 +126,13 @@ export function Landing() {
         <Header />
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-20 text-center">
-          <div className="max-w-4xl mx-auto">
+        <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/15 via-background to-secondary/10 pt-32 pb-24 lg:pt-40 lg:pb-32 px-4 text-center">
+          <motion.div
+            className="max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
             <Badge variant="secondary" className="mb-4">
               🎉 Smart Budgeting Made Simple
             </Badge>
@@ -141,7 +147,7 @@ export function Landing() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {user ? (
                 <Link to="/app/dashboard">
-                  <Button size="lg" className="text-lg px-8 py-3">
+                  <Button size="lg" className="rounded-full text-lg px-8 py-6 shadow-xl shadow-primary/20 hover:-translate-y-1 transition-all duration-300">
                     Go to Dashboard
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
@@ -149,65 +155,84 @@ export function Landing() {
               ) : (
                 <>
                   <Link to="/register">
-                    <Button size="lg" className="text-lg px-8 py-3">
+                    <Button size="lg" className="rounded-full text-lg px-8 py-6 shadow-xl shadow-primary/20 hover:-translate-y-1 transition-all duration-300">
                       Start Free Today
                       <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                   </Link>
                   <Link to="/login">
-                    <Button variant="outline" size="lg" className="text-lg px-8 py-3">
+                    <Button variant="outline" size="lg" className="rounded-full text-lg px-8 py-6 hover:-translate-y-1 transition-all duration-300 bg-background/50 backdrop-blur-sm">
                       Sign In
                     </Button>
                   </Link>
                 </>
               )}
             </div>
-          </div>
+          </motion.div>
         </section>
 
         {/* Features Section */}
         <section className="container mx-auto px-4 py-20">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Everything You Need to Budget Better
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Powerful features designed to help you understand and improve your financial health.
             </p>
-          </div>
+          </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <feature.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">{feature.description}</CardDescription>
-                </CardContent>
-              </Card>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="border border-border/50 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full">
+                  <CardHeader>
+                    <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-4">
+                      <feature.icon className="w-7 h-7 text-primary" />
+                    </div>
+                    <CardTitle className="text-2xl font-heading">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-base font-body">{feature.description}</CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </section>
 
         {/* Stats Section */}
-        <section className="bg-primary text-primary-foreground py-20">
+        <section className="bg-primary text-primary-foreground py-20 overflow-hidden">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-4xl font-bold mb-2">10,000+</div>
-                <div className="text-primary-foreground/80">Active Users</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold mb-2">$2M+</div>
-                <div className="text-primary-foreground/80">Money Tracked</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold mb-2">4.9★</div>
-                <div className="text-primary-foreground/80">User Rating</div>
-              </div>
+              {[
+                { value: "10,000+", label: "Active Users" },
+                { value: "$2M+", label: "Money Tracked" },
+                { value: "4.9★", label: "User Rating" }
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.2, type: "spring", stiffness: 100 }}
+                >
+                  <div className="text-4xl font-bold mb-2">{stat.value}</div>
+                  <div className="text-primary-foreground/80">{stat.label}</div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
@@ -257,20 +282,28 @@ export function Landing() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 mb-4">"{testimonial.content}"</p>
-                  <div>
-                    <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role}</div>
-                  </div>
-                </CardContent>
-              </Card>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+              >
+                <Card className="border-0 shadow-lg h-full">
+                  <CardContent className="p-6">
+                    <div className="flex mb-4">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    <p className="text-gray-600 mb-4">"{testimonial.content}"</p>
+                    <div>
+                      <div className="font-semibold text-gray-900">{testimonial.name}</div>
+                      <div className="text-sm text-gray-500">{testimonial.role}</div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </section>

@@ -17,6 +17,7 @@ import { transactionAPI, categoryAPI } from "@/lib/api";
 import storageService from "@/lib/storage";
 import { getCurrencySymbol } from "@/utils/currency";
 import { useCurrency } from "@/hooks/useCurrency";
+import { motion } from "framer-motion";
 
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -348,31 +349,42 @@ const Index = ({ period }: IndexProps) => {
 
       {/* Budget Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <BudgetCard
-          title="Total Income"
-          amount={budgetData.income || `${currencySymbol}0.00`}
-          icon={<TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />}
-          variant="success"
-        />
-        <BudgetCard
-          title="Total Spent"
-          amount={budgetData.spent}
-          percentage={budgetData.percentage}
-          icon={<TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />}
-          variant="warning"
-        />
-        <BudgetCard
-          title="Net Balance"
-          amount={budgetData.netBalance || `${currencySymbol}0.00`}
-          icon={<span className="text-lg font-bold">{currencySymbol}</span>}
-          variant={budgetData.isNetPositive ? "success" : "destructive"}
-        />
-        <BudgetCard
-          title="Total Budget"
-          amount={budgetData.total}
-          icon={<span className="text-lg font-bold">{currencySymbol}</span>}
-          variant="default"
-        />
+        {[
+          {
+            title: "Total Income",
+            amount: budgetData.income || `${currencySymbol}0.00`,
+            icon: <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />,
+            variant: "success" as const
+          },
+          {
+            title: "Total Spent",
+            amount: budgetData.spent,
+            percentage: budgetData.percentage,
+            icon: <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />,
+            variant: "warning" as const
+          },
+          {
+            title: "Net Balance",
+            amount: budgetData.netBalance || `${currencySymbol}0.00`,
+            icon: <span className="text-lg font-bold">{currencySymbol}</span>,
+            variant: (budgetData.isNetPositive ? "success" : "destructive") as "default" | "success" | "warning" | "destructive"
+          },
+          {
+            title: "Total Budget",
+            amount: budgetData.total,
+            icon: <span className="text-lg font-bold">{currencySymbol}</span>,
+            variant: "default" as const
+          }
+        ].map((card, index) => (
+          <motion.div
+            key={card.title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1, type: "spring", stiffness: 100 }}
+          >
+            <BudgetCard {...card} />
+          </motion.div>
+        ))}
       </div>
 
       <hr className="border-border/40" />

@@ -40,12 +40,12 @@ export const TopBar = ({ onPeriodChange }: TopBarProps) => {
   };
 
   return (
-    <header className="border-b border-border bg-white/80 backdrop-blur-md sticky top-0 z-40">
-      <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-4 gap-2">
+    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl transition-all">
+      <div className="flex h-16 sm:h-20 items-center px-4 sm:px-6 gap-4">
 
         {/* Left: sidebar toggle + mobile logo */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <SidebarTrigger className="h-9 w-9" />
+          <SidebarTrigger className="-ml-2 sm:-ml-3 hover:bg-accent hover:text-accent-foreground transition-colors rounded-full" />
           {/* Show logo only on mobile (sm and below) when sidebar is hidden */}
           <img
             src={budgetBuddyLogo}

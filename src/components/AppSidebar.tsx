@@ -60,7 +60,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="font-heading">Menu</SidebarGroupLabel>
+          <SidebarGroupLabel className="font-heading font-semibold text-sidebar-foreground/70">Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -136,15 +136,15 @@ export function AppSidebar() {
             </Avatar>
             {open && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-sidebar-foreground truncate">{user.name}</p>
-                <p className="text-xs text-sidebar-foreground/60 truncate">{user.email}</p>
+                <p className="text-sm font-heading font-semibold text-sidebar-foreground truncate">{user.name}</p>
+                <p className="text-xs font-body text-sidebar-foreground/60 truncate">{user.email}</p>
               </div>
             )}
             {open && (
               <button
                 onClick={handleLogout}
                 title="Log out"
-                className="flex-shrink-0 p-1.5 rounded-md text-sidebar-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                className="flex-shrink-0 p-2 rounded-full text-sidebar-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors"
               >
                 <LogOut className="h-4 w-4" />
               </button>
@@ -154,7 +154,7 @@ export function AppSidebar() {
             <button
               onClick={handleLogout}
               title="Log out"
-              className="mt-2 w-full flex justify-center p-1.5 rounded-md text-sidebar-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors"
+              className="mt-2 w-full flex justify-center p-2 rounded-full text-sidebar-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors"
             >
               <LogOut className="h-4 w-4" />
             </button>

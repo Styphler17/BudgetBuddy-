@@ -1,24 +1,27 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ArrowRight } from "lucide-react";
 import type { BlogPostSummary } from "@/lib/blogApi";
 
 interface BlogCardProps {
   post: BlogPostSummary;
   variant?: "default" | "compact";
   highlight?: boolean;
+  className?: string;
 }
 
-export const BlogCard = ({ post, variant = "default", highlight = false }: BlogCardProps) => {
+export const BlogCard = ({ post, variant = "default", highlight = false, className }: BlogCardProps) => {
   const isCompact = variant === "compact";
   const showImage = !isCompact && Boolean(post.coverImageUrl);
   const Container = highlight ? "article" : "div";
 
   return (
-    <Container>
-      <Card className={highlight ? "border-primary/40 shadow-lg" : undefined}>
+    <Container className={cn("h-full", className)}>
+      <Card className={cn("flex h-full flex-col", highlight ? "border-primary/40 shadow-lg" : undefined)}>
         {showImage && (
           <div className="p-4 pb-0">
             <Link to={`/blog/${post.slug}`} className="group block overflow-hidden rounded-xl">
@@ -47,11 +50,12 @@ export const BlogCard = ({ post, variant = "default", highlight = false }: BlogC
             </Link>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-            {post.excerpt && (
-            <p className={`text-sm text-muted-foreground ${isCompact ? "" : "md:text-base"}`}>
-              {post.excerpt}
-            </p>
+        <CardContent className="flex-1 space-y-3">
+          {post.excerpt && (
+            <div
+              className={`text-sm text-muted-foreground line-clamp-3 ${isCompact ? "" : "md:text-base"}`}
+              dangerouslySetInnerHTML={{ __html: post.excerpt || "" }}
+            />
           )}
           {post.tags.length > 0 && !isCompact && (
             <div className="flex flex-wrap gap-2">
@@ -63,15 +67,13 @@ export const BlogCard = ({ post, variant = "default", highlight = false }: BlogC
             </div>
           )}
         </CardContent>
-        <CardFooter className={isCompact ? "justify-between py-3" : "flex items-center justify-between"}>
-          <Link to={`/blog/${post.slug}`} className="text-sm font-medium text-primary hover:underline">
-            Read more
-          </Link>
-          {!isCompact && (
-            <Button variant="ghost" size="sm" asChild>
-              <Link to={`/blog/${post.slug}`}>Open article</Link>
-            </Button>
-          )}
+        <CardFooter className={isCompact ? "justify-end py-3" : "flex items-center justify-end"}>
+          <Button variant="ghost" size="sm" asChild className="group/btn text-primary hover:text-primary hover:bg-primary/10">
+            <Link to={`/blog/${post.slug}`} className="flex items-center gap-2">
+              Read Article
+              <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+            </Link>
+          </Button>
         </CardFooter>
       </Card>
     </Container>

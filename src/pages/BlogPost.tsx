@@ -11,6 +11,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { blogAPI, type BlogPostDetail, type BlogPostSummary } from "@/lib/blogApi";
+import { stripHtml } from "@/lib/textUtils";
 import { useToast } from "@/hooks/use-toast";
 import { ROUTE_PATHS } from "@/config/site";
 import {
@@ -129,7 +130,7 @@ const BlogPost = () => {
   const seoTitle = post?.metaTitle || post?.title || "BudgetBuddy Blog";
   const seoDescription =
     post?.metaDescription ||
-    post?.excerpt ||
+    stripHtml(post?.excerpt) ||
     "Read the latest money insights and product updates from the BudgetBuddy team.";
 
   return (

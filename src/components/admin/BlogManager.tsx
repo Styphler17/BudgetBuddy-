@@ -49,6 +49,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BlogContentRenderer } from "@/components/blog/BlogContentRenderer";
+import { RichEditor } from "./RichEditor";
 import {
   ArrowDown,
   ArrowUp,
@@ -510,9 +511,9 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
     }
   };
 
-const handleToggleStatus = async (post: BlogPostSummary, publish?: boolean) => {
-  const publishNow = typeof publish === "boolean" ? publish : post.status !== "published";
-  const nextStatus: BlogPostStatus = publishNow ? "published" : "draft";
+  const handleToggleStatus = async (post: BlogPostSummary, publish?: boolean) => {
+    const publishNow = typeof publish === "boolean" ? publish : post.status !== "published";
+    const nextStatus: BlogPostStatus = publishNow ? "published" : "draft";
 
     try {
       await blogAPI.update(post.id, {
@@ -632,12 +633,11 @@ const handleToggleStatus = async (post: BlogPostSummary, publish?: boolean) => {
         {block.type === "paragraph" && (
           <div className="space-y-2">
             <Label htmlFor={`block-${index}-paragraph`}>Body copy</Label>
-            <Textarea
-              id={`block-${index}-paragraph`}
+            <RichEditor
               value={block.text ?? ""}
-              onChange={(e) => handleUpdateBlock(index, { text: e.target.value })}
-              rows={5}
-              placeholder="Compose your paragraph content. Use line breaks to create spacing."
+              onChange={(content) => handleUpdateBlock(index, { text: content })}
+              placeholder="Compose your paragraph content. Use formatting for a professional look."
+              height={300}
             />
           </div>
         )}
@@ -1091,12 +1091,11 @@ const handleToggleStatus = async (post: BlogPostSummary, publish?: boolean) => {
                       </div>
                       <div className="space-y-2 md:col-span-2">
                         <Label htmlFor="blog-excerpt">Excerpt</Label>
-                        <Textarea
-                          id="blog-excerpt"
+                        <RichEditor
                           value={form.excerpt}
-                          onChange={(e) => setForm((prev) => ({ ...prev, excerpt: e.target.value }))}
+                          onChange={(content) => setForm((prev) => ({ ...prev, excerpt: content }))}
                           placeholder="Short summary used for listings and SEO description."
-                          rows={3}
+                          height={200}
                         />
                       </div>
                       <div className="space-y-2">

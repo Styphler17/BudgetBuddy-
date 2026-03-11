@@ -14,12 +14,12 @@ export function Header() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50 transition-all">
       <div className="container mx-auto px-4 py-2">
         <nav className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-3">
-            <img src={logo} alt="BudgetBuddy" className="h-14 w-14 rounded-lg object-cover" />
-            <span className="text-xl font-bold text-gray-900">BudgetBuddy</span>
+          <Link to="/" className="flex items-center space-x-3 group">
+            <img src={logo} alt="BudgetBuddy" className="h-14 w-14 rounded-2xl object-cover shadow-sm group-hover:shadow-md transition-all duration-300" />
+            <span className="text-xl font-heading font-bold text-foreground">BudgetBuddy</span>
           </Link>
 
           {/* Desktop Navigation */}

@@ -25,7 +25,7 @@ export const BudgetCard = ({
 
   return (
     <div className={cn(
-      "bg-card rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-200",
+      "bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300",
       variantStyles[variant]
     )}>
       <div className="flex items-start justify-between mb-3">

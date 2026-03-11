@@ -11,14 +11,9 @@ interface BlogContentRendererProps {
 const normaliseText = (text?: string) =>
   text ? text.trim() : "";
 
-const renderParagraphText = (text?: string) => {
+const renderRichText = (text?: string) => {
   if (!text) return null;
-  const segments = text.split(/\n+/).filter(Boolean);
-  return segments.map((segment, index) => (
-    <span key={index} className="block">
-      {segment}
-    </span>
-  ));
+  return <div dangerouslySetInnerHTML={{ __html: text }} />;
 };
 
 const clampHeadingLevel = (level?: number) => {
@@ -108,14 +103,14 @@ export const BlogContentRenderer = ({
           }
           case "paragraph":
             return (
-              <p key={index} className="leading-7 text-muted-foreground">
-                {renderParagraphText(block.text)}
-              </p>
+              <div key={index} className="leading-7 text-muted-foreground">
+                {renderRichText(block.text)}
+              </div>
             );
           case "quote":
             return (
               <blockquote key={index} className="border-l-4 border-primary pl-4 italic text-muted-foreground">
-                {renderParagraphText(block.text)}
+                {renderRichText(block.text)}
                 {showCaptions && block.caption && (
                   <span className="mt-2 block text-sm font-medium text-primary">{block.caption}</span>
                 )}
