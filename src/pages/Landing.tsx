@@ -8,6 +8,7 @@ import { BackToTop } from "@/components/BackToTop";
 import { Seo } from "@/components/Seo";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { blogAPI, type BlogPostSummary } from "@/lib/blogApi";
+import storageService from "@/lib/storage";
 import { ROUTE_PATHS, DEFAULT_SEO_KEYWORDS } from "@/config/site";
 import {
   TrendingUp,
@@ -27,6 +28,8 @@ export function Landing() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [featuredPosts, setFeaturedPosts] = useState<BlogPostSummary[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
+
+  const user = JSON.parse(storageService.getItem("user") || "null");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -136,17 +139,28 @@ export function Landing() {
               Join thousands of users who have transformed their financial habits.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register">
-                <Button size="lg" className="text-lg px-8 py-3">
-                  Start Free Today
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button variant="outline" size="lg" className="text-lg px-8 py-3">
-                  Sign In
-                </Button>
-              </Link>
+              {user ? (
+                <Link to="/app/dashboard">
+                  <Button size="lg" className="text-lg px-8 py-3">
+                    Go to Dashboard
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link to="/register">
+                    <Button size="lg" className="text-lg px-8 py-3">
+                      Start Free Today
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
+                  <Link to="/login">
+                    <Button variant="outline" size="lg" className="text-lg px-8 py-3">
+                      Sign In
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </section>
@@ -271,12 +285,21 @@ export function Landing() {
               <p className="text-lg text-gray-600 mb-8">
                 Join thousands of users who have taken control of their financial future with BudgetBuddy.
               </p>
-              <Link to="/register">
-                <Button size="lg" className="text-lg px-8 py-3">
-                  Get Started Free
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
+              {user ? (
+                <Link to="/app/dashboard">
+                  <Button size="lg" className="text-lg px-8 py-3">
+                    Go to Dashboard
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/register">
+                  <Button size="lg" className="text-lg px-8 py-3">
+                    Get Started Free
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </section>

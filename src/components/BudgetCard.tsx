@@ -5,20 +5,21 @@ interface BudgetCardProps {
   amount: string;
   percentage?: number;
   icon?: React.ReactNode;
-  variant?: "default" | "success" | "warning" | "accent";
+  variant?: "default" | "success" | "warning" | "destructive" | "accent";
 }
 
-export const BudgetCard = ({ 
-  title, 
-  amount, 
-  percentage, 
-  icon, 
-  variant = "default" 
+export const BudgetCard = ({
+  title,
+  amount,
+  percentage,
+  icon,
+  variant = "default"
 }: BudgetCardProps) => {
   const variantStyles = {
     default: "border-l-4 border-l-primary",
     success: "border-l-4 border-l-secondary",
     warning: "border-l-4 border-l-destructive",
+    destructive: "border-l-4 border-l-destructive",
     accent: "border-l-4 border-l-accent",
   };
 
@@ -39,13 +40,13 @@ export const BudgetCard = ({
       {percentage !== undefined && (
         <div className="flex items-center gap-2">
           <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-            <div 
+            <div
               className={cn(
                 "h-full rounded-full transition-all duration-500",
                 variant === "success" ? "bg-secondary" :
-                variant === "warning" ? "bg-destructive" :
-                variant === "accent" ? "bg-accent" :
-                "bg-primary"
+                  (variant === "warning" || variant === "destructive") ? "bg-destructive" :
+                    variant === "accent" ? "bg-accent" :
+                      "bg-primary"
               )}
               style={{ width: `${Math.min(percentage, 100)}%` }}
             />

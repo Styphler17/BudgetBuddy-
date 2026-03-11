@@ -36,6 +36,9 @@ const Index = ({ period }: IndexProps) => {
       total: `${symbol}0.00`,
       spent: `${symbol}0.00`,
       remaining: `${symbol}0.00`,
+      income: `${symbol}0.00`,
+      netBalance: `${symbol}0.00`,
+      isNetPositive: true,
       percentage: 0,
     };
   });
@@ -126,9 +129,11 @@ const Index = ({ period }: IndexProps) => {
         const netBalance = totalIncome - totalSpent;
         const percentage = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
 
+        const remaining = totalBudget - totalSpent;
         setBudgetData({
           total: `${symbol}${totalBudget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
           spent: `${symbol}${totalSpent.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+          remaining: `${symbol}${Math.max(0, remaining).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
           income: `${symbol}${totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
           netBalance: `${symbol}${netBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
           isNetPositive: netBalance >= 0,

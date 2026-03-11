@@ -60,17 +60,6 @@ export function Header() {
             {user && (
               <>
                 <Link
-                  to="/app"
-                  className={cn(
-                    "transition-colors",
-                    isActive("/app")
-                      ? "text-primary font-semibold"
-                      : "text-gray-600 hover:text-gray-900"
-                  )}
-                >
-                  Dashboard
-                </Link>
-                <Link
                   to="/app/transactions"
                   className={cn(
                     "transition-colors",
@@ -99,15 +88,20 @@ export function Header() {
           {/* Auth Buttons */}
           <div className="flex items-center space-x-4">
             {user ? (
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  storageService.removeItem("user");
-                  window.location.href = "/";
-                }}
-              >
-                Sign Out
-              </Button>
+              <>
+                <Link to="/app/dashboard" className="hidden md:block">
+                  <Button variant="default">Go to Dashboard</Button>
+                </Link>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    storageService.removeItem("user");
+                    window.location.href = "/";
+                  }}
+                >
+                  Sign Out
+                </Button>
+              </>
             ) : (
               <>
                 <Link to="/login">
@@ -182,13 +176,6 @@ export function Header() {
               {user ? (
                 <>
                   <Link
-                    to="/app"
-                    className="text-2xl font-semibold text-gray-600"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
                     to="/app/transactions"
                     className="text-2xl font-semibold text-gray-600"
                     onClick={() => setIsMenuOpen(false)}
@@ -202,8 +189,13 @@ export function Header() {
                   >
                     Analytics
                   </Link>
+                  <Link to="/app/dashboard" className="w-full mt-4" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full text-lg h-12" variant="default">
+                      Go to Dashboard
+                    </Button>
+                  </Link>
                   <Button
-                    className="w-full text-lg mt-4"
+                    className="w-full text-lg mt-2 h-12"
                     variant="destructive"
                     onClick={() => {
                       storageService.removeItem("user");

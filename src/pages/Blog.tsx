@@ -11,6 +11,14 @@ import { BackToTop } from "@/components/BackToTop";
 import { blogAPI, type BlogPostSummary } from "@/lib/blogApi";
 import { ROUTE_PATHS } from "@/config/site";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const BLOG_PAGE_TITLE = "BudgetBuddy Blog | Money Moves That Matter";
 const BLOG_PAGE_DESCRIPTION =
@@ -103,6 +111,17 @@ const Blog = () => {
         <main>
           <section className="bg-muted/40 py-16">
             <div className="container mx-auto max-w-4xl px-6 text-center">
+              <Breadcrumb className="mb-6 flex justify-center">
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>Blog</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
               <Badge variant="outline" className="mb-4 text-sm uppercase tracking-widest">
                 BudgetBuddy Blog
               </Badge>

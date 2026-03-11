@@ -9,6 +9,7 @@ import { Eye, EyeOff, Mail, Lock, Shield } from "lucide-react";
 import { adminAPI } from "@/lib/api";
 import storageService from "@/lib/storage";
 import { useToast } from "@/hooks/use-toast";
+import bcrypt from "bcryptjs";
 
 export function AdminLogin() {
   const [formData, setFormData] = useState({
@@ -28,15 +29,18 @@ export function AdminLogin() {
 
     try {
       // Find admin by email
-      const admin = await adminAPI.findByEmail(formData.email);
+      const adminResponse = await adminAPI.findByEmail(formData.email);
+      const admin = adminResponse as any;
 
       if (!admin) {
         setError("Invalid admin credentials");
         return;
       }
 
-      // For demo purposes, check plain password (in production, use hashed)
-      if (admin.password_hash !== formData.password) {
+      // Verify password securely using bcrypt
+      const isValidPassword = bcrypt.compareSync(formData.password, admin.password_hash);
+
+      if (!isValidPassword) {
         setError("Invalid admin credentials");
         return;
       }

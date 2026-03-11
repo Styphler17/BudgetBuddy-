@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.1.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Oct 28, 2025 at 05:42 PM
--- Server version: 11.8.3-MariaDB-log
--- PHP Version: 7.2.34
+-- Host: localhost:3306
+-- Generation Time: Mar 11, 2026 at 07:47 AM
+-- Server version: 5.7.24
+-- PHP Version: 8.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,12 +30,19 @@ SET time_zone = "+00:00";
 CREATE TABLE `accounts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `type` enum('checking','savings','credit','investment') NOT NULL,
-  `balance` decimal(10,2) DEFAULT 0.00,
-  `currency` varchar(10) DEFAULT 'USD',
-  `created_at` timestamp NULL DEFAULT current_timestamp()
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('checking','savings','credit','investment','cash') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `balance` decimal(10,2) DEFAULT '0.00',
+  `currency` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT 'USD',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `accounts`
+--
+
+INSERT INTO `accounts` (`id`, `user_id`, `name`, `type`, `balance`, `currency`, `created_at`) VALUES
+(1, 1, 'Wise Account', 'savings', '20.00', 'USD', '2026-03-10 06:29:54');
 
 -- --------------------------------------------------------
 
@@ -45,14 +52,14 @@ CREATE TABLE `accounts` (
 
 CREATE TABLE `admins` (
   `id` int(11) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `password_hash` varchar(255) NOT NULL,
-  `role` enum('super_admin','admin','moderator') DEFAULT 'admin',
-  `is_active` tinyint(1) DEFAULT 1,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` enum('super_admin','admin','moderator') COLLATE utf8mb4_unicode_ci DEFAULT 'admin',
+  `is_active` tinyint(1) DEFAULT '1',
   `last_login` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -60,7 +67,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `email`, `name`, `password_hash`, `role`, `is_active`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 'temp.admin@budgetbuddy.com', 'Temporary Admin', 'TempAdmin!123', 'admin', 1, NULL, '2025-10-28 02:38:49', '2025-10-28 02:38:49');
+(1, 'temp.admin@budgetbuddy.com', 'Temporary Admin', '$2b$10$aRGn7iqI8jZJL9F1tJ4WQOsc0SI04xknY9/AvU0HRWPAjThQLxth.', 'admin', 1, NULL, '2025-10-28 02:38:49', '2026-03-11 07:46:26');
 
 -- --------------------------------------------------------
 
@@ -71,12 +78,12 @@ INSERT INTO `admins` (`id`, `email`, `name`, `password_hash`, `role`, `is_active
 CREATE TABLE `admin_logs` (
   `id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
-  `action` varchar(255) NOT NULL,
-  `target_type` enum('user','category','transaction','system') NOT NULL,
+  `action` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `target_type` enum('user','category','transaction','system') COLLATE utf8mb4_unicode_ci NOT NULL,
   `target_id` int(11) DEFAULT NULL,
-  `details` text DEFAULT NULL,
-  `ip_address` varchar(45) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
+  `details` text COLLATE utf8mb4_unicode_ci,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -88,21 +95,21 @@ CREATE TABLE `admin_logs` (
 CREATE TABLE `blog_posts` (
   `id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `excerpt` text DEFAULT NULL,
-  `cover_image_url` text DEFAULT NULL,
-  `cover_image_alt` varchar(255) DEFAULT NULL,
-  `status` enum('draft','published','archived') DEFAULT 'draft',
-  `content` longtext DEFAULT NULL,
-  `tags` text DEFAULT NULL,
-  `meta_title` varchar(255) DEFAULT NULL,
-  `meta_description` text DEFAULT NULL,
-  `meta_keywords` text DEFAULT NULL,
-  `reading_time` int(11) DEFAULT 0,
-  `feature_embed_url` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `excerpt` text COLLATE utf8mb4_unicode_ci,
+  `cover_image_url` text COLLATE utf8mb4_unicode_ci,
+  `cover_image_alt` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('draft','published','archived') COLLATE utf8mb4_unicode_ci DEFAULT 'draft',
+  `content` longtext COLLATE utf8mb4_unicode_ci,
+  `tags` text COLLATE utf8mb4_unicode_ci,
+  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` text COLLATE utf8mb4_unicode_ci,
+  `meta_keywords` text COLLATE utf8mb4_unicode_ci,
+  `reading_time` int(11) DEFAULT '0',
+  `feature_embed_url` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `published_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -125,11 +132,11 @@ INSERT INTO `blog_posts` (`id`, `admin_id`, `title`, `slug`, `excerpt`, `cover_i
 CREATE TABLE `budgets` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `period` enum('daily','weekly','monthly','yearly') NOT NULL,
+  `period` enum('daily','weekly','monthly','yearly') COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -141,12 +148,19 @@ CREATE TABLE `budgets` (
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `emoji` varchar(10) DEFAULT NULL,
-  `color` varchar(20) DEFAULT '#3b82f6',
-  `budget` decimal(10,2) DEFAULT 0.00,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `emoji` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `color` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT '#3b82f6',
+  `budget` decimal(10,2) DEFAULT '0.00',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `user_id`, `name`, `emoji`, `color`, `budget`, `created_at`) VALUES
+(1, 1, 'Car', '🚗', '#3b82f6', '5000.00', '2026-03-10 01:55:50');
 
 -- --------------------------------------------------------
 
@@ -157,13 +171,20 @@ CREATE TABLE `categories` (
 CREATE TABLE `goals` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `target_amount` decimal(10,2) NOT NULL,
-  `current_amount` decimal(10,2) DEFAULT 0.00,
+  `current_amount` decimal(10,2) DEFAULT '0.00',
   `deadline` date DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `goals`
+--
+
+INSERT INTO `goals` (`id`, `user_id`, `name`, `target_amount`, `current_amount`, `deadline`, `category_id`, `created_at`) VALUES
+(1, 1, 'Car', '5000.00', '0.00', '2026-12-31', NULL, '2026-03-10 01:50:12');
 
 -- --------------------------------------------------------
 
@@ -173,12 +194,12 @@ CREATE TABLE `goals` (
 
 CREATE TABLE `system_settings` (
   `id` int(11) NOT NULL,
-  `setting_key` varchar(255) NOT NULL,
-  `setting_value` text DEFAULT NULL,
-  `setting_type` enum('string','number','boolean','json') DEFAULT 'string',
-  `description` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `setting_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `setting_value` text COLLATE utf8mb4_unicode_ci,
+  `setting_type` enum('string','number','boolean','json') COLLATE utf8mb4_unicode_ci DEFAULT 'string',
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -192,11 +213,18 @@ CREATE TABLE `transactions` (
   `user_id` int(11) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `description` text DEFAULT NULL,
-  `type` enum('income','expense') NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `type` enum('income','expense') COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `user_id`, `category_id`, `amount`, `description`, `type`, `date`, `created_at`) VALUES
+(1, 1, 1, '200.00', 'saved', 'expense', '2026-03-10', '2026-03-10 01:57:17');
 
 -- --------------------------------------------------------
 
@@ -206,15 +234,23 @@ CREATE TABLE `transactions` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `password_hash` varchar(255) NOT NULL,
-  `currency` varchar(10) DEFAULT 'USD',
-  `is_active` tinyint(1) DEFAULT 1,
-  `email_verified` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `google_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT 'USD',
+  `is_active` tinyint(1) DEFAULT '1',
+  `email_verified` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `google_id`, `name`, `password_hash`, `currency`, `is_active`, `email_verified`, `created_at`, `updated_at`) VALUES
+(1, 'test@budgetbuddy.com', NULL, 'Test User', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USD', 1, 0, '2026-03-10 01:29:55', '2026-03-11 07:44:23');
 
 -- --------------------------------------------------------
 
@@ -225,11 +261,19 @@ CREATE TABLE `users` (
 CREATE TABLE `user_settings` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `setting_key` varchar(255) NOT NULL,
-  `setting_value` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `setting_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `setting_value` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_settings`
+--
+
+INSERT INTO `user_settings` (`id`, `user_id`, `setting_key`, `setting_value`, `created_at`, `updated_at`) VALUES
+(1, 1, 'currency', 'EUR', '2026-03-10 01:36:59', '2026-03-10 08:19:08'),
+(9, 1, 'goal_reminders', 'true', '2026-03-10 08:46:31', '2026-03-10 08:46:31');
 
 --
 -- Indexes for dumped tables
@@ -331,7 +375,7 @@ ALTER TABLE `user_settings`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `admins`
@@ -361,13 +405,13 @@ ALTER TABLE `budgets`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `goals`
 --
 ALTER TABLE `goals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -379,19 +423,19 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_settings`
 --
 ALTER TABLE `user_settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

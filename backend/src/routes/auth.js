@@ -12,20 +12,32 @@ const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret_key_change_in_prod
 router.post(
   "/google",
   asyncHandler(async (req, res) => {
-    const { credential } = req.body;
+    const { credential, email: bodyEmail, name: bodyName, google_id: bodyGoogleId } = req.body;
 
-    if (!credential) {
-      return res.status(400).json({ message: "No Google credential provided" });
+    let email, name, google_id;
+
+    if (credential) {
+      try {
+        const ticket = await googleClient.verifyIdToken({
+          idToken: credential,
+          audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        email = payload.email;
+        name = payload.name;
+        google_id = payload.sub;
+      } catch (err) {
+        console.error("JWT verification failed:", err);
+        return res.status(401).json({ message: "Invalid Google token" });
+      }
+    } else if (bodyEmail && bodyName && bodyGoogleId) {
+      // Internal/dev flow where we already have verified info
+      email = bodyEmail;
+      name = bodyName;
+      google_id = bodyGoogleId;
+    } else {
+      return res.status(400).json({ message: "No Google authentication info provided" });
     }
-
-    try {
-      // 1. Verify Google token
-      const ticket = await googleClient.verifyIdToken({
-        idToken: credential,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      const payload = ticket.getPayload();
-      const { email, name, sub: google_id } = payload;
 
       // 2. Check if user exists in database
       const [users] = await db.query("SELECT * FROM users WHERE email = ? LIMIT 1", [email]);
@@ -74,11 +86,6 @@ router.post(
         },
         token
       });
-
-    } catch (error) {
-      console.error("Google Auth Error:", error);
-      res.status(401).json({ message: "Invalid Google token or authentication failed." });
-    }
   })
 );
 

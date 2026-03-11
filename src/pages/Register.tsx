@@ -13,6 +13,7 @@ import logo from "@/assets/BudgetBuddy.png";
 import pattern from "@/assets/login-pattern.svg";
 import { Header } from "@/components/Header";
 import { SUPPORTED_CURRENCIES } from "@/utils/currency";
+import bcrypt from "bcryptjs";
 
 export function Register() {
   const [formData, setFormData] = useState({
@@ -56,12 +57,14 @@ export function Register() {
         return;
       }
 
-      // In a real app, you'd hash the password here
-      // For demo purposes, we're storing it as plain text
+      // Hash the password securely
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(formData.password, salt);
+
       await userAPI.create({
         email: formData.email,
         name: formData.name,
-        passwordHash: formData.password, // In production: hash this with bcrypt
+        passwordHash: hashedPassword,
         currency: formData.currency
       });
 

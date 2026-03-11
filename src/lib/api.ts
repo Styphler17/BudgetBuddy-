@@ -1,4 +1,5 @@
 import storageService from "./storage";
+import bcrypt from "bcryptjs";
 
 type RowDataPacket = Record<string, unknown>;
 
@@ -25,6 +26,17 @@ export interface UserRecord {
   last_name?: string | null;
 }
 
+export interface AdminRecord {
+  id: number;
+  email: string;
+  name: string;
+  password_hash: string;
+  role: string;
+  is_active: boolean;
+  last_login?: string | null;
+  created_at?: string;
+}
+
 const seedDefaultAdminAccount = () => {
   if (mockAdmins.some(admin => admin.email === 'temp.admin@budgetbuddy.com')) {
     return;
@@ -34,7 +46,7 @@ const seedDefaultAdminAccount = () => {
     id: mockAdmins.length + 1,
     email: 'temp.admin@budgetbuddy.com',
     name: 'Temporary Admin',
-    password_hash: 'TempAdmin!123',
+    password_hash: bcrypt.hashSync('TempAdmin!123', 10),
     role: 'admin',
     is_active: true,
     last_login: null,
@@ -249,7 +261,7 @@ const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]
   if (sqlLower.includes('select coalesce(sum(amount), 0) as spent')) {
     const spent = mockTransactions
       .filter(t => t.user_id === params[0] && t.category_id === params[1] && t.type === 'expense')
-      .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+      .reduce((sum, t) => sum + parseFloat(String(t.amount)), 0);
     return [{ spent }];
   }
 
@@ -759,8 +771,8 @@ const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]
 // import { query } from './database';
 const query = mockQuery;
 
-export const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : "http://localhost:5000/api";
-const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
+export const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : "http://localhost:5001/api";
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5001").replace(/\/$/, "");
 
 const buildQuery = (params: Record<string, string | number | undefined>) => {
   const searchParams = new URLSearchParams();
@@ -1192,7 +1204,12 @@ export const userAPI = {
   },
 
   findByEmail: async (email: string): Promise<UserRecord | undefined> => {
-    return apiRequest(`/api/users/by-email${buildQuery({ email })}`);
+    try {
+      return await apiRequest(`/api/users/by-email${buildQuery({ email })}`);
+    } catch (error: any) {
+      if (error.status === 404) return undefined;
+      throw error;
+    }
   },
 
   update: async (id: number, userData: Partial<{ name: string; currency: string; first_name: string; last_name: string; email: string; password_hash: string }>) => {
@@ -1495,10 +1512,10 @@ export const adminAPI = {
     return result;
   },
 
-  findByEmail: async (email: string) => {
+  findByEmail: async (email: string): Promise<AdminRecord | undefined> => {
     const sql = 'SELECT * FROM admins WHERE email = ?';
     const result = await query(sql, [email]);
-    return result[0];
+    return result[0] as AdminRecord | undefined;
   },
 
   findAll: async (limit?: number, offset?: number) => {
@@ -1673,7 +1690,7 @@ export const adminAPI = {
 export const systemSettingsAPI = {
   get: async (key: string) => {
     const sql = 'SELECT setting_value, setting_type FROM system_settings WHERE setting_key = ?';
-    const result = await query(sql, [key]);
+    const result = (await query(sql, [key])) as any[];
     if (result[0]) {
       const { setting_value, setting_type } = result[0];
       // Parse based on type

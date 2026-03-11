@@ -1,4 +1,4 @@
-import { LayoutDashboard, TrendingUp, Wallet, Settings, FileText, PieChart, Bell, LogOut, User } from "lucide-react";
+import { LayoutDashboard, TrendingUp, Wallet, Settings, FileText, PieChart, Bell, LogOut, User, Globe } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import budgetBuddyLogo from "@/assets/BudgetBuddy.png";
@@ -92,6 +92,31 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup className="mt-auto">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/"
+                    onClick={() => { if (isMobile) setOpenMobile(false); }}
+                    className={({ isActive }) =>
+                      cn(
+                        "flex items-center gap-3 px-3 py-2.5 rounded-md transition-all duration-200 group w-full",
+                        isActive
+                          ? "bg-primary/10 text-primary font-bold shadow-sm"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                      )
+                    }
+                  >
+                    <Globe className="h-5 w-5 text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground transition-transform group-hover:scale-105" />
+                    {open && <span className="font-body text-sm tracking-tight">Back to Website</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

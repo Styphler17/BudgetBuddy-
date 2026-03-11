@@ -13,6 +13,14 @@ import { BackToTop } from "@/components/BackToTop";
 import { blogAPI, type BlogPostDetail, type BlogPostSummary } from "@/lib/blogApi";
 import { useToast } from "@/hooks/use-toast";
 import { ROUTE_PATHS } from "@/config/site";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const extractYouTubeId = (url: string) => {
   try {
@@ -140,6 +148,24 @@ const BlogPost = () => {
         <main>
           <section className="bg-muted/40 py-10">
             <div className="container mx-auto max-w-4xl px-6">
+              <Breadcrumb className="mb-4">
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/blog">Blog</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="max-w-[150px] truncate sm:max-w-[300px] md:max-w-[500px]">
+                      {post?.title || "Loading..."}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+
               <Button asChild variant="ghost" className="mb-6 w-fit pl-0 text-primary">
                 <Link to="/blog">
                   <ArrowLeft className="mr-2 h-4 w-4" />
