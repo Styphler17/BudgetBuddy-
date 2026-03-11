@@ -6,8 +6,9 @@ import {
   BlogPostDetail,
   BlogPostStatus,
   BlogPostSummary,
-  blogAPI
-} from "@/lib/blogApi";
+  blogAPI,
+  adminAPI
+} from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,6 +51,7 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BlogContentRenderer } from "@/components/blog/BlogContentRenderer";
 import { RichEditor } from "./RichEditor";
+import { cn } from "@/lib/utils";
 import {
   ArrowDown,
   ArrowUp,
@@ -459,6 +461,18 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
         setEditingPost(created);
         setForm(toEditorState(created));
         setEditorMode("edit");
+
+        // Log the action
+        if (adminId) {
+          adminAPI.logAction(
+            adminId,
+            "create_blog",
+            "system",
+            created.id,
+            `Created new blog post: ${created.title}`
+          );
+        }
+
         toast({
           title: "Blog draft saved",
           description: "Your new blog post is ready to review.",
@@ -468,12 +482,25 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
         const updated = await blogAPI.update(editingPost.id, payload);
         setEditingPost(updated);
         setForm(toEditorState(updated));
+
+        // Log the action
+        if (adminId) {
+          adminAPI.logAction(
+            adminId,
+            "update_blog",
+            "system",
+            editingPost.id,
+            `Updated blog post: ${updated.title}`
+          );
+        }
+
         toast({
           title: "Blog updated",
           description: "Changes have been saved successfully.",
           variant: "default"
         });
       }
+
       await fetchPosts(filters);
     } catch (error) {
       console.error("Failed to save blog", error);
@@ -491,6 +518,18 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
     if (!deleteTarget) return;
     try {
       await blogAPI.delete(deleteTarget.id);
+
+      // Log the action
+      if (adminId) {
+        adminAPI.logAction(
+          adminId,
+          "delete_blog",
+          "system",
+          deleteTarget.id,
+          `Deleted blog post: ${deleteTarget.title}`
+        );
+      }
+
       toast({
         title: "Blog removed",
         description: `"${deleteTarget.title}" has been deleted.`,
@@ -521,12 +560,16 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
         publishedAt: publishNow ? new Date().toISOString() : null
       });
 
-      toast({
-        title: publishNow ? "Post published" : "Post unpublished",
-        description: publishNow
-          ? `"${post.title}" is now live on the blog.`
-          : `"${post.title}" has been moved back to drafts.`
-      });
+      // Log the action
+      if (adminId) {
+        adminAPI.logAction(
+          adminId,
+          publishNow ? "publish_blog" : "unpublish_blog",
+          "system",
+          post.id,
+          `${publishNow ? "Published" : "Unpublished"} blog post: ${post.title}`
+        );
+      }
 
       await fetchPosts(filters);
     } catch (error) {
@@ -740,32 +783,34 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <div>
-            <CardTitle>Blog Posts</CardTitle>
-            <CardDescription>
-              Create, publish, and maintain engaging stories for your audience.
-            </CardDescription>
+      {!editorOpen && (
+        <>
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight">Blog Stories</h1>
+              <p className="text-sm text-muted-foreground">
+                Create, publish, and maintain engaging content for your audience.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => fetchPosts(filters)}
+                disabled={loadingPosts}
+                className="rounded-full h-9 w-9"
+                title="Refresh posts"
+              >
+                {loadingPosts ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              </Button>
+              <Button onClick={handleCreateNew} disabled={!adminId} className="flex-1 md:flex-none shadow-lg shadow-primary/20 h-9">
+                <Plus className="mr-2 h-4 w-4" />
+                New Story
+              </Button>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => fetchPosts(filters)}
-              disabled={loadingPosts}
-              title="Refresh posts"
-            >
-              {loadingPosts ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-            </Button>
-            <Button onClick={handleCreateNew} disabled={!adminId}>
-              <FilePlus className="mr-2 h-4 w-4" />
-              New Post
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
+
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <Badge variant="secondary">Total: {stats.total}</Badge>
             <Badge variant="default">Published: {stats.published}</Badge>
@@ -841,7 +886,7 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
             )}
           </div>
 
-          <div className="rounded-lg border bg-card">
+          <div>
             {loadingPosts ? (
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -858,175 +903,189 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
               </div>
             ) : (
               <>
-                <div className="grid gap-4 p-4 md:hidden">
+                {/* Cards — visible below 1024px */}
+                <div className="grid gap-3 lg:hidden grid-cols-1">
                   {posts.map((post) => (
-                    <div key={post.id} className="rounded-lg border bg-muted/40 p-4 space-y-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1">
-                          <p className="font-semibold text-foreground">{post.title}</p>
+                    <div key={post.id} className="rounded-2xl border bg-card shadow-sm overflow-hidden flex flex-col">
+                      {/* Card Header */}
+                      <div className="p-4 border-b bg-muted/20 flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <p className="font-bold text-sm text-foreground leading-snug">{post.title}</p>
                           {post.excerpt && (
-                            <p className="text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                            <p className="text-xs text-muted-foreground line-clamp-2 italic">{post.excerpt}</p>
                           )}
-                          <p className="text-xs text-muted-foreground">
-                            ID: {post.id} • Author #{post.authorId}
-                          </p>
                         </div>
-                        <Badge variant={statusBadgeVariant[post.status]}>{post.status}</Badge>
+                        <Badge variant={statusBadgeVariant[post.status]} className="shrink-0 font-bold uppercase text-[9px] px-2">
+                          {post.status}
+                        </Badge>
                       </div>
-                      <div className="grid gap-2 text-sm text-muted-foreground">
+                      {/* Metadata Strip */}
+                      <div className="grid grid-cols-3 divide-x text-center border-b">
+                        <div className="py-2.5 px-2">
+                          <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">Read time</p>
+                          <p className="font-bold text-xs mt-0.5">{post.readingTime || 1} min</p>
+                        </div>
+                        <div className="py-2.5 px-2">
+                          <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">Updated</p>
+                          <p className="font-bold text-xs mt-0.5">{formatDate(post.updatedAt || post.publishedAt)}</p>
+                        </div>
+                        <div className="py-2.5 px-2">
+                          <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">Tags</p>
+                          <p className="font-bold text-xs mt-0.5">{post.tags.length > 0 ? post.tags.length : "—"}</p>
+                        </div>
+                      </div>
+                      {/* Tags + Publish */}
+                      <div className="px-4 py-3 space-y-3 flex-1">
+                        {post.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {post.tags.slice(0, 5).map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-[9px] h-4 py-0 px-1.5 border-primary/20 bg-primary/5 font-bold">
+                                {tag}
+                              </Badge>
+                            ))}
+                            {post.tags.length > 5 && <span className="text-[10px] text-muted-foreground">+{post.tags.length - 5}</span>}
+                          </div>
+                        )}
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="font-medium text-foreground">Published</p>
-                            <p className="text-xs text-muted-foreground">
-                              Toggle to control visibility on the public site.
-                            </p>
+                            <p className="text-xs font-bold text-foreground">Live on site</p>
+                            <p className="text-[10px] text-muted-foreground">Toggle visibility</p>
                           </div>
                           <Switch
                             checked={post.status === "published"}
                             onCheckedChange={(checked) => handleToggleStatus(post, checked)}
-                            aria-label={`Toggle publish status for ${post.title}`}
+                            aria-label={`Publish ${post.title}`}
                           />
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline">{post.readingTime || 1} min read</Badge>
-                          <span>{formatDate(post.updatedAt || post.publishedAt)}</span>
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">Tags</p>
-                          <div className="mt-1 flex flex-wrap gap-1">
-                            {post.tags.length === 0 ? (
-                              <span className="text-xs text-muted-foreground">None</span>
-                            ) : (
-                              post.tags.map((tag) => (
-                                <Badge key={tag} variant="outline" className="text-xs">
-                                  {tag}
-                                </Badge>
-                              ))
-                            )}
-                          </div>
-                        </div>
                       </div>
-                      <div className="grid gap-2 sm:grid-cols-2">
-                        <Button className="flex w-full" variant="outline" onClick={() => handleEditPost(post.id)}>
-                          Edit
+                      {/* Actions */}
+                      <div className="flex border-t">
+                        <Button
+                          variant="ghost"
+                          className="flex-1 h-10 rounded-none text-xs font-bold hover:bg-muted gap-1.5"
+                          onClick={() => handleEditPost(post.id)}
+                        >
+                          <Edit className="h-3.5 w-3.5" />Edit
                         </Button>
                         {post.status === "published" && (
-                          <Button
-                            asChild
-                            variant="ghost"
-                            className="flex w-full sm:col-span-2"
-                            title="View live post"
-                          >
-                            <Link to={`/blog/${post.slug}`} target="_blank" rel="noreferrer">
-                              View live
-                            </Link>
-                          </Button>
+                          <>
+                            <div className="w-px bg-border" />
+                            <Button asChild variant="ghost" className="flex-1 h-10 rounded-none text-xs font-bold text-primary hover:bg-primary/5 gap-1.5">
+                              <Link to={`/blog/${post.slug}`} target="_blank" rel="noreferrer">
+                                <Eye className="h-3.5 w-3.5" />View
+                              </Link>
+                            </Button>
+                          </>
                         )}
-                        <div className="flex flex-col gap-2 sm:col-span-2 sm:flex-row">
-                          <Button
-                            className="flex-1"
-                            variant="destructive"
-                            onClick={() => setDeleteTarget(post)}
-                          >
-                            Delete
-                          </Button>
-                        </div>
+                        <div className="w-px bg-border" />
+                        <Button
+                          variant="ghost"
+                          className="flex-1 h-10 rounded-none text-xs font-bold text-destructive hover:bg-destructive/5 gap-1.5"
+                          onClick={() => setDeleteTarget(post)}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />Delete
+                        </Button>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="hidden md:block">
+                {/* Table — visible at 1024px+ */}
+                <div className="hidden lg:block overflow-x-auto rounded-xl border bg-card/50 shadow-sm">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Reading</TableHead>
-                        <TableHead>Updated</TableHead>
-                        <TableHead>Tags</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead className="font-bold">Title</TableHead>
+                        <TableHead className="font-bold">Status</TableHead>
+                        <TableHead className="font-bold">Reading</TableHead>
+                        <TableHead className="hidden xl:table-cell font-bold">Updated</TableHead>
+                        <TableHead className="font-bold">Tags</TableHead>
+                        <TableHead className="text-right font-bold pr-4">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {posts.map((post) => (
-                        <TableRow key={post.id}>
-                          <TableCell>
-                            <div className="flex flex-col">
-                              <span className="font-medium">{post.title}</span>
+                        <TableRow key={post.id} className="hover:bg-muted/5 transition-colors">
+                          <TableCell className="max-w-[200px] xl:max-w-xs">
+                            <div className="flex flex-col min-w-0">
+                              <span className="font-bold text-sm truncate" title={post.title}>{post.title}</span>
                               {post.excerpt && (
-                                <span className="text-sm text-muted-foreground line-clamp-1">
+                                <span className="text-[11px] text-muted-foreground line-clamp-1 italic">
                                   {post.excerpt}
                                 </span>
                               )}
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Badge variant={statusBadgeVariant[post.status]}>{post.status}</Badge>
+                            <Badge variant={statusBadgeVariant[post.status]} className="h-5 px-1.5 text-[10px] uppercase font-bold">
+                              {post.status}
+                            </Badge>
                           </TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{post.readingTime || 1} min</Badge>
+                          <TableCell className="hidden lg:table-cell">
+                            <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
+                              {post.readingTime || 1} min read
+                            </span>
                           </TableCell>
-                          <TableCell>
-                            <span className="text-sm text-muted-foreground">
+                          <TableCell className="hidden xl:table-cell">
+                            <span className="text-xs text-muted-foreground whitespace-nowrap">
                               {formatDate(post.updatedAt || post.publishedAt)}
                             </span>
                           </TableCell>
-                          <TableCell>
-                            <div className="flex flex-wrap gap-1">
-                              {post.tags.length === 0 ? (
-                                <span className="text-xs text-muted-foreground">-</span>
-                              ) : (
-                                post.tags.map((tag) => (
-                                  <Badge key={tag} variant="outline" className="text-xs">
-                                    {tag}
-                                  </Badge>
-                                ))
-                              )}
+                          <TableCell className="hidden lg:table-cell">
+                            <div className="flex flex-wrap gap-1 max-w-[150px]">
+                              {post.tags.slice(0, 2).map((tag) => (
+                                <Badge key={tag} variant="outline" className="text-[9px] h-4 py-0 px-1 border-primary/20 bg-primary/5">
+                                  {tag}
+                                </Badge>
+                              ))}
+                              {post.tags.length > 2 && <span className="text-[10px] text-muted-foreground">+{post.tags.length - 2}</span>}
                             </div>
                           </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex flex-wrap items-center justify-end gap-2">
-                              <div className="flex items-center gap-2">
+                          <TableCell className="text-right pr-4">
+                            <div className="flex items-center justify-end gap-1 lg:gap-2">
+                              <div className="hidden lg:flex items-center gap-1.5 mr-2 pr-2 border-r">
                                 <Switch
                                   checked={post.status === "published"}
                                   onCheckedChange={(checked) => handleToggleStatus(post, checked)}
-                                  aria-label={`Toggle publish status for ${post.title}`}
+                                  aria-label={`Publish ${post.title}`}
+                                  className="scale-75"
                                 />
-                                <span className="text-xs font-medium uppercase text-muted-foreground">
+                                <span className="text-[10px] font-bold uppercase text-muted-foreground w-8">
                                   {post.status === "published" ? "Live" : "Draft"}
                                 </span>
                               </div>
-                              {post.status === "published" && (
+                              <div className="flex items-center gap-1">
+                                {post.status === "published" && (
+                                  <Button
+                                    asChild
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-8 w-8 text-primary hover:bg-primary/10"
+                                    title="View live"
+                                  >
+                                    <Link to={`/blog/${post.slug}`} target="_blank" rel="noreferrer">
+                                      <Eye className="h-4 w-4" />
+                                    </Link>
+                                  </Button>
+                                )}
                                 <Button
-                                  asChild
                                   size="icon"
                                   variant="ghost"
-                                  className="h-8 w-8"
-                                  title="View live post"
+                                  className="h-8 w-8 hover:bg-muted"
+                                  onClick={() => handleEditPost(post.id)}
+                                  title="Edit"
                                 >
-                                  <Link to={`/blog/${post.slug}`} target="_blank" rel="noreferrer">
-                                    <Eye className="h-4 w-4" />
-                                  </Link>
+                                  <Edit className="h-4 w-4" />
                                 </Button>
-                              )}
-                              <Button
-                                size="icon"
-                                variant="ghost"
-                                className="h-8 w-8"
-                                onClick={() => handleEditPost(post.id)}
-                                title="Edit post"
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                size="icon"
-                                variant="ghost"
-                                className="h-8 w-8 text-destructive hover:text-destructive"
-                                onClick={() => setDeleteTarget(post)}
-                                title="Delete post"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="h-8 w-8 text-destructive hover:text-destructive/20 hover:bg-destructive/10"
+                                  onClick={() => setDeleteTarget(post)}
+                                  title="Delete"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -1037,8 +1096,8 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
               </>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </>
+      )}
 
       {editorOpen && (
         <Card className="border-primary/30">
@@ -1284,7 +1343,8 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
             )}
           </CardContent>
         </Card>
-      )}
+      )
+      }
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
@@ -1305,6 +1365,6 @@ export const BlogManager = ({ adminId }: BlogManagerProps) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </div >
   );
 };

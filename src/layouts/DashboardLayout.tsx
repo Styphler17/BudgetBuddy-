@@ -12,15 +12,22 @@ interface DashboardLayoutProps {
 }
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-  const [currentPeriod, setCurrentPeriod] = useState<Period>("monthly");
+  const [currentPeriod, setCurrentPeriod] = useState<Period>(() => {
+    return (localStorage.getItem("dashboard-period") as Period) || "monthly";
+  });
   const location = useLocation();
+
+  const handlePeriodChange = (period: Period) => {
+    setCurrentPeriod(period);
+    localStorage.setItem("dashboard-period", period);
+  };
 
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <div className="flex-1 flex flex-col w-full min-w-0">
-          <TopBar onPeriodChange={setCurrentPeriod} />
+          <TopBar onPeriodChange={handlePeriodChange} />
           <main className="flex-1 overflow-hidden relative">
             <AnimatePresence mode="wait">
               <motion.div

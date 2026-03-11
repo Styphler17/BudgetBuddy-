@@ -4,6 +4,8 @@ const cors = require("cors");
 
 const blogsRouter = require("./routes/blogs");
 const usersRouter = require("./routes/users");
+const adminRouter = require("./routes/admin");
+const authRouter = require("./routes/auth");
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/blogs", blogsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/auth", authRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Not found" });
@@ -35,6 +39,7 @@ app.use((err, _req, res, _next) => {
 });
 
 const port = 5001;
-app.listen(port, () => {
-  console.log(`BudgetBuddy API running on http://localhost:${port}`);
+const host = "127.0.0.1";
+app.listen(port, host, () => {
+  console.log(`BudgetBuddy API running on http://${host}:${port}`);
 });

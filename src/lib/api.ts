@@ -3,18 +3,6 @@ import bcrypt from "bcryptjs";
 
 type RowDataPacket = Record<string, unknown>;
 
-// Mock data storage
-const mockUsers: Record<string, unknown>[] = [];
-const mockAdmins: Record<string, unknown>[] = [];
-const mockCategories: Record<string, unknown>[] = [];
-const mockTransactions: Record<string, unknown>[] = [];
-const mockBudgets: Record<string, unknown>[] = [];
-const mockGoals: Record<string, unknown>[] = [];
-const mockAccounts: Record<string, unknown>[] = [];
-const mockUserSettings: Record<string, unknown>[] = [];
-const mockAdminLogs: Record<string, unknown>[] = [];
-const mockSystemSettings: Record<string, unknown>[] = [];
-
 export interface UserRecord {
   id: number;
   email: string;
@@ -37,23 +25,6 @@ export interface AdminRecord {
   created_at?: string;
 }
 
-const seedDefaultAdminAccount = () => {
-  if (mockAdmins.some(admin => admin.email === 'temp.admin@budgetbuddy.com')) {
-    return;
-  }
-  const timestamp = new Date().toISOString();
-  mockAdmins.push({
-    id: mockAdmins.length + 1,
-    email: 'temp.admin@budgetbuddy.com',
-    name: 'Temporary Admin',
-    password_hash: bcrypt.hashSync('TempAdmin!123', 10),
-    role: 'admin',
-    is_active: true,
-    last_login: null,
-    created_at: timestamp
-  });
-};
-
 export type BlogPostStatus = 'draft' | 'published' | 'archived';
 
 export type BlogContentBlockType = 'paragraph' | 'heading' | 'image' | 'embed' | 'quote' | 'list';
@@ -66,27 +37,6 @@ export interface BlogContentBlock {
   alt?: string;
   caption?: string;
   items?: string[];
-}
-
-interface BlogPostRecord {
-  id: number;
-  admin_id: number;
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  cover_image_url: string | null;
-  cover_image_alt: string | null;
-  status: BlogPostStatus;
-  content: string;
-  tags: string | null;
-  meta_title: string | null;
-  meta_description: string | null;
-  meta_keywords: string | null;
-  reading_time: number;
-  feature_embed_url: string | null;
-  created_at: string;
-  updated_at: string;
-  published_at: string | null;
 }
 
 export interface BlogPostSummary {
@@ -155,624 +105,8 @@ export interface BlogListOptions {
   excludeId?: number;
 }
 
-const mockBlogPosts: BlogPostRecord[] = [];
-let mockBlogAutoIncrement = 1;
-
-const seedMockBlogPosts = () => {
-  // Real data is served by the backend; no mock seeding required.
-};
-
-
-seedDefaultAdminAccount();
-
-// Mock database functions
-const mockQuery = async (sql: string, params: unknown[] = []): Promise<unknown[]> => {
-  // Parse SQL to determine operation
-  const sqlLower = sql.toLowerCase();
-
-  if (sqlLower.includes('insert into users')) {
-    const email = params[0] as string;
-    const name = params[1] as string;
-    const user = {
-      id: mockUsers.length + 1,
-      email,
-      name,
-      username: name || (email ? email.split('@')[0] : ''),
-      password_hash: params[2],
-      currency: 'USD',
-      is_active: true,
-      email_verified: false,
-      first_name: null,
-      last_name: null,
-      created_at: new Date().toISOString()
-    };
-    mockUsers.push(user);
-    return [{ insertId: user.id }];
-  }
-
-  if (sqlLower.includes('select * from users where email = ?')) {
-    return mockUsers.filter(u => u.email === params[0]);
-  }
-
-  if (sqlLower.startsWith('update users set')) {
-    const userId = Number(params[params.length - 1]);
-    const user = mockUsers.find(u => u.id === userId);
-    if (user) {
-      let index = 0;
-      if (sql.includes('name = ?')) {
-        const value = params[index++] as string;
-        (user as Record<string, unknown>).name = value;
-        (user as Record<string, unknown>).username = value;
-      }
-      if (sql.includes('currency = ?')) {
-        (user as Record<string, unknown>).currency = params[index++] ?? (user as Record<string, unknown>).currency;
-      }
-      if (sql.includes('first_name = ?')) {
-        (user as Record<string, unknown>).first_name = params[index++] as string;
-      }
-      if (sql.includes('last_name = ?')) {
-        (user as Record<string, unknown>).last_name = params[index++] as string;
-      }
-      if (sql.includes('email = ?')) {
-        (user as Record<string, unknown>).email = params[index++] as string;
-      }
-      if (sql.includes('password_hash = ?')) {
-        (user as Record<string, unknown>).password_hash = params[index++] as string;
-      }
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('insert into categories')) {
-    const category = {
-      id: mockCategories.length + 1,
-      user_id: params[0],
-      name: params[1],
-      emoji: params[2],
-      budget: params[3],
-      created_at: new Date().toISOString()
-    };
-    mockCategories.push(category);
-    return [{ insertId: category.id }];
-  }
-
-  if (sqlLower.includes('select * from categories where user_id = ?')) {
-    return mockCategories.filter(c => c.user_id === params[0]);
-  }
-
-  if (sqlLower.includes('update categories set')) {
-    const categoryId = params[params.length - 1];
-    const category = mockCategories.find(c => c.id === categoryId);
-    if (category) {
-      if (sql.includes('name = ?')) category.name = params[0];
-      if (sql.includes('emoji = ?')) category.emoji = params[1];
-      if (sql.includes('budget = ?')) category.budget = params[2];
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('delete from categories where id = ?')) {
-    const filteredCategories = mockCategories.filter(c => c.id !== params[0]);
-    mockCategories.length = 0;
-    mockCategories.push(...filteredCategories);
-    return [];
-  }
-
-  if (sqlLower.includes('select coalesce(sum(amount), 0) as spent')) {
-    const spent = mockTransactions
-      .filter(t => t.user_id === params[0] && t.category_id === params[1] && t.type === 'expense')
-      .reduce((sum, t) => sum + parseFloat(String(t.amount)), 0);
-    return [{ spent }];
-  }
-
-  if (sqlLower.includes('insert into transactions')) {
-    const transaction = {
-      id: mockTransactions.length + 1,
-      user_id: params[0],
-      category_id: params[1],
-      amount: params[2],
-      description: params[3],
-      type: params[4],
-      date: params[5],
-      created_at: new Date().toISOString()
-    };
-    mockTransactions.push(transaction);
-    return [{ insertId: transaction.id }];
-  }
-
-  if (sqlLower.includes('select t.*, c.name as category_name')) {
-    const userTransactions = mockTransactions
-      .filter(t => t.user_id === params[0])
-      .map(t => {
-        const category = mockCategories.find(c => c.id === t.category_id);
-        return {
-          ...t,
-          category_name: category?.name || null,
-          category_emoji: category?.emoji || null
-        };
-      });
-    return userTransactions;
-  }
-
-  if (sqlLower.includes('update transactions set')) {
-    const transactionId = params[params.length - 1];
-    const transaction = mockTransactions.find(t => t.id === transactionId);
-    if (transaction) {
-      if (sql.includes('category_id = ?')) transaction.category_id = params[0];
-      if (sql.includes('amount = ?')) transaction.amount = params[1];
-      if (sql.includes('description = ?')) transaction.description = params[2];
-      if (sql.includes('type = ?')) transaction.type = params[3];
-      if (sql.includes('date = ?')) transaction.date = params[4];
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('delete from transactions where id = ?')) {
-    const filteredTransactions = mockTransactions.filter(t => t.id !== params[0]);
-    mockTransactions.length = 0;
-    mockTransactions.push(...filteredTransactions);
-    return [];
-  }
-
-  if (sqlLower.includes('insert into budgets')) {
-    const budget = {
-      id: mockBudgets.length + 1,
-      user_id: params[0],
-      period: params[1],
-      amount: params[2],
-      start_date: params[3],
-      end_date: params[4],
-      created_at: new Date().toISOString()
-    };
-    mockBudgets.push(budget);
-    return [{ insertId: budget.id }];
-  }
-
-  if (sqlLower.includes('select * from budgets where user_id = ? and period = ?')) {
-    return mockBudgets.filter(b => b.user_id === params[0] && b.period === params[1]);
-  }
-
-  if (sqlLower.includes('update budgets set')) {
-    const budgetId = params[params.length - 1];
-    const budget = mockBudgets.find(b => b.id === budgetId);
-    if (budget) {
-      if (sql.includes('amount = ?')) budget.amount = params[0];
-      if (sql.includes('start_date = ?')) budget.start_date = params[1];
-      if (sql.includes('end_date = ?')) budget.end_date = params[2];
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('insert into goals')) {
-    const goal = {
-      id: mockGoals.length + 1,
-      user_id: params[0],
-      name: params[1],
-      target_amount: params[2],
-      current_amount: params[3] || 0,
-      deadline: params[4],
-      category_id: params[5],
-      created_at: new Date().toISOString()
-    };
-    mockGoals.push(goal);
-    return [{ insertId: goal.id }];
-  }
-
-  if (sqlLower.includes('select g.*, c.name as category_name')) {
-    return mockGoals
-      .filter(g => g.user_id === params[0])
-      .map(g => {
-        const category = mockCategories.find(c => c.id === g.category_id);
-        return {
-          ...g,
-          category_name: category?.name || null,
-          category_emoji: category?.emoji || null
-        };
-      });
-  }
-
-  if (sqlLower.includes('update goals set')) {
-    const goalId = params[params.length - 1];
-    const goal = mockGoals.find(g => g.id === goalId);
-    if (goal) {
-      if (sql.includes('name = ?')) goal.name = params[0];
-      if (sql.includes('target_amount = ?')) goal.target_amount = params[1];
-      if (sql.includes('current_amount = ?')) goal.current_amount = params[2];
-      if (sql.includes('deadline = ?')) goal.deadline = params[3];
-      if (sql.includes('category_id = ?')) goal.category_id = params[4];
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('delete from goals where id = ?')) {
-    const filteredGoals = mockGoals.filter(g => g.id !== params[0]);
-    mockGoals.length = 0;
-    mockGoals.push(...filteredGoals);
-    return [];
-  }
-
-  if (sqlLower.includes('insert into accounts')) {
-    const account = {
-      id: mockAccounts.length + 1,
-      user_id: params[0],
-      name: params[1],
-      type: params[2],
-      balance: params[3] || 0,
-      currency: params[4] || 'USD',
-      created_at: new Date().toISOString()
-    };
-    mockAccounts.push(account);
-    return [{ insertId: account.id }];
-  }
-
-  if (sqlLower.includes('select * from accounts where user_id = ?')) {
-    return mockAccounts.filter(a => a.user_id === params[0]);
-  }
-
-  if (sqlLower.includes('update accounts set')) {
-    const accountId = params[params.length - 1];
-    const account = mockAccounts.find(a => a.id === accountId);
-    if (account) {
-      if (sql.includes('name = ?')) account.name = params[0];
-      if (sql.includes('type = ?')) account.type = params[1];
-      if (sql.includes('balance = ?')) account.balance = params[2];
-      if (sql.includes('currency = ?')) account.currency = params[3];
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('delete from accounts where id = ?')) {
-    const filteredAccounts = mockAccounts.filter(a => a.id !== params[0]);
-    mockAccounts.length = 0;
-    mockAccounts.push(...filteredAccounts);
-    return [];
-  }
-
-  if (sqlLower.includes('select setting_value from user_settings')) {
-    const setting = mockUserSettings.find(s => s.user_id === params[0] && s.setting_key === params[1]);
-    return setting ? [{ setting_value: setting.setting_value }] : [];
-  }
-
-  if (sqlLower.includes('insert into user_settings')) {
-    const existingIndex = mockUserSettings.findIndex(s => s.user_id === params[0] && s.setting_key === params[1]);
-    if (existingIndex >= 0) {
-      mockUserSettings[existingIndex].setting_value = params[2];
-    } else {
-      mockUserSettings.push({
-        id: mockUserSettings.length + 1,
-        user_id: params[0],
-        setting_key: params[1],
-        setting_value: params[2],
-        created_at: new Date().toISOString()
-      });
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('select setting_key, setting_value from user_settings')) {
-    return mockUserSettings.filter(s => s.user_id === params[0]);
-  }
-
-  // Admin API mocks
-  if (sqlLower.includes('insert into admins')) {
-    const admin = {
-      id: mockAdmins.length + 1,
-      email: params[0],
-      name: params[1],
-      password_hash: params[2],
-      role: params[3] || 'admin',
-      is_active: true,
-      last_login: null,
-      created_at: new Date().toISOString()
-    };
-    mockAdmins.push(admin);
-    return [{ insertId: admin.id }];
-  }
-
-  if (sqlLower.includes('select * from admins where email = ?')) {
-    return mockAdmins.filter(a => a.email === params[0]);
-  }
-
-  if (sqlLower.includes('select id, email, name, role, is_active, last_login, created_at from admins')) {
-    return mockAdmins;
-  }
-
-  if (sqlLower.startsWith('update admins set') && !sqlLower.includes('last_login')) {
-    const adminId = Number(params[params.length - 1]);
-    const admin = mockAdmins.find(a => a.id === adminId);
-    if (admin) {
-      let index = 0;
-      if (sql.includes('name = ?')) {
-        admin.name = params[index++] as string;
-      }
-      if (sql.includes('role = ?')) {
-        admin.role = params[index++] as string;
-      }
-      if (sql.includes('is_active = ?')) {
-        const value = params[index++];
-        admin.is_active = typeof value === 'string'
-          ? value === '1' || value.toLowerCase() === 'true'
-          : Boolean(value);
-      }
-      if (sql.includes('email = ?')) {
-        admin.email = params[index++] as string;
-      }
-      if (sql.includes('password_hash = ?')) {
-        admin.password_hash = params[index++] as string;
-      }
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('update admins set last_login')) {
-    const admin = mockAdmins.find(a => a.id === params[0]);
-    if (admin) {
-      admin.last_login = new Date().toISOString();
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('select id, email, name, currency, is_active, email_verified, created_at from users')) {
-    return mockUsers.map(u => ({
-      id: u.id,
-      email: u.email,
-      name: u.name,
-      currency: u.currency,
-      is_active: u.is_active,
-      email_verified: u.email_verified,
-      created_at: u.created_at
-    }));
-  }
-
-  if (sqlLower.includes('select count(*) as count from')) {
-    if (sql.includes('from users')) return [{ count: mockUsers.length }];
-    if (sql.includes('from admins')) return [{ count: mockAdmins.length }];
-    if (sql.includes('from transactions')) return [{ count: mockTransactions.length }];
-    if (sql.includes('from categories')) return [{ count: mockCategories.length }];
-    if (sql.includes('from goals')) return [{ count: mockGoals.length }];
-    if (sql.includes('from accounts')) return [{ count: mockAccounts.length }];
-  }
-
-  if (sqlLower.includes('select al.*, a.name as admin_name')) {
-    return mockAdminLogs.map(log => {
-      const admin = mockAdmins.find(a => a.id === log.admin_id);
-      return {
-        ...log,
-        admin_name: admin?.name || 'Unknown',
-        admin_email: admin?.email || 'Unknown'
-      };
-    });
-  }
-
-  if (sqlLower.includes('insert into admin_logs')) {
-    const log = {
-      id: mockAdminLogs.length + 1,
-      admin_id: params[0],
-      action: params[1],
-      target_type: params[2],
-      target_id: params[3],
-      details: params[4],
-      ip_address: params[5],
-      created_at: new Date().toISOString()
-    };
-    mockAdminLogs.push(log);
-    return [{ insertId: log.id }];
-  }
-
-  if (sqlLower.includes('select setting_value, setting_type from system_settings')) {
-    const setting = mockSystemSettings.find(s => s.setting_key === params[0]);
-    return setting ? [{ setting_value: setting.setting_value, setting_type: setting.setting_type }] : [];
-  }
-
-  if (sqlLower.includes('insert into system_settings')) {
-    const existingIndex = mockSystemSettings.findIndex(s => s.setting_key === params[0]);
-    if (existingIndex >= 0) {
-      mockSystemSettings[existingIndex].setting_value = params[1];
-      mockSystemSettings[existingIndex].setting_type = params[2];
-      mockSystemSettings[existingIndex].description = params[3];
-    } else {
-      mockSystemSettings.push({
-        id: mockSystemSettings.length + 1,
-        setting_key: params[0],
-        setting_value: params[1],
-        setting_type: params[2],
-        description: params[3],
-        created_at: new Date().toISOString()
-      });
-    }
-    return [];
-  }
-
-  if (sqlLower.includes('select * from system_settings')) {
-    return mockSystemSettings;
-  }
-
-  if (sqlLower.includes('delete from system_settings')) {
-    const filteredSystemSettings = mockSystemSettings.filter(s => s.setting_key !== params[0]);
-    mockSystemSettings.length = 0;
-    mockSystemSettings.push(...filteredSystemSettings);
-    return [];
-  }
-
-  // Blog posts mock queries
-  if (sqlLower.startsWith('insert into blog_posts')) {
-    const [
-      adminId,
-      title,
-      slug,
-      excerpt,
-      coverImageUrl,
-      coverImageAlt,
-      status,
-      content,
-      tags,
-      metaTitle,
-      metaDescription,
-      metaKeywords,
-      readingTime,
-      featureEmbedUrl,
-      publishedAt
-    ] = params;
-
-    const nowIso = new Date().toISOString();
-    const post: BlogPostRecord = {
-      id: mockBlogAutoIncrement++,
-      admin_id: Number(adminId),
-      title: String(title),
-      slug: String(slug),
-      excerpt: excerpt ? String(excerpt) : null,
-      cover_image_url: coverImageUrl ? String(coverImageUrl) : null,
-      cover_image_alt: coverImageAlt ? String(coverImageAlt) : null,
-      status: (status as BlogPostStatus) || 'draft',
-      content: content ? String(content) : '[]',
-      tags: tags ? String(tags) : null,
-      meta_title: metaTitle ? String(metaTitle) : null,
-      meta_description: metaDescription ? String(metaDescription) : null,
-      meta_keywords: metaKeywords ? String(metaKeywords) : null,
-      reading_time: typeof readingTime === 'number' ? readingTime : Number(readingTime) || 0,
-      feature_embed_url: featureEmbedUrl ? String(featureEmbedUrl) : null,
-      created_at: nowIso,
-      updated_at: nowIso,
-      published_at: publishedAt ? new Date(publishedAt as string).toISOString() : null
-    };
-
-    mockBlogPosts.unshift(post);
-    return [{ insertId: post.id }];
-  }
-
-  if (sqlLower.startsWith('update blog_posts set title = ?')) {
-    const [
-      title,
-      slug,
-      excerpt,
-      coverImageUrl,
-      coverImageAlt,
-      status,
-      content,
-      tags,
-      metaTitle,
-      metaDescription,
-      metaKeywords,
-      readingTime,
-      featureEmbedUrl,
-      publishedAt,
-      id
-    ] = params;
-
-    const post = mockBlogPosts.find(p => p.id === Number(id));
-    if (post) {
-      post.title = String(title);
-      post.slug = String(slug);
-      post.excerpt = excerpt ? String(excerpt) : null;
-      post.cover_image_url = coverImageUrl ? String(coverImageUrl) : null;
-      post.cover_image_alt = coverImageAlt ? String(coverImageAlt) : null;
-      post.status = (status as BlogPostStatus) || 'draft';
-      post.content = content ? String(content) : '[]';
-      post.tags = tags ? String(tags) : null;
-      post.meta_title = metaTitle ? String(metaTitle) : null;
-      post.meta_description = metaDescription ? String(metaDescription) : null;
-      post.meta_keywords = metaKeywords ? String(metaKeywords) : null;
-      post.reading_time = typeof readingTime === 'number' ? readingTime : Number(readingTime) || 0;
-      post.feature_embed_url = featureEmbedUrl ? String(featureEmbedUrl) : null;
-      post.published_at = publishedAt ? new Date(publishedAt as string).toISOString() : null;
-      post.updated_at = new Date().toISOString();
-    }
-    return [];
-  }
-
-  if (sqlLower.startsWith('delete from blog_posts where id = ?')) {
-    const id = Number(params[0]);
-    const filtered = mockBlogPosts.filter(p => p.id !== id);
-    mockBlogPosts.length = 0;
-    mockBlogPosts.push(...filtered);
-    return [];
-  }
-
-  if (sqlLower.startsWith('select * from blog_posts where id = ?')) {
-    const id = Number(params[0]);
-    return mockBlogPosts.filter(p => p.id === id);
-  }
-
-  if (sqlLower.startsWith('select * from blog_posts where slug = ?')) {
-    const slug = String(params[0]);
-    return mockBlogPosts.filter(p => p.slug === slug);
-  }
-
-  if (sqlLower.startsWith('select * from blog_posts where status = ? and id != ?')) {
-    const status = params[0] as BlogPostStatus;
-    const excludeId = Number(params[1]);
-    const limit = typeof params[2] === 'number' ? params[2] : undefined;
-    const filtered = mockBlogPosts
-      .filter(p => p.status === status && p.id !== excludeId)
-      .sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
-    return typeof limit === 'number' ? filtered.slice(0, limit) : filtered;
-  }
-
-  if (sqlLower.startsWith('select * from blog_posts where status = ?')) {
-    const status = params[0] as BlogPostStatus;
-    const limit = typeof params[1] === 'number' ? params[1] : undefined;
-    const offset = typeof params[2] === 'number' ? params[2] : undefined;
-    const filtered = mockBlogPosts
-      .filter(p => p.status === status)
-      .sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
-    let results = filtered;
-    if (typeof offset === 'number') {
-      results = results.slice(offset);
-    }
-    if (typeof limit === 'number') {
-      results = results.slice(0, limit);
-    }
-    return results;
-  }
-
-  if (sqlLower.startsWith('select * from blog_posts')) {
-    let results = [...mockBlogPosts];
-
-    if (sqlLower.includes('order by created_at desc')) {
-      results.sort((a, b) => b.created_at.localeCompare(a.created_at));
-    } else if (sqlLower.includes('order by published_at desc')) {
-      results.sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
-    }
-
-    let limit: number | undefined;
-    let offset: number | undefined;
-
-    if (sqlLower.includes('limit ?') && sqlLower.includes('offset ?')) {
-      limit = typeof params[0] === 'number' ? params[0] : undefined;
-      offset = typeof params[1] === 'number' ? params[1] : undefined;
-    } else if (sqlLower.includes('limit ?')) {
-      const candidateIndex = params.length - 1;
-      const candidate = params[candidateIndex];
-      if (typeof candidate === 'number') {
-        limit = candidate;
-      }
-    } else if (sqlLower.includes('offset ?')) {
-      const candidate = params[params.length - 1];
-      if (typeof candidate === 'number') {
-        offset = candidate;
-      }
-    }
-
-    if (typeof offset === 'number') {
-      results = results.slice(offset);
-    }
-    if (typeof limit === 'number') {
-      results = results.slice(0, limit);
-    }
-
-    return results;
-  }
-
-  // Default return for unhandled queries
-  return [];
-};
-
-// Replace the database import with mock implementation
-// import { query } from './database';
-const query = mockQuery;
-
-export const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : "http://localhost:5001/api";
-const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5001").replace(/\/$/, "");
+export const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : "http://127.0.0.1:5001/api";
+const API_BASE = (import.meta.env.VITE_API_URL || "http://127.0.0.1:5001").replace(/\/$/, "");
 
 const buildQuery = (params: Record<string, string | number | undefined>) => {
   const searchParams = new URLSearchParams();
@@ -790,26 +124,35 @@ async function apiRequest<T>(path: string, options: RequestInit = {}) {
     ...(options.headers || {})
   };
 
-  const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  const fullUrl = `${API_BASE}${path}`;
 
-  if (!response.ok) {
-    let message = response.statusText;
-    try {
-      const data = await response.json();
-      message = data?.message || message;
-    } catch {
-      // ignore JSON parse failure, fall back to status text
+  try {
+    const response = await fetch(fullUrl, { ...options, headers });
+
+    if (!response.ok) {
+      let message = response.statusText;
+      try {
+        const data = await response.json();
+        message = data?.message || message;
+      } catch {
+        // ignore JSON parse failure
+      }
+      const error = new Error(message);
+      (error as any).status = response.status;
+      throw error;
     }
-    const error = new Error(message);
-    (error as Error & { status?: number }).status = response.status;
+
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
+    return (await response.json()) as T;
+  } catch (error) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      console.error(`API Fetch Error: Could not connect to ${fullUrl}. Ensure your backend server is running on port 5001.`);
+    }
     throw error;
   }
-
-  if (response.status === 204) {
-    return undefined as T;
-  }
-
-  return (await response.json()) as T;
 }
 
 const resolveUserId = (explicit?: number): number => {
@@ -830,358 +173,48 @@ const resolveUserId = (explicit?: number): number => {
   throw new Error("User context is not available");
 };
 
-const slugify = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-
-const splitCsv = (value: string | null) =>
-  value
-    ? value
-      .split(',')
-      .map((item) => item.trim())
-      .filter(Boolean)
-    : [];
-
-const joinCsv = (values?: string[] | null) =>
-  values && values.length ? values.map((v) => v.trim()).filter(Boolean).join(',') : null;
-
-const normaliseBlocks = (blocks?: BlogContentBlock[]) =>
-  Array.isArray(blocks) ? blocks.filter((block): block is BlogContentBlock => Boolean(block?.type)) : [];
-
-const parseBlocks = (value: string | null): BlogContentBlock[] => {
-  if (!value) return [];
-  try {
-    const parsed = JSON.parse(value) as BlogContentBlock[];
-    return normaliseBlocks(parsed);
-  } catch (error) {
-    console.warn('Failed to parse blog content blocks', error);
-    return [];
-  }
-};
-
-const stringifyBlocks = (blocks?: BlogContentBlock[]) => JSON.stringify(normaliseBlocks(blocks));
-
-const computeReadingTime = (blocks: BlogContentBlock[]) => {
-  const wordsPerMinute = 220;
-  const totalWords = normaliseBlocks(blocks).reduce((wordCount, block) => {
-    if (block.type === 'list' && block.items) {
-      const itemsText = block.items.join(' ');
-      return wordCount + itemsText.trim().split(/\s+/).filter(Boolean).length;
-    }
-    if ('text' in block && block.text) {
-      return wordCount + block.text.trim().split(/\s+/).filter(Boolean).length;
-    }
-    return wordCount;
-  }, 0);
-
-  return Math.max(1, Math.ceil(totalWords / wordsPerMinute));
-};
-
-const applyPagination = <T>(items: T[], limit?: number, offset?: number) => {
-  let result = [...items];
-  if (typeof offset === 'number' && offset > 0) {
-    result = result.slice(offset);
-  }
-  if (typeof limit === 'number' && limit >= 0) {
-    result = result.slice(0, limit);
-  }
-  return result;
-};
-
-const mapRecordToSummary = (record: BlogPostRecord): BlogPostSummary => ({
-  id: record.id,
-  title: record.title,
-  slug: record.slug,
-  excerpt: record.excerpt,
-  coverImageUrl: record.cover_image_url,
-  coverImageAlt: record.cover_image_alt,
-  status: record.status,
-  tags: splitCsv(record.tags),
-  readingTime: record.reading_time,
-  publishedAt: record.published_at,
-  createdAt: record.created_at,
-  updatedAt: record.updated_at,
-  authorId: record.admin_id
-});
-
-const mapRecordToDetail = (record: BlogPostRecord): BlogPostDetail => {
-  const summary = mapRecordToSummary(record);
-  return {
-    ...summary,
-    contentBlocks: parseBlocks(record.content),
-    metaTitle: record.meta_title,
-    metaDescription: record.meta_description,
-    metaKeywords: splitCsv(record.meta_keywords),
-    featureEmbedUrl: record.feature_embed_url,
-    authorId: record.admin_id
-  };
-};
-
-const getBlogRecordById = async (id: number): Promise<BlogPostRecord | null> => {
-  const rows = (await query('SELECT * FROM blog_posts WHERE id = ? LIMIT 1', [id])) as BlogPostRecord[];
-  return rows[0] ?? null;
-};
-
-const getBlogRecordBySlug = async (slug: string): Promise<BlogPostRecord | null> => {
-  const rows = (await query('SELECT * FROM blog_posts WHERE slug = ? LIMIT 1', [slug])) as BlogPostRecord[];
-  return rows[0] ?? null;
-};
-
-const ensureUniqueSlug = async (desiredSlug: string, excludeId?: number) => {
-  const baseSlug = slugify(desiredSlug);
-  let candidate = baseSlug;
-  let suffix = 1;
-
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    const existing = await getBlogRecordBySlug(candidate);
-    if (!existing || (excludeId && existing.id === excludeId)) {
-      return candidate;
-    }
-    candidate = `${baseSlug}-${suffix++}`;
-  }
-};
-
-const sortByPublishedDate = (records: BlogPostRecord[]) =>
-  [...records].sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
-
-const sortByCreatedDate = (records: BlogPostRecord[]) =>
-  [...records].sort((a, b) => b.created_at.localeCompare(a.created_at));
-
+// Blog API
 export const blogAPI = {
   listPublished: async (options: BlogListOptions = {}): Promise<BlogPostSummary[]> => {
-    const { limit, offset, search, tag, excludeId } = options;
-    const rows = (await query('SELECT * FROM blog_posts WHERE status = ?', ['published'])) as BlogPostRecord[];
-    let filtered = sortByPublishedDate(rows).filter((row) => row.published_at);
-
-    if (excludeId) {
-      filtered = filtered.filter((row) => row.id !== excludeId);
-    }
-
-    if (tag) {
-      const normalizedTag = tag.toLowerCase();
-      filtered = filtered.filter((row) => splitCsv(row.tags).some((item) => item.toLowerCase() === normalizedTag));
-    }
-
-    if (search) {
-      const searchTerm = search.toLowerCase();
-      filtered = filtered.filter((row) => {
-        const haystack = [
-          row.title,
-          row.excerpt ?? '',
-          row.meta_description ?? '',
-          row.tags ?? ''
-        ]
-          .join(' ')
-          .toLowerCase();
-        return haystack.includes(searchTerm);
-      });
-    }
-
-    return applyPagination(filtered.map(mapRecordToSummary), limit, offset);
+    const qs = buildQuery({ ...options, status: 'published' });
+    return apiRequest(`/api/blogs${qs}`);
   },
 
-  listAll: async (
-    options: BlogListOptions & { status?: BlogPostStatus | 'all' } = {}
-  ): Promise<BlogPostSummary[]> => {
-    const { limit, offset, search, tag, status = 'all' } = options;
-    let rows: BlogPostRecord[];
-
-    if (status === 'all') {
-      rows = (await query('SELECT * FROM blog_posts ORDER BY created_at DESC', [])) as BlogPostRecord[];
-    } else {
-      rows = (await query('SELECT * FROM blog_posts WHERE status = ?', [status])) as BlogPostRecord[];
-    }
-
-    let filtered = status === 'published' ? sortByPublishedDate(rows) : sortByCreatedDate(rows);
-
-    if (tag) {
-      const target = tag.toLowerCase();
-      filtered = filtered.filter((row) => splitCsv(row.tags).some((item) => item.toLowerCase() === target));
-    }
-
-    if (search) {
-      const needle = search.toLowerCase();
-      filtered = filtered.filter((row) => {
-        const haystack = [
-          row.title,
-          row.excerpt ?? '',
-          row.meta_description ?? '',
-          row.tags ?? '',
-          row.meta_keywords ?? ''
-        ]
-          .join(' ')
-          .toLowerCase();
-        return haystack.includes(needle);
-      });
-    }
-
-    return applyPagination(filtered.map(mapRecordToSummary), limit, offset);
+  listAll: async (options: BlogListOptions & { status?: BlogPostStatus | 'all' } = {}): Promise<BlogPostSummary[]> => {
+    const qs = buildQuery(options as any);
+    return apiRequest(`/api/blogs${qs}`);
   },
 
   getBySlug: async (slug: string): Promise<BlogPostDetail | null> => {
-    const record = await getBlogRecordBySlug(slug);
-    if (!record || record.status !== 'published') return null;
-    return mapRecordToDetail(record);
+    return apiRequest(`/api/blogs/slug/${slug}`);
   },
 
   getById: async (id: number): Promise<BlogPostDetail | null> => {
-    const record = await getBlogRecordById(id);
-    return record ? mapRecordToDetail(record) : null;
+    return apiRequest(`/api/blogs/${id}`);
   },
 
   getRelated: async (postId: number, options: { limit?: number } = {}): Promise<BlogPostSummary[]> => {
-    const { limit = 3 } = options;
-    const current = await getBlogRecordById(postId);
-    if (!current) return [];
-
-    const currentTags = new Set(splitCsv(current.tags).map((tag) => tag.toLowerCase()));
-    let rows = (await query('SELECT * FROM blog_posts WHERE status = ?', ['published'])) as BlogPostRecord[];
-    rows = rows.filter((row) => row.id !== current.id && row.published_at);
-
-    const tagMatches: BlogPostRecord[] = [];
-    const fallback: BlogPostRecord[] = [];
-
-    rows.forEach((row) => {
-      const rowTags = splitCsv(row.tags).map((tag) => tag.toLowerCase());
-      if (rowTags.some((tag) => currentTags.has(tag))) {
-        tagMatches.push(row);
-      } else {
-        fallback.push(row);
-      }
-    });
-
-    const ordered = [...sortByPublishedDate(tagMatches), ...sortByPublishedDate(fallback)];
-    return applyPagination(ordered.map(mapRecordToSummary), limit, 0);
+    return apiRequest(`/api/blogs/${postId}/related${buildQuery(options)}`);
   },
 
   create: async (input: BlogPostCreateInput): Promise<BlogPostDetail> => {
-    const blocks = normaliseBlocks(input.contentBlocks);
-    const readingTime = computeReadingTime(blocks);
-    const slug = await ensureUniqueSlug(input.slug || input.title);
-    const status: BlogPostStatus = input.status || 'draft';
-    const tagsCsv = joinCsv(input.tags);
-    const metaKeywordsCsv = joinCsv(input.metaKeywords);
-    const contentString = stringifyBlocks(blocks);
-    const metaTitle = input.metaTitle || input.title;
-    const metaDescription = input.metaDescription || input.excerpt || null;
-    const featureEmbedUrl = input.featureEmbedUrl ?? null;
-    const publishedAt =
-      status === 'published'
-        ? input.publishedAt || new Date().toISOString()
-        : null;
-
-    const sql = `
-      INSERT INTO blog_posts (
-        admin_id, title, slug, excerpt, cover_image_url, cover_image_alt, status,
-        content, tags, meta_title, meta_description, meta_keywords, reading_time,
-        feature_embed_url, published_at
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    const params = [
-      input.adminId,
-      input.title,
-      slug,
-      input.excerpt ?? null,
-      input.coverImageUrl ?? null,
-      input.coverImageAlt ?? null,
-      status,
-      contentString,
-      tagsCsv,
-      metaTitle,
-      metaDescription,
-      metaKeywordsCsv,
-      readingTime,
-      featureEmbedUrl,
-      publishedAt
-    ];
-
-    const result = await query(sql, params) as { insertId: number }[];
-    const insertId = result?.[0]?.insertId;
-    if (!insertId) {
-      throw new Error('Failed to create blog post');
-    }
-
-    const record = await getBlogRecordById(insertId);
-    if (!record) {
-      throw new Error('Failed to load created blog post');
-    }
-
-    return mapRecordToDetail(record);
+    return apiRequest('/api/blogs', {
+      method: 'POST',
+      body: JSON.stringify(input)
+    });
   },
 
   update: async (id: number, input: BlogPostUpdateInput): Promise<BlogPostDetail> => {
-    const existing = await getBlogRecordById(id);
-    if (!existing) {
-      throw new Error('Blog post not found');
-    }
-
-    const nextTitle = input.title ?? existing.title;
-    const requestedSlug = input.slug ?? (input.title ? slugify(input.title) : existing.slug);
-    const slug = await ensureUniqueSlug(requestedSlug, id);
-
-    const blocks = input.contentBlocks ? normaliseBlocks(input.contentBlocks) : parseBlocks(existing.content);
-    const readingTime = input.contentBlocks ? computeReadingTime(blocks) : existing.reading_time;
-
-    const tagsCsv = input.tags !== undefined ? joinCsv(input.tags) : existing.tags;
-    const metaKeywordsCsv =
-      input.metaKeywords !== undefined ? joinCsv(input.metaKeywords) : existing.meta_keywords;
-
-    const status = input.status ?? existing.status;
-    let publishedAt = existing.published_at;
-    if (status === 'published') {
-      if (!publishedAt) {
-        publishedAt = input.publishedAt || new Date().toISOString();
-      } else if (input.publishedAt) {
-        publishedAt = input.publishedAt;
-      }
-    } else {
-      publishedAt = null;
-    }
-
-    const sql = `
-      UPDATE blog_posts
-      SET title = ?, slug = ?, excerpt = ?, cover_image_url = ?, cover_image_alt = ?, status = ?,
-          content = ?, tags = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, reading_time = ?,
-          feature_embed_url = ?, published_at = ?, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `;
-
-    const params = [
-      nextTitle,
-      slug,
-      input.excerpt ?? existing.excerpt,
-      input.coverImageUrl ?? existing.cover_image_url,
-      input.coverImageAlt ?? existing.cover_image_alt,
-      status,
-      stringifyBlocks(blocks),
-      tagsCsv,
-      input.metaTitle ?? existing.meta_title ?? nextTitle,
-      input.metaDescription ?? existing.meta_description ?? existing.excerpt,
-      metaKeywordsCsv,
-      readingTime,
-      input.featureEmbedUrl === undefined ? existing.feature_embed_url : input.featureEmbedUrl,
-      publishedAt,
-      id
-    ];
-
-    await query(sql, params);
-    const updated = await getBlogRecordById(id);
-    if (!updated) {
-      throw new Error('Failed to load updated blog post');
-    }
-
-    return mapRecordToDetail(updated);
+    return apiRequest(`/api/blogs/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(input)
+    });
   },
 
   delete: async (id: number) => {
-    await query('DELETE FROM blog_posts WHERE id = ?', [id]);
+    return apiRequest(`/api/blogs/${id}`, {
+      method: 'DELETE'
+    });
   }
 };
 
@@ -1190,12 +223,7 @@ export const userAPI = {
   create: async (userData: { email: string; name: string; passwordHash: string; currency?: string }) => {
     return apiRequest("/api/users", {
       method: "POST",
-      body: JSON.stringify({
-        email: userData.email,
-        name: userData.name,
-        passwordHash: userData.passwordHash,
-        currency: userData.currency
-      })
+      body: JSON.stringify(userData)
     });
   },
 
@@ -1212,11 +240,7 @@ export const userAPI = {
     }
   },
 
-  update: async (id: number, userData: Partial<{ name: string; currency: string; first_name: string; last_name: string; email: string; password_hash: string }>) => {
-    if (!Object.keys(userData).length) {
-      return;
-    }
-
+  update: async (id: number, userData: Partial<UserRecord>) => {
     return apiRequest(`/api/users/${id}`, {
       method: "PUT",
       body: JSON.stringify(userData)
@@ -1229,11 +253,7 @@ export const categoryAPI = {
   create: async (categoryData: { userId: number; name: string; emoji?: string; budget: number }) => {
     return apiRequest(`/api/users/${categoryData.userId}/categories`, {
       method: "POST",
-      body: JSON.stringify({
-        name: categoryData.name,
-        emoji: categoryData.emoji,
-        budget: categoryData.budget
-      })
+      body: JSON.stringify(categoryData)
     });
   },
 
@@ -1243,10 +263,6 @@ export const categoryAPI = {
 
   update: async (id: number, categoryData: Partial<{ name: string; emoji: string; budget: number }>, userId?: number) => {
     const resolvedUserId = resolveUserId(userId);
-    if (!Object.keys(categoryData).length) {
-      return;
-    }
-
     return apiRequest(`/api/users/${resolvedUserId}/categories/${id}`, {
       method: "PUT",
       body: JSON.stringify(categoryData)
@@ -1261,11 +277,11 @@ export const categoryAPI = {
   },
 
   getSpendingByCategory: async (userId: number, categoryId: number) => {
-    const data = await apiRequest(`/api/users/${userId}/transactions${buildQuery({ categoryId })}`);
-    if (Array.isArray(data)) {
-      return data
-        .filter((transaction) => transaction.type === "expense")
-        .reduce((sum, transaction) => sum + Number(transaction.amount ?? 0), 0);
+    const transactions = await apiRequest<any[]>(`/api/users/${userId}/transactions${buildQuery({ categoryId })}`);
+    if (Array.isArray(transactions)) {
+      return transactions
+        .filter((t) => t.type === "expense")
+        .reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0);
     }
     return 0;
   }
@@ -1275,7 +291,7 @@ export const categoryAPI = {
 export const transactionAPI = {
   create: async (transactionData: {
     userId: number;
-    categoryId?: number;
+    categoryId: number | null;
     amount: number;
     description?: string;
     type: "income" | "expense";
@@ -1283,13 +299,7 @@ export const transactionAPI = {
   }) => {
     return apiRequest(`/api/users/${transactionData.userId}/transactions`, {
       method: "POST",
-      body: JSON.stringify({
-        categoryId: transactionData.categoryId,
-        amount: transactionData.amount,
-        description: transactionData.description,
-        type: transactionData.type,
-        date: transactionData.date
-      })
+      body: JSON.stringify(transactionData)
     });
   },
 
@@ -1301,7 +311,7 @@ export const transactionAPI = {
   update: async (
     id: number,
     transactionData: Partial<{
-      categoryId: number;
+      categoryId: number | null;
       amount: number;
       description: string;
       type: "income" | "expense";
@@ -1310,10 +320,6 @@ export const transactionAPI = {
     userId?: number
   ) => {
     const resolvedUserId = resolveUserId(userId);
-    if (!Object.keys(transactionData).length) {
-      return;
-    }
-
     return apiRequest(`/api/users/${resolvedUserId}/transactions/${id}`, {
       method: "PUT",
       body: JSON.stringify(transactionData)
@@ -1332,36 +338,24 @@ export const transactionAPI = {
 export const budgetAPI = {
   create: async (budgetData: {
     userId: number;
-    period: "daily" | "weekly" | "monthly" | "yearly";
+    period: string;
     amount: number;
     startDate: string;
     endDate: string;
   }) => {
     return apiRequest(`/api/users/${budgetData.userId}/budgets`, {
       method: "POST",
-      body: JSON.stringify({
-        period: budgetData.period,
-        amount: budgetData.amount,
-        startDate: budgetData.startDate,
-        endDate: budgetData.endDate
-      })
+      body: JSON.stringify(budgetData)
     });
   },
 
   findByUserIdAndPeriod: async (userId: number, period: string) => {
-    const rows = await apiRequest(`/api/users/${userId}/budgets${buildQuery({ period })}`);
-    if (Array.isArray(rows)) {
-      return rows[0];
-    }
-    return null;
+    const rows = await apiRequest<any[]>(`/api/users/${userId}/budgets${buildQuery({ period })}`);
+    return Array.isArray(rows) ? rows[0] : null;
   },
 
   update: async (id: number, budgetData: Partial<{ amount: number; startDate: string; endDate: string }>, userId?: number) => {
     const resolvedUserId = resolveUserId(userId);
-    if (!Object.keys(budgetData).length) {
-      return;
-    }
-
     return apiRequest(`/api/users/${resolvedUserId}/budgets/${id}`, {
       method: "PUT",
       body: JSON.stringify(budgetData)
@@ -1381,13 +375,7 @@ export const goalAPI = {
   }) => {
     return apiRequest(`/api/users/${goalData.userId}/goals`, {
       method: "POST",
-      body: JSON.stringify({
-        name: goalData.name,
-        targetAmount: goalData.targetAmount,
-        currentAmount: goalData.currentAmount,
-        deadline: goalData.deadline,
-        categoryId: goalData.categoryId
-      })
+      body: JSON.stringify(goalData)
     });
   },
 
@@ -1395,22 +383,8 @@ export const goalAPI = {
     return apiRequest(`/api/users/${userId}/goals`);
   },
 
-  update: async (
-    id: number,
-    goalData: Partial<{
-      name: string;
-      targetAmount: number;
-      currentAmount: number;
-      deadline: string;
-      categoryId: number;
-    }>,
-    userId?: number
-  ) => {
+  update: async (id: number, goalData: any, userId?: number) => {
     const resolvedUserId = resolveUserId(userId);
-    if (!Object.keys(goalData).length) {
-      return;
-    }
-
     return apiRequest(`/api/users/${resolvedUserId}/goals/${id}`, {
       method: "PUT",
       body: JSON.stringify(goalData)
@@ -1427,21 +401,10 @@ export const goalAPI = {
 
 // Account API
 export const accountAPI = {
-  create: async (accountData: {
-    userId: number;
-    name: string;
-    type: "checking" | "savings" | "credit" | "investment";
-    balance?: number;
-    currency?: string;
-  }) => {
+  create: async (accountData: any) => {
     return apiRequest(`/api/users/${accountData.userId}/accounts`, {
       method: "POST",
-      body: JSON.stringify({
-        name: accountData.name,
-        type: accountData.type,
-        balance: accountData.balance,
-        currency: accountData.currency
-      })
+      body: JSON.stringify(accountData)
     });
   },
 
@@ -1449,21 +412,8 @@ export const accountAPI = {
     return apiRequest(`/api/users/${userId}/accounts`);
   },
 
-  update: async (
-    id: number,
-    accountData: Partial<{
-      name: string;
-      type: "checking" | "savings" | "credit" | "investment";
-      balance: number;
-      currency: string;
-    }>,
-    userId?: number
-  ) => {
+  update: async (id: number, accountData: any, userId?: number) => {
     const resolvedUserId = resolveUserId(userId);
-    if (!Object.keys(accountData).length) {
-      return;
-    }
-
     return apiRequest(`/api/users/${resolvedUserId}/accounts/${id}`, {
       method: "PUT",
       body: JSON.stringify(accountData)
@@ -1506,240 +456,98 @@ export const settingsAPI = {
 
 // Admin API
 export const adminAPI = {
-  create: async (adminData: { email: string; name: string; passwordHash: string; role?: 'super_admin' | 'admin' | 'moderator' }) => {
-    const sql = 'INSERT INTO admins (email, name, password_hash, role) VALUES (?, ?, ?, ?)';
-    const result = await query(sql, [adminData.email, adminData.name, adminData.passwordHash, adminData.role || 'admin']);
-    return result;
+  create: async (adminData: any) => {
+    return apiRequest('/api/admin/create', {
+      method: "POST",
+      body: JSON.stringify(adminData)
+    });
   },
 
   findByEmail: async (email: string): Promise<AdminRecord | undefined> => {
-    const sql = 'SELECT * FROM admins WHERE email = ?';
-    const result = await query(sql, [email]);
-    return result[0] as AdminRecord | undefined;
+    try {
+      return await apiRequest(`/api/admin/find-by-email?email=${email}`);
+    } catch (error: any) {
+      if (error.status === 404) return undefined;
+      throw error;
+    }
   },
 
   findAll: async (limit?: number, offset?: number) => {
-    let sql = 'SELECT id, email, name, role, is_active, last_login, created_at FROM admins ORDER BY created_at DESC';
-    const params = [];
-
-    if (limit) {
-      sql += ' LIMIT ?';
-      params.push(limit);
-    }
-    if (offset) {
-      sql += ' OFFSET ?';
-      params.push(offset);
-    }
-
-    return await query(sql, params);
+    return apiRequest(`/api/admin/admins${buildQuery({ limit, offset })}`);
   },
 
-  update: async (id: number, adminData: Partial<{ name: string; role: string; is_active: boolean; email: string; passwordHash: string }>) => {
-    const fields = [];
-    const values = [];
-
-    if (adminData.name !== undefined) {
-      fields.push('name = ?');
-      values.push(adminData.name);
-    }
-    if (adminData.role !== undefined) {
-      fields.push('role = ?');
-      values.push(adminData.role);
-    }
-    if (adminData.is_active !== undefined) {
-      fields.push('is_active = ?');
-      values.push(adminData.is_active);
-    }
-    if (adminData.email !== undefined) {
-      fields.push('email = ?');
-      values.push(adminData.email);
-    }
-    if (adminData.passwordHash !== undefined) {
-      fields.push('password_hash = ?');
-      values.push(adminData.passwordHash);
-    }
-
-    if (fields.length === 0) return;
-
-    const sql = `UPDATE admins SET ${fields.join(', ')} WHERE id = ?`;
-    values.push(id);
-    return await query(sql, values);
+  update: async (id: number, adminData: any) => {
+    return apiRequest(`/api/admin/update/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(adminData)
+    });
   },
 
   updateLastLogin: async (id: number) => {
-    const sql = 'UPDATE admins SET last_login = CURRENT_TIMESTAMP WHERE id = ?';
-    return await query(sql, [id]);
+    return apiRequest(`/api/admin/update-last-login/${id}`, {
+      method: "PUT"
+    });
   },
 
   delete: async (id: number) => {
-    const sql = 'DELETE FROM admins WHERE id = ?';
-    return await query(sql, [id]);
+    return apiRequest(`/api/admin/delete/${id}`, {
+      method: "DELETE"
+    });
   },
 
-  // User management for admins
   getAllUsers: async (limit?: number, offset?: number) => {
-    let sql = 'SELECT id, email, name, currency, is_active, email_verified, created_at FROM users ORDER BY created_at DESC';
-    const params = [];
-
-    if (limit) {
-      sql += ' LIMIT ?';
-      params.push(limit);
-    }
-    if (offset) {
-      sql += ' OFFSET ?';
-      params.push(offset);
-    }
-
-    return await query(sql, params);
+    return apiRequest(`/api/admin/users${buildQuery({ limit, offset })}`);
   },
 
-  updateUser: async (id: number, userData: Partial<{ name: string; currency: string; is_active: boolean; email_verified: boolean }>) => {
-    const fields = [];
-    const values = [];
-
-    if (userData.name !== undefined) {
-      fields.push('name = ?');
-      values.push(userData.name);
-    }
-    if (userData.currency !== undefined) {
-      fields.push('currency = ?');
-      values.push(userData.currency);
-    }
-    if (userData.is_active !== undefined) {
-      fields.push('is_active = ?');
-      values.push(userData.is_active);
-    }
-    if (userData.email_verified !== undefined) {
-      fields.push('email_verified = ?');
-      values.push(userData.email_verified);
-    }
-
-    if (fields.length === 0) return;
-
-    const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
-    values.push(id);
-    return await query(sql, values);
+  updateUser: async (id: number, userData: any) => {
+    return apiRequest(`/api/admin/users/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(userData)
+    });
   },
 
   deleteUser: async (id: number) => {
-    const sql = 'DELETE FROM users WHERE id = ?';
-    return await query(sql, [id]);
+    return apiRequest(`/api/admin/users/${id}`, {
+      method: "DELETE"
+    });
   },
 
-  // System statistics
   getSystemStats: async () => {
-    const stats = {
-      totalUsers: 0,
-      totalAdmins: 0,
-      totalTransactions: 0,
-      totalCategories: 0,
-      totalGoals: 0,
-      totalAccounts: 0
-    };
-
-    // Get counts
-    const getCount = (rows: any[]) =>
-      rows && rows.length > 0 && typeof rows[0]?.count === "number" ? rows[0].count : 0;
-
-    const userCount = await query('SELECT COUNT(*) as count FROM users');
-    const adminCount = await query('SELECT COUNT(*) as count FROM admins');
-    const transactionCount = await query('SELECT COUNT(*) as count FROM transactions');
-    const categoryCount = await query('SELECT COUNT(*) as count FROM categories');
-    const goalCount = await query('SELECT COUNT(*) as count FROM goals');
-    const accountCount = await query('SELECT COUNT(*) as count FROM accounts');
-
-    stats.totalUsers = getCount(userCount as any[]);
-    stats.totalAdmins = getCount(adminCount as any[]);
-    stats.totalTransactions = getCount(transactionCount as any[]);
-    stats.totalCategories = getCount(categoryCount as any[]);
-    stats.totalGoals = getCount(goalCount as any[]);
-    stats.totalAccounts = getCount(accountCount as any[]);
-
-    return stats;
+    return apiRequest('/api/admin/stats');
   },
 
-  // Admin logs
-  logAction: async (adminId: number, action: string, targetType: 'user' | 'category' | 'transaction' | 'system', targetId?: number, details?: string, ipAddress?: string) => {
-    const sql = 'INSERT INTO admin_logs (admin_id, action, target_type, target_id, details, ip_address) VALUES (?, ?, ?, ?, ?, ?)';
-    return await query(sql, [adminId, action, targetType, targetId, details, ipAddress]);
+  logAction: async (adminId: number, action: string, targetType: string, targetId?: number, details?: string, ipAddress?: string) => {
+    return apiRequest('/api/admin/logs', {
+      method: "POST",
+      body: JSON.stringify({ adminId, action, targetType, targetId, details, ipAddress })
+    });
   },
 
   getLogs: async (limit?: number, offset?: number) => {
-    let sql = `
-      SELECT al.*, a.name as admin_name, a.email as admin_email
-      FROM admin_logs al
-      LEFT JOIN admins a ON al.admin_id = a.id
-      ORDER BY al.created_at DESC
-    `;
-    const params = [];
-
-    if (limit) {
-      sql += ' LIMIT ?';
-      params.push(limit);
-    }
-    if (offset) {
-      sql += ' OFFSET ?';
-      params.push(offset);
-    }
-
-    return await query(sql, params);
+    return apiRequest(`/api/admin/logs${buildQuery({ limit, offset })}`);
   }
 };
 
 // System Settings API
 export const systemSettingsAPI = {
   get: async (key: string) => {
-    const sql = 'SELECT setting_value, setting_type FROM system_settings WHERE setting_key = ?';
-    const result = (await query(sql, [key])) as any[];
-    if (result[0]) {
-      const { setting_value, setting_type } = result[0];
-      // Parse based on type
-      switch (setting_type) {
-        case 'number':
-          return parseFloat(setting_value);
-        case 'boolean':
-          return setting_value === 'true';
-        case 'json':
-          return JSON.parse(setting_value);
-        default:
-          return setting_value;
-      }
-    }
-    return null;
+    return apiRequest(`/api/system-settings/${key}`);
   },
 
-  set: async (key: string, value: unknown, type: 'string' | 'number' | 'boolean' | 'json' = 'string', description?: string) => {
-    const stringValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
-    const sql = `
-      INSERT INTO system_settings (setting_key, setting_value, setting_type, description)
-      VALUES (?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), setting_type = VALUES(setting_type), description = VALUES(description)
-    `;
-    return await query(sql, [key, stringValue, type, description]);
+  set: async (key: string, value: any, type: string = 'string', description?: string) => {
+    return apiRequest('/api/system-settings', {
+      method: "PUT",
+      body: JSON.stringify({ key, value, type, description })
+    });
   },
 
   getAll: async () => {
-    const sql = 'SELECT * FROM system_settings ORDER BY setting_key';
-    const result = await query(sql) as RowDataPacket[];
-    return result.map(row => ({
-      ...row,
-      parsed_value: (() => {
-        switch (row.setting_type) {
-          case 'number':
-            return parseFloat(row.setting_value as string);
-          case 'boolean':
-            return (row.setting_value as string) === 'true';
-          case 'json':
-            return JSON.parse(row.setting_value as string);
-          default:
-            return row.setting_value;
-        }
-      })()
-    }));
+    return apiRequest('/api/system-settings');
   },
 
   delete: async (key: string) => {
-    const sql = 'DELETE FROM system_settings WHERE setting_key = ?';
-    return await query(sql, [key]);
+    return apiRequest(`/api/system-settings/${key}`, {
+      method: "DELETE"
+    });
   }
 };
