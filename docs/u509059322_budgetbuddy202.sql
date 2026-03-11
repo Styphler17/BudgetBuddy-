@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 11, 2026 at 07:47 AM
+-- Generation Time: Mar 11, 2026 at 05:52 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.1
 
@@ -184,7 +184,8 @@ CREATE TABLE `goals` (
 --
 
 INSERT INTO `goals` (`id`, `user_id`, `name`, `target_amount`, `current_amount`, `deadline`, `category_id`, `created_at`) VALUES
-(1, 1, 'Car', '5000.00', '0.00', '2026-12-31', NULL, '2026-03-10 01:50:12');
+(1, 1, 'Car', '5000.00', '0.00', '2026-12-31', NULL, '2026-03-10 01:50:12'),
+(2, 2, 'test', '2000.00', '0.00', '2027-03-02', NULL, '2026-03-11 09:07:15');
 
 -- --------------------------------------------------------
 
@@ -235,7 +236,6 @@ INSERT INTO `transactions` (`id`, `user_id`, `category_id`, `amount`, `descripti
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `google_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `currency` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT 'USD',
@@ -249,8 +249,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `google_id`, `name`, `password_hash`, `currency`, `is_active`, `email_verified`, `created_at`, `updated_at`) VALUES
-(1, 'test@budgetbuddy.com', NULL, 'Test User', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USD', 1, 0, '2026-03-10 01:29:55', '2026-03-11 07:44:23');
+INSERT INTO `users` (`id`, `email`, `name`, `password_hash`, `currency`, `is_active`, `email_verified`, `created_at`, `updated_at`) VALUES
+(1, 'test@budgetbuddy.com', 'Test User', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USD', 1, 0, '2026-03-10 01:29:55', '2026-03-11 07:44:23'),
+(2, 'livefinal@example.com', 'Live User', '$2b$10$NJA8JKFM.Kii6h.3k3b79eIrx8sDSW/tAS5Ih.yWcKj5mVA0DoZ3a', 'USD', 1, 0, '2026-03-11 08:14:31', '2026-03-11 08:14:31'),
+(3, 'changeme@test.com', 'CHANGE', '$2b$10$b6v8/7ph6vGHRe6WvIgDkuHbVFuCpGc8ya0Zy408pCsHpzoBwlLwK', 'USD', 1, 0, '2026-03-11 08:21:38', '2026-03-11 08:21:38');
 
 -- --------------------------------------------------------
 
@@ -411,7 +413,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `goals`
 --
 ALTER TABLE `goals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -429,7 +431,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_settings`
