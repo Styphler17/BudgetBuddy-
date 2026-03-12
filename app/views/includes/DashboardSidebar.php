@@ -24,19 +24,19 @@ $menu_items = [
 
     <!-- Menu -->
     <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto custom-scrollbar">
-        <p class="px-4 mb-4 text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-[0.2em]">System Menu</p>
+        <p class="px-4 mb-4 text-[10px] font-black text-gray-400 dark:text-slate-400 uppercase tracking-[0.2em]">System Menu</p>
         <?php foreach ($menu_items as $item): 
             $is_active = (strpos($current_page, $item['url']) !== false);
         ?>
             <a href="<?php echo $item['url']; ?>" 
-               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group w-full <?php echo $is_active ? 'bg-primary text-white shadow-lg shadow-primary/20 font-bold' : 'text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'; ?>">
+               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group w-full <?php echo $is_active ? 'bg-primary text-white shadow-lg shadow-primary/20 font-bold' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'; ?>">
                 <i data-lucide="<?php echo $item['icon']; ?>" class="h-5 w-5 <?php echo $is_active ? 'text-white' : 'text-gray-400 dark:text-slate-500 group-hover:text-primary dark:group-hover:text-accent'; ?>"></i>
                 <span class="text-sm tracking-tight"><?php echo $item['title']; ?></span>
             </a>
         <?php endforeach; ?>
         
         <div class="mt-8 pt-6 border-t border-gray-100 dark:border-white/5">
-            <a href="/BudgetBuddy-/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 dark:text-slate-500 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all w-full font-medium">
+            <a href="/BudgetBuddy-/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all w-full font-medium">
                 <i data-lucide="globe" class="h-5 w-5"></i>
                 <span class="text-sm">Back to Website</span>
             </a>
@@ -50,7 +50,7 @@ $menu_items = [
             </div>
             <div class="flex-1 min-w-0">
                 <p class="text-sm font-bold text-gray-900 dark:text-white truncate"><?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?></p>
-                <p class="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase truncate">Authorized Node</p>
+                <p class="text-[10px] text-gray-500 dark:text-slate-400 font-bold uppercase truncate">Authorized Node</p>
             </div>
             <a href="/BudgetBuddy-/logout" class="p-2 text-gray-400 hover:text-rose-500 transition-colors rounded-lg hover:bg-rose-50 dark:hover:bg-rose-500/10" title="Log out">
                 <i data-lucide="log-out" class="h-4 w-4"></i>

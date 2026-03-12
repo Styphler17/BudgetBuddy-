@@ -15,11 +15,8 @@
 
     <!-- Right Side Actions -->
     <div class="flex items-center gap-2 sm:gap-4">
-        <!-- Theme Toggle -->
-        <button id="dash-theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-all border border-transparent dark:border-white/5" title="Toggle Theme">
-            <i data-lucide="sun" id="dash-theme-light-icon" class="hidden w-5 h-5"></i>
-            <i data-lucide="moon" id="dash-theme-dark-icon" class="hidden w-5 h-5"></i>
-        </button>
+        <!-- Theme Switcher -->
+        <?php include APP_PATH . '/views/includes/ThemeSwitcher.php'; ?>
 
         <?php if (isset($_SESSION['user_id'])): ?>
             <div class="flex items-center gap-3 pl-2 border-l border-gray-100 dark:border-white/10">
@@ -38,27 +35,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
-    const dashThemeToggle = document.getElementById('dash-theme-toggle');
-    const lightIcon = document.getElementById('dash-theme-light-icon');
-    const darkIcon = document.getElementById('dash-theme-dark-icon');
-
-    const updateDashThemeIcons = () => {
-        if (document.body.classList.contains('dark')) {
-            lightIcon.classList.remove('hidden');
-            darkIcon.classList.add('hidden');
-        } else {
-            lightIcon.classList.add('hidden');
-            darkIcon.classList.remove('hidden');
-        }
-    };
-
-    updateDashThemeIcons();
-
-    dashThemeToggle?.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark'));
-        updateDashThemeIcons();
-    });
 
     mobileSidebarToggle?.addEventListener('click', () => {
         const sidebar = document.getElementById('dashboard-sidebar');

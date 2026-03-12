@@ -5,3 +5,132 @@
   --color-4: #a2db21;
   --color-5: #100fb0;
 }
+
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+toggle-theme.tsx
+'use client';
+
+import React from 'react';
+import { MonitorCogIcon, MoonStarIcon, SunIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useTheme } from 'next-themes';
+import { cn } from '@/lib/utils';
+
+const THEME_OPTIONS = [
+	{
+		icon: MonitorCogIcon,
+		value: 'system',
+	},
+	{
+		icon: SunIcon,
+		value: 'light',
+	},
+	{
+		icon: MoonStarIcon,
+		value: 'dark',
+	},
+];
+
+export function ToggleTheme() {
+	const { theme, setTheme } = useTheme();
+
+	const [isMounted, setIsMounted] = React.useState(false);
+
+	React.useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
+	if (!isMounted) {
+		return <div className="flex h-8 w-24" />;
+	}
+
+	return (
+		<motion.div
+			key={String(isMounted)}
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.3 }}
+			className="bg-muted/80 inline-flex items-center overflow-hidden rounded-md border"
+			role="radiogroup"
+		>
+			{THEME_OPTIONS.map((option) => (
+				<button
+					className={cn(
+						'relative flex size-7 cursor-pointer items-center justify-center rounded-md transition-all',
+						theme === option.value
+							? 'text-foreground'
+							: 'text-muted-foreground hover:text-foreground',
+					)}
+					role="radio"
+					aria-checked={theme === option.value}
+					aria-label={`Switch to ${option.value} theme`}
+					onClick={() => setTheme(option.value)}
+				>
+					{theme === option.value && (
+						<motion.div
+							layoutId="theme-option"
+							transition={{ type: 'spring', bounce: 0.1, duration: 0.75 }}
+							className="border-muted-foreground/50 absolute inset-0 rounded-md border"
+						/>
+					)}
+					<option.icon className="size-3.5" />
+				</button>
+			))}
+		</motion.div>
+	);
+}
+
+
+demo.tsx
+import { ToggleTheme } from "@/components/ui/toggle-theme";
+import { cn } from '@/lib/utils';
+
+export default function DemoOne() {	return (
+		<div className="relative flex min-h-screen w-full items-center justify-center">
+			<div
+				aria-hidden="true"
+				className={cn(
+					'absolute inset-0 -z-10 size-full',
+					'bg-[radial-gradient(color-mix(in_oklab,--theme(--color-foreground/.1)30%,transparent)_2px,transparent_2px)]',
+					'bg-[size:12px_12px]',
+				)}
+			/>
+			<ToggleTheme />
+		</div>
+	);}
+
+```
+
+Install NPM dependencies:
+```bash
+next-themes, lucide-react, framer-motion
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them

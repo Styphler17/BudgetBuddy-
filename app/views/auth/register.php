@@ -1,17 +1,17 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4 py-12">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center px-4 py-12 transition-colors duration-300">
     <div class="relative w-full max-w-6xl grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16 items-center">
         
         <!-- Left Side -->
         <div class="flex flex-col justify-center space-y-10 text-center lg:text-left relative">
-            <div class="absolute -top-20 -left-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+            <div class="absolute -top-20 -left-20 w-64 h-64 bg-primary/5 dark:bg-accent/5 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
 
             <div class="flex flex-col items-center gap-6 lg:items-start relative z-10">
                 <div class="max-w-xl space-y-4">
-                    <p class="text-sm uppercase tracking-[0.35em] text-primary font-black animate-fade-in">Join BudgetBuddy</p>
-                    <h1 class="text-4xl md:text-5xl font-bold leading-tight text-gray-900 font-outfit">
-                        Start building better money habits with <span class="text-primary italic">tailored</span> insights.
+                    <p class="text-sm uppercase tracking-[0.35em] text-primary dark:text-accent font-black animate-fade-in">Join BudgetBuddy</p>
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-white font-outfit">
+                        Start building better money habits with <span class="text-primary dark:text-accent italic">tailored</span> insights.
                     </h1>
-                    <p class="text-lg text-gray-600 leading-relaxed font-medium">
+                    <p class="text-lg text-gray-600 dark:text-slate-300 leading-relaxed font-medium">
                         Create your account to unlock goal tracking, budgeting dashboards, and smart recommendations.
                     </p>
                 </div>
@@ -19,43 +19,43 @@
 
             <!-- Visual Checklist of Benefits -->
             <div class="grid gap-4 max-w-md mx-auto lg:mx-0 relative z-10">
-                <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white shadow-sm hover-lift transition-all">
-                    <div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                <div class="flex items-center gap-3 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm p-4 rounded-2xl border border-white dark:border-white/10 shadow-sm hover-lift transition-all">
+                    <div class="h-8 w-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">
                         <i data-lucide="check" class="h-5 w-5"></i>
                     </div>
-                    <span class="font-bold text-gray-700">Free forever plan</span>
+                    <span class="font-bold text-gray-700 dark:text-slate-300">Free forever plan</span>
                 </div>
-                <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white shadow-sm hover-lift transition-all">
-                    <div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                <div class="flex items-center gap-3 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm p-4 rounded-2xl border border-white dark:border-white/10 shadow-sm hover-lift transition-all">
+                    <div class="h-8 w-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">
                         <i data-lucide="check" class="h-5 w-5"></i>
                     </div>
-                    <span class="font-bold text-gray-700">No credit card required</span>
+                    <span class="font-bold text-gray-700 dark:text-slate-300">No credit card required</span>
                 </div>
-                <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white shadow-sm hover-lift transition-all">
-                    <div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                <div class="flex items-center gap-3 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm p-4 rounded-2xl border border-white dark:border-white/10 shadow-sm hover-lift transition-all">
+                    <div class="h-8 w-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">
                         <i data-lucide="check" class="h-5 w-5"></i>
                     </div>
-                    <span class="font-bold text-gray-700">Cancel anytime</span>
+                    <span class="font-bold text-gray-700 dark:text-slate-300">Cancel anytime</span>
                 </div>
             </div>
 
             <!-- Decorative Mockup (Optional, keeping small version) -->
             <div class="hidden lg:block relative h-12">
-                <div class="absolute -top-10 left-10 bg-white/40 backdrop-blur-md p-4 rounded-xl border border-white/50 shadow-sm w-48 rotate-[2deg] opacity-50">
-                    <div class="h-2 w-24 bg-gray-200 rounded-full mb-2"></div>
-                    <div class="h-2 w-16 bg-gray-100 rounded-full"></div>
+                <div class="absolute -top-10 left-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md p-4 rounded-xl border border-white/50 dark:border-white/10 shadow-sm w-48 rotate-[2deg] opacity-50">
+                    <div class="h-2 w-24 bg-gray-200 dark:bg-slate-700 rounded-full mb-2"></div>
+                    <div class="h-2 w-16 bg-gray-100 dark:bg-slate-600 rounded-full"></div>
                 </div>
             </div>
         </div>
 
         <!-- Right Side: Register Card -->
-        <div class="w-full bg-white border border-gray-200 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden animate-slide-up">
-            <div class="p-8 flex flex-col items-center space-y-3 text-center border-b border-gray-50 bg-gray-50/30">
-                <div class="px-3 py-1 rounded-full bg-primary/10 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
+        <div class="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden animate-slide-up">
+            <div class="p-8 flex flex-col items-center space-y-3 text-center border-b border-gray-50 dark:border-white/5 bg-gray-50/30 dark:bg-slate-800/30">
+                <div class="px-3 py-1 rounded-full bg-primary/10 dark:bg-accent/10 text-[10px] font-black uppercase tracking-[0.2em] text-primary dark:text-accent mb-2">
                     Step 1 of 2 — Account Details
                 </div>
-                <h2 class="text-3xl font-bold text-gray-900 font-outfit tracking-tight">Create Account</h2>
-                <p class="text-gray-500 font-medium">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white font-outfit tracking-tight">Create Account</h2>
+                <p class="text-gray-500 dark:text-slate-400 font-medium">
                     Join BudgetBuddy to start managing your finances
                 </p>
             </div>
@@ -67,99 +67,99 @@
                     $type = 'button';
                     $variant = 'outline';
                     $size = 'md';
-                    $class = 'w-full h-12 rounded-xl mb-6';
+                    $class = 'w-full h-12 rounded-xl mb-6 dark:border-white/10 dark:text-white dark:hover:bg-white/5';
                     $attr = 'onclick="alert(\'Google Sign Up is coming soon!\')"';
                     include APP_PATH . '/views/includes/Button.php';
                 ?>
 
                 <div class="relative flex items-center gap-4 mb-6">
-                    <div class="h-px flex-grow bg-gray-100"></div>
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Or email</span>
-                    <div class="h-px flex-grow bg-gray-100"></div>
+                    <div class="h-px flex-grow bg-gray-100 dark:bg-white/5"></div>
+                    <span class="text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest">Or email</span>
+                    <div class="h-px flex-grow bg-gray-100 dark:bg-white/5"></div>
                 </div>
 
                 <form action="/BudgetBuddy-/register" method="POST" class="space-y-4 text-left">
                     <?php if (isset($error)): ?>
-                        <div class="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm font-medium">
+                        <div class="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm font-medium">
                             <?php echo htmlspecialchars($error); ?>
                         </div>
                     <?php endif; ?>
 
                     <div class="space-y-2">
-                        <label for="name" class="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">
+                        <label for="name" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
                             Full Name
                         </label>
                         <div class="relative group">
-                            <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors"></i>
+                            <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500 group-focus-within:text-primary dark:group-focus-within:text-accent transition-colors"></i>
                             <input
                                 id="name"
                                 name="name"
                                 type="text"
                                 placeholder="Enter your full name"
-                                class="w-full h-12 border border-gray-300 rounded-xl pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-4 focus:ring-primary/5 focus:border-primary focus:border-transparent outline-none transition-all font-medium"
+                                class="w-full h-12 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-xl pl-12 pr-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-4 focus:ring-primary/5 dark:focus:ring-accent/5 focus:border-primary dark:focus:border-accent outline-none transition-all font-medium"
                                 required
                             >
                         </div>
                     </div>
 
                     <div class="space-y-2">
-                        <label for="email" class="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">
+                        <label for="email" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
                             Email
                         </label>
                         <div class="relative group">
-                            <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors"></i>
+                            <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500 group-focus-within:text-primary dark:group-focus-within:text-accent transition-colors"></i>
                             <input
                                 id="email"
                                 name="email"
                                 type="email"
                                 autocomplete="email"
                                 placeholder="Enter your email"
-                                class="w-full h-12 border border-gray-300 rounded-xl pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-4 focus:ring-primary/5 focus:border-primary focus:border-transparent outline-none transition-all font-medium"
+                                class="w-full h-12 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-xl pl-12 pr-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-4 focus:ring-primary/5 dark:focus:ring-accent/5 focus:border-primary dark:focus:border-accent outline-none transition-all font-medium"
                                 required
                             >
                         </div>
                     </div>
 
                     <div class="space-y-2">
-                        <label for="reg-password" class="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">
+                        <label for="reg-password" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
                             Password
                         </label>
                         <div class="relative group">
-                            <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors"></i>
+                            <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500 group-focus-within:text-primary dark:group-focus-within:text-accent transition-colors"></i>
                             <input
                                 id="reg-password"
                                 name="password"
                                 type="password"
                                 placeholder="Create a password"
-                                class="w-full h-12 border border-gray-300 rounded-xl pl-12 pr-12 text-gray-900 placeholder:text-gray-400 focus:ring-4 focus:ring-primary/5 focus:border-primary focus:border-transparent outline-none transition-all font-medium"
+                                class="w-full h-12 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-xl pl-12 pr-12 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-4 focus:ring-primary/5 dark:focus:ring-accent/5 focus:border-primary dark:focus:border-accent outline-none transition-all font-medium"
                                 onkeyup="checkPasswordStrength(this.value)"
                                 required
                             >
-                            <button type="button" onclick="togglePassword('reg-password', 'reg-eye-1')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                            <button type="button" onclick="togglePassword('reg-password', 'reg-eye-1')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-white transition-colors">
                                 <i id="reg-eye-1" data-lucide="eye" class="h-4 w-4"></i>
                             </button>
                         </div>
                         <!-- Password Strength Indicator -->
                         <div class="mt-2 px-1">
-                            <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden flex gap-1">
-                                <div id="strength-bar-1" class="h-full w-1/3 bg-gray-200 transition-all duration-500"></div>
-                                <div id="strength-bar-2" class="h-full w-1/3 bg-gray-200 transition-all duration-500"></div>
-                                <div id="strength-bar-3" class="h-full w-1/3 bg-gray-200 transition-all duration-500"></div>
+                            <div class="h-1.5 w-full bg-gray-100 dark:bg-white/5 rounded-full overflow-hidden flex gap-1">
+                                <div id="strength-bar-1" class="h-full w-1/3 bg-gray-200 dark:bg-slate-700 transition-all duration-500"></div>
+                                <div id="strength-bar-2" class="h-full w-1/3 bg-gray-200 dark:bg-slate-700 transition-all duration-500"></div>
+                                <div id="strength-bar-3" class="h-full w-1/3 bg-gray-200 dark:bg-slate-700 transition-all duration-500"></div>
                             </div>
-                            <p id="strength-text" class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-1.5">Strength: None</p>
+                            <p id="strength-text" class="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-500 mt-1.5">Strength: None</p>
                         </div>
                     </div>
 
                     <div class="space-y-2">
-                        <label for="currency" class="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">
+                        <label for="currency" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
                             Preferred Currency
                         </label>
                         <div class="relative group">
-                            <i data-lucide="coins" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors"></i>
+                            <i data-lucide="coins" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500 group-focus-within:text-primary dark:group-focus-within:text-accent transition-colors"></i>
                                                     <select 
                                                         id="currency" 
                                                         name="currency"
-                                                        class="w-full h-12 border border-gray-300 rounded-xl pl-12 pr-10 text-gray-900 focus:ring-4 focus:ring-primary/5 focus:border-primary focus:border-transparent outline-none appearance-none bg-white font-medium transition-all"
+                                                        class="w-full h-12 border border-gray-300 dark:border-white/10 rounded-xl pl-12 pr-10 text-gray-900 dark:text-white focus:ring-4 focus:ring-primary/5 dark:focus:ring-accent/5 focus:border-primary dark:focus:border-accent outline-none appearance-none bg-white dark:bg-slate-800 font-medium transition-all"
                                                     >
                                                         <option value="USD">USD ($) - US Dollar</option>
                                                         <option value="EUR">EUR (€) - Euro</option>
@@ -179,11 +179,11 @@
                             type="checkbox"
                             id="terms"
                             name="terms"
-                            class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            class="mt-1 h-4 w-4 rounded border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 text-primary dark:text-accent focus:ring-primary dark:focus:ring-accent"
                             required
                         />
-                        <label for="terms" class="text-xs font-medium text-gray-600 leading-relaxed">
-                            I agree to the <a href="/BudgetBuddy-/terms" class="text-primary hover:underline font-bold">Terms of Service</a> and <a href="/BudgetBuddy-/privacy-policy" class="text-primary hover:underline font-bold">Privacy Policy</a>.
+                        <label for="terms" class="text-xs font-medium text-gray-600 dark:text-slate-400 leading-relaxed">
+                            I agree to the <a href="/BudgetBuddy-/terms" class="text-primary dark:text-accent hover:underline font-bold">Terms of Service</a> and <a href="/BudgetBuddy-/privacy-policy" class="text-primary dark:text-accent hover:underline font-bold">Privacy Policy</a>.
                         </label>
                     </div>
 
@@ -198,9 +198,9 @@
                 </form>
 
                 <div class="mt-8 text-center">
-                    <p class="text-sm text-gray-600 font-medium font-body">
+                    <p class="text-sm text-gray-600 dark:text-slate-400 font-medium font-body">
                         Already have an account?
-                        <a href="/BudgetBuddy-/login" class="font-bold text-primary hover:underline ml-1">
+                        <a href="/BudgetBuddy-/login" class="font-bold text-primary dark:text-accent hover:underline ml-1">
                             Sign in instead
                         </a>
                     </p>

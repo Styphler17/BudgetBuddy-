@@ -22,6 +22,7 @@
         
         <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -33,6 +34,9 @@
                     fontFamily: {
                         inter: ['Inter', 'sans-serif'],
                         outfit: ['Outfit', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        toast: "0px 32px 64px -16px rgba(0,0,0,0.30), 0px 16px 32px -8px rgba(0,0,0,0.30), 0px 8px 16px -4px rgba(0,0,0,0.24), 0px 4px 8px -2px rgba(0,0,0,0.24), 0px -8px 16px -1px rgba(0,0,0,0.16), 0px 2px 4px -1px rgba(0,0,0,0.24), 0px 0px 0px 1px rgba(0,0,0,1.00), inset 0px 0px 0px 1px rgba(255,255,255,0.08), inset 0px 1px 0px 0px rgba(255,255,255,0.20)"
                     },
                     animation: {
                         'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
@@ -58,13 +62,33 @@
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.dark { background-color: #020617; color: #f1f5f9; }
         .font-outfit { font-family: 'Outfit', sans-serif; }
         
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+
+        .dark header { background-color: rgba(2, 6, 23, 0.8) !important; border-color: rgba(255, 255, 255, 0.1) !important; }
+        .dark .bg-white { background-color: #0f172a !important; }
+        .dark .text-gray-900 { color: #ffffff !important; }
+        .dark .text-gray-600 { color: #cbd5e1 !important; }
     </style>
     <script>
+        // Dark mode initialization - 3 State Support
+        (function() {
+            const savedTheme = localStorage.getItem('theme-mode') || 'system';
+            const isDark = savedTheme === 'dark' || 
+                (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            if (isDark) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        })();
+
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -114,6 +138,12 @@
             </main>
         </div>
     </div>
+
+    <!-- Back to Top -->
+    <?php require_once APP_PATH . '/views/includes/BackToTop.php'; ?>
+
+    <!-- Save Changes Toast -->
+    <?php require_once APP_PATH . '/views/includes/ToastSave.php'; ?>
 
     <script>
         window.addEventListener('load', () => {

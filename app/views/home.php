@@ -1,14 +1,26 @@
-<div class="min-h-screen bg-white">
+<style>
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<div class="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-[#EEF2FF] to-[#F8FAFF] pt-32 pb-24 lg:pt-48 lg:pb-40 px-4">
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#EEF2FF] to-[#F8FAFF] dark:from-slate-900 dark:to-slate-950 pt-32 pb-24 lg:pt-48 lg:pb-40 px-4">
         <!-- Soft Mesh Orbs -->
-        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
-        <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 dark:bg-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/5 dark:bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
         <div class="container mx-auto max-w-7xl relative z-10 text-left">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="text-center lg:text-left animate-slide-up">
-                    <span class="inline-flex items-center rounded-full border border-primary/10 bg-white px-4 py-1.5 text-sm font-bold text-primary mb-8 shadow-sm glow-primary relative overflow-hidden">
+                    <span class="inline-flex items-center rounded-full border border-primary/10 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-8 shadow-sm glow-primary relative overflow-hidden">
                         <span class="relative z-10">🎉 Smart Budgeting Made Simple</span>
                         <div class="absolute inset-0 animate-shimmer opacity-30"></div>
                     </span>
@@ -17,7 +29,7 @@
                         Take Control of Your <span class="text-primary dark:text-accent italic">Finances</span>
                     </h1>
                     
-                    <p class="text-xl text-gray-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-body">
+                    <p class="text-xl text-gray-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-body">
                         BudgetBuddy helps you track expenses, set goals, and make smarter financial decisions.
                         Join thousands of users who have transformed their financial habits.
                     </p>
@@ -80,10 +92,10 @@
     </section>
 
     <!-- Features Section (Alternating Layout) -->
-    <section class="container mx-auto px-4 py-32 space-y-32">
+    <section class="container mx-auto px-4 py-32 space-y-32 reveal">
         <div class="text-center mb-20 max-w-3xl mx-auto">
             <h2 class="text-4xl font-h1 text-gray-900 dark:text-white mb-4">Everything You Need to Budget Better</h2>
-            <p class="text-lg text-gray-600 dark:text-slate-400 font-body">Powerful features designed to help you understand and improve your financial health.</p>
+            <p class="text-lg text-gray-600 dark:text-slate-300 font-body">Powerful features designed to help you understand and improve your financial health.</p>
         </div>
 
         <?php
@@ -114,13 +126,13 @@
         foreach ($features as $index => $f): 
             $isReversed = $index % 2 !== 0;
         ?>
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="grid lg:grid-cols-2 gap-16 items-center reveal">
                 <div class="<?php echo $isReversed ? 'lg:order-2' : ''; ?> space-y-6 text-left">
                     <div class="w-16 h-16 <?php echo $f['color']; ?> rounded-2xl flex items-center justify-center text-white shadow-lg">
                         <i data-lucide="<?php echo $f['icon']; ?>" class="w-8 h-8"></i>
                     </div>
                     <h2 class="text-3xl md:text-4xl font-h2 text-gray-900 dark:text-white"><?php echo $f['title']; ?></h2>
-                    <p class="text-lg text-gray-600 dark:text-slate-400 leading-relaxed font-body"><?php echo $f['desc']; ?></p>
+                    <p class="text-lg text-gray-600 dark:text-slate-300 leading-relaxed font-body"><?php echo $f['desc']; ?></p>
                     <?php 
                         $text = 'Learn more';
                         $type = 'a';
@@ -142,7 +154,7 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="bg-primary dark:bg-slate-900 py-24 relative overflow-hidden text-white">
+    <section class="bg-primary dark:bg-slate-900 py-24 relative overflow-hidden text-white reveal">
         <div class="container mx-auto px-4 relative z-10 text-center">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div class="space-y-3">
@@ -162,11 +174,11 @@
     </section>
 
     <!-- Featured Blog Posts -->
-    <section class="container mx-auto px-4 py-32">
+    <section class="container mx-auto px-4 py-32 reveal">
         <div class="flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left mb-16">
             <div>
                 <h2 class="text-4xl font-h1 text-gray-900 dark:text-white">Latest from the blog</h2>
-                <p class="mt-2 text-xl text-gray-600 dark:text-slate-400 font-body">
+                <p class="mt-2 text-xl text-gray-600 dark:text-slate-300 font-body">
                     Fresh insights and product tips to help you make smarter money moves.
                 </p>
             </div>
@@ -189,7 +201,7 @@
                 ['title' => 'Building Wealth in the Digital Era', 'tag' => 'Insights', 'img' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60']
             ];
             foreach ($sample_posts as $post): ?>
-                <div class="group relative rounded-3xl border border-gray-200 dark:border-white/5 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 text-left">
+                <div class="group relative rounded-3xl border border-gray-200 dark:border-white/5 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 text-left reveal">
                     <div class="aspect-video overflow-hidden relative">
                         <span class="absolute top-4 left-4 z-20 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg text-[10px] font-black uppercase text-primary dark:text-accent tracking-widest shadow-sm">
                             <?php echo $post['tag']; ?>
@@ -199,8 +211,8 @@
                     </div>
                     <div class="p-8">
                         <h3 class="text-2xl font-h2 text-gray-900 dark:text-white mb-4 leading-tight group-hover:text-primary dark:group-hover:text-accent transition-colors"><?php echo $post['title']; ?></h3>
-                        <a href="/BudgetBuddy-/blog" class="inline-flex items-center text-sm font-bold text-primary dark:text-accent group-hover:gap-2 transition-all">
-                            Read more <i data-lucide="arrow-right" class="ml-2 h-4 w-4"></i>
+                        <a href="/BudgetBuddy-/<?php echo $post['slug'] ?? 'blog'; ?>" class="inline-flex items-center text-sm font-bold text-primary dark:text-accent group-hover:gap-2 transition-all">
+                            Read article <i data-lucide="arrow-right" class="ml-2 h-4 w-4"></i>
                         </a>
                     </div>
                 </div>
@@ -209,11 +221,11 @@
     </section>
 
     <!-- Testimonials Slider -->
-    <section class="bg-gray-50 dark:bg-slate-900/50 py-32 overflow-hidden">
+    <section class="bg-gray-50 dark:bg-slate-900/50 py-32 overflow-hidden reveal">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16 text-gray-900 dark:text-white">
                 <h2 class="text-4xl font-h1">Loved by thousands</h2>
-                <p class="text-xl text-gray-600 dark:text-slate-400 mt-2 font-body">Real stories from real users achieving financial freedom.</p>
+                <p class="text-xl text-gray-600 dark:text-slate-300 mt-2 font-body">Real stories from real users achieving financial freedom.</p>
             </div>
             
             <div class="relative max-w-4xl mx-auto">
@@ -253,7 +265,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="bg-white dark:bg-[#020617] py-32">
+    <section class="bg-white dark:bg-[#020617] py-32 reveal">
         <div class="container mx-auto px-4 text-center">
             <div class="max-w-4xl mx-auto bg-primary dark:bg-slate-900 rounded-[3rem] p-16 md:p-24 relative overflow-hidden">
                 <!-- Background Decoration -->
@@ -262,7 +274,7 @@
 
                 <div class="relative z-10 text-center">
                     <h2 class="text-4xl md:text-5xl font-h1 text-white mb-6 tracking-tight">Ready to Transform Your Finances?</h2>
-                    <p class="text-xl text-primary-foreground/80 dark:text-slate-400 mb-10 max-w-xl mx-auto font-body">Join thousands of users who have taken control of their financial future today.</p>
+                    <p class="text-xl text-primary-foreground/80 dark:text-slate-300 mb-10 max-w-xl mx-auto font-body">Join thousands of users who have taken control of their financial future today.</p>
                     <?php 
                         $text = 'Get Started Free';
                         $type = 'a';
@@ -310,6 +322,23 @@
             slideTestimonial(currentSlide);
         }, 5000);
 
+        // Scroll Reveal Logic
+        const revealCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        };
+
+        const revealObserver = new IntersectionObserver(revealCallback, {
+            threshold: 0.15
+        });
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
         // Counter Animation Logic
         const counters = [
             { id: 'stat-users', end: 10000, suffix: '+', prefix: '' },
@@ -333,16 +362,17 @@
             window.requestAnimationFrame(step);
         };
 
-        // Trigger on scroll or immediate if in view
-        const observer = new IntersectionObserver((entries) => {
+        // Trigger counters on reveal
+        const statsSection = document.getElementById('stat-users').closest('section');
+        const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     counters.forEach(c => animateCounter(c.id, c.end, c.suffix, c.prefix, c.decimals));
-                    observer.disconnect();
+                    statsObserver.disconnect();
                 }
             });
         }, { threshold: 0.1 });
 
-        observer.observe(document.getElementById('stat-users'));
+        statsObserver.observe(statsSection);
     });
 </script>

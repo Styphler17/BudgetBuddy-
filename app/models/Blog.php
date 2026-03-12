@@ -11,9 +11,9 @@ class Blog {
     }
 
     /**
-     * Get all published blog posts
+     * Get all published blog posts with pagination
      */
-    public function getAllPublished($search = '', $tag = '') {
+    public function getAllPublished($search = '', $tag = '', $limit = null, $offset = 0) {
         $sql = "SELECT * FROM blog_posts WHERE status = 'published'";
         $params = [];
 
@@ -30,11 +30,51 @@ class Blog {
 
         $sql .= " ORDER BY created_at DESC";
         
+        if ($limit !== null) {
+            $sql .= " LIMIT ? OFFSET ?";
+        }
+        
         $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
+        
+        if ($limit !== null) {
+            $stmt->bindValue(count($params) + 1, (int)$limit, PDO::PARAM_INT);
+            $stmt->bindValue(count($params) + 2, (int)$offset, PDO::PARAM_INT);
+            // We need to execute without params array if we use bindValue for some
+            // So let's bind all
+            foreach ($params as $i => $val) {
+                $stmt->bindValue($i + 1, $val);
+            }
+            $stmt->execute();
+        } else {
+            $stmt->execute($params);
+        }
+        
         $posts = $stmt->fetchAll();
         
         return array_map([$this, 'formatPost'], $posts);
+    }
+
+    /**
+     * Count total published posts
+     */
+    public function countPublished($search = '', $tag = '') {
+        $sql = "SELECT COUNT(*) as total FROM blog_posts WHERE status = 'published'";
+        $params = [];
+
+        if (!empty($search)) {
+            $sql .= " AND (title LIKE ? OR excerpt LIKE ?)";
+            $params[] = "%$search%";
+            $params[] = "%$search%";
+        }
+
+        if (!empty($tag)) {
+            $sql .= " AND tags LIKE ?";
+            $params[] = "%$tag%";
+        }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetch()['total'];
     }
 
     /**

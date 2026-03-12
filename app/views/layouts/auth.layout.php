@@ -73,10 +73,19 @@
         h2, .text-h2 { font-family: 'Outfit', sans-serif; font-weight: 600; }
     </style>
     <script>
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.body.classList.add('dark');
-        }
+        // Dark mode initialization - 3 State Support
+        (function() {
+            const savedTheme = localStorage.getItem('theme-mode') || 'system';
+            const isDark = savedTheme === 'dark' || 
+                (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            if (isDark) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        })();
+
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -91,7 +100,7 @@
         }
     </script>
 </head>
-<body class="min-h-screen flex flex-col bg-white text-gray-900">
+<body class="min-h-screen flex flex-col bg-white dark:bg-slate-950 text-gray-900 dark:text-slate-100 transition-colors duration-300">
     <!-- Header/Navigation -->
     <?php require_once APP_PATH . '/views/includes/Header.php'; ?>
 
@@ -102,6 +111,9 @@
 
     <!-- Footer -->
     <?php require_once APP_PATH . '/views/includes/Footer.php'; ?>
+
+    <!-- Back to Top -->
+    <?php require_once APP_PATH . '/views/includes/BackToTop.php'; ?>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>

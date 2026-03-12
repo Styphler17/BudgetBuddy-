@@ -196,9 +196,20 @@ class Router {
                 break;
 
             default:
+                // Check if the route is a blog slug
+                if (!empty($route)) {
+                    $blogModel = new Blog();
+                    $post = $blogModel->findBySlug($route);
+                    if ($post) {
+                        $controller = new BlogController();
+                        $controller->view($route);
+                        break;
+                    }
+                }
+
                 // Handle 404 or Fallback
                 $controller = new HomeController();
-                $controller->index(); // You might want a dedicated 404 page later
+                $controller->index();
                 break;
         }
     }

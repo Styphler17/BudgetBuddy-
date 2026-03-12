@@ -19,6 +19,16 @@
     <!-- Custom Animations -->
     <link rel="stylesheet" href="/BudgetBuddy-/public/css/animations.css">
     
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init({
+              publicKey: "_v_vSRGl_66IsEq9-",
+            });
+        })();
+    </script>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -62,6 +72,9 @@
                         '16px': '16px',
                         '24px': '24px',
                         '32px': '32px',
+                    },
+                    boxShadow: {
+                        toast: "0px 32px 64px -16px rgba(0,0,0,0.30), 0px 16px 32px -8px rgba(0,0,0,0.30), 0px 8px 16px -4px rgba(0,0,0,0.24), 0px 4px 8px -2px rgba(0,0,0,0.24), 0px -8px 16px -1px rgba(0,0,0,0.16), 0px 2px 4px -1px rgba(0,0,0,0.24), 0px 0px 0px 1px rgba(0,0,0,1.00), inset 0px 0px 0px 1px rgba(255,255,255,0.08), inset 0px 1px 0px 0px rgba(255,255,255,0.20)"
                     }
                 }
             }
@@ -115,11 +128,18 @@
 </head>
 <body class="min-h-screen flex flex-col">
     <script>
-        // Dark mode initialization
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.body.classList.add('dark');
-        }
+        // Dark mode initialization - 3 State Support
+        (function() {
+            const savedTheme = localStorage.getItem('theme-mode') || 'system';
+            const isDark = savedTheme === 'dark' || 
+                (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            if (isDark) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        })();
     </script>
     <!-- Header/Navigation -->
     <?php require_once APP_PATH . '/views/includes/Header.php'; ?>
@@ -131,6 +151,12 @@
 
     <!-- Footer -->
     <?php require_once APP_PATH . '/views/includes/Footer.php'; ?>
+
+    <!-- Back to Top -->
+    <?php require_once APP_PATH . '/views/includes/BackToTop.php'; ?>
+
+    <!-- Save Changes Toast -->
+    <?php require_once APP_PATH . '/views/includes/ToastSave.php'; ?>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>

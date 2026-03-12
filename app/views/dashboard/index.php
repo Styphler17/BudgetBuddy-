@@ -8,8 +8,8 @@
     <!-- Welcome Header -->
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-extrabold text-gray-900 font-outfit tracking-tight">Dashboard Overview</h1>
-            <p class="text-gray-500 font-medium mt-1">Welcome back, <?php echo $_SESSION['user_name'] ?? 'User'; ?>! Here's what's happening with your money.</p>
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white font-outfit tracking-tight">Dashboard Overview</h1>
+            <p class="text-gray-500 dark:text-slate-400 font-medium mt-1">Welcome back, <?php echo $_SESSION['user_name'] ?? 'User'; ?>! Here's what's happening with your money.</p>
         </div>
         <div class="flex items-center gap-3">
             <?php 
@@ -77,36 +77,36 @@
         <!-- Recent Transactions -->
         <div class="lg:col-span-2 glass-card p-6">
             <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-bold text-gray-900 font-outfit">Recent Transactions</h3>
-                <a href="/BudgetBuddy-/transactions" class="text-sm font-medium text-primary hover:underline">View All</a>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">Recent Transactions</h3>
+                <a href="/BudgetBuddy-/transactions" class="text-sm font-medium text-primary dark:text-accent hover:underline">View All</a>
             </div>
 
             <div class="space-y-4">
                 <?php if (empty($recentTransactions)): ?>
-                    <div class="text-center py-10 text-gray-500">
+                    <div class="text-center py-10 text-gray-500 dark:text-slate-400">
                         <p>No recent activity</p>
                     </div>
                 <?php endif; ?>
                 
                 <?php foreach ($recentTransactions as $tx): ?>
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900/50 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors border border-transparent dark:border-white/5">
                     <div class="flex items-center gap-4">
-                        <div class="h-10 w-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-lg">
+                        <div class="h-10 w-10 rounded-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-white/10 flex items-center justify-center text-lg">
                             <?php if ($tx['category_emoji']): ?>
                                 <span><?php echo $tx['category_emoji']; ?></span>
                             <?php else: ?>
-                                <i data-lucide="<?php echo $tx['type'] === 'income' ? 'arrow-up-right' : 'arrow-down-left'; ?>" class="h-5 w-5 text-gray-500"></i>
+                                <i data-lucide="<?php echo $tx['type'] === 'income' ? 'arrow-up-right' : 'arrow-down-left'; ?>" class="h-5 w-5 text-gray-500 dark:text-slate-400"></i>
                             <?php endif; ?>
                         </div>
                         <div>
-                            <p class="font-medium text-gray-900"><?php echo htmlspecialchars($tx['description']); ?></p>
-                            <p class="text-xs text-gray-500 mt-1">
+                            <p class="font-medium text-gray-900 dark:text-white"><?php echo htmlspecialchars($tx['description']); ?></p>
+                            <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
                                 <?php echo date('M d, Y', strtotime($tx['date'])); ?>
                             </p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="font-bold <?php echo $tx['type'] === 'income' ? 'text-green-600' : 'text-gray-900'; ?>">
+                        <p class="font-bold <?php echo $tx['type'] === 'income' ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'; ?>">
                             <?php echo $tx['type'] === 'income' ? '+' : '-'; ?>$<?php echo number_format($tx['amount'], 2); ?>
                         </p>
                     </div>
@@ -117,27 +117,27 @@
 
         <!-- Budget Progress -->
         <div class="glass-card p-6">
-            <h3 class="text-xl font-bold text-gray-900 font-outfit mb-6">Budget Progress</h3>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit mb-6">Budget Progress</h3>
             
             <div class="space-y-6">
                 <?php if (empty($budgetProgress)): ?>
-                    <div class="text-center py-10 text-gray-500">
+                    <div class="text-center py-10 text-gray-500 dark:text-slate-400">
                         <p>No budgets set</p>
-                        <a href="/BudgetBuddy-/categories" class="text-sm text-primary hover:underline mt-2 inline-block">Manage Categories</a>
+                        <a href="/BudgetBuddy-/categories" class="text-sm text-primary dark:text-accent hover:underline mt-2 inline-block">Manage Categories</a>
                     </div>
                 <?php endif; ?>
 
                 <?php foreach ($budgetProgress as $budget): ?>
                 <div class="space-y-2">
                     <div class="flex justify-between items-end">
-                        <p class="text-sm font-medium text-gray-700"><?php echo htmlspecialchars($budget['name']); ?></p>
-                        <p class="text-sm text-gray-500">$<?php echo number_format($budget['spent'], 0); ?> / $<?php echo number_format($budget['limit'], 0); ?></p>
+                        <p class="text-sm font-medium text-gray-700 dark:text-slate-300"><?php echo htmlspecialchars($budget['name']); ?></p>
+                        <p class="text-sm text-gray-500 dark:text-slate-400">$<?php echo number_format($budget['spent'], 0); ?> / $<?php echo number_format($budget['limit'], 0); ?></p>
                     </div>
-                    <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                    <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div class="h-full rounded-full transition-all <?php 
                             if ($budget['percentage'] >= 100) echo 'bg-red-500';
                             elseif ($budget['percentage'] >= 80) echo 'bg-orange-500';
-                            else echo 'bg-primary';
+                            else echo 'bg-primary dark:bg-accent';
                         ?>" style="width: <?php echo min($budget['percentage'], 100); ?>%"></div>
                     </div>
                 </div>

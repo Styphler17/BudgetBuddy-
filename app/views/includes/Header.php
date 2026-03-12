@@ -24,7 +24,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
             <!-- Logo Section -->
             <a href="/BudgetBuddy-/" class="flex items-center space-x-3 group">
                 <img src="/BudgetBuddy-/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-14 w-14 rounded-2xl object-cover shadow-sm group-hover:shadow-md transition-all duration-300">
-                <span class="text-xl font-bold text-gray-900 dark:text-white font-outfit">BudgetBuddy</span>
+                <span class="text-xl font-bold text-gray-900 dark:text-white font-outfit hidden md:block">BudgetBuddy</span>
             </a>
 
             <!-- Desktop Navigation -->
@@ -41,11 +41,8 @@ $is_active = function($path) use ($current_uri, $base_url) {
 
             <!-- Auth Buttons & Theme Toggle -->
             <div class="flex items-center space-x-4">
-                <!-- Theme Toggle -->
-                <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-all border border-transparent dark:border-white/5" title="Toggle Theme">
-                    <i data-lucide="sun" id="theme-toggle-light-icon" class="hidden w-5 h-5"></i>
-                    <i data-lucide="moon" id="theme-toggle-dark-icon" class="hidden w-5 h-5"></i>
-                </button>
+                <!-- Theme Switcher -->
+                <?php include APP_PATH . '/views/includes/ThemeSwitcher.php'; ?>
 
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <div class="hidden md:flex items-center space-x-4">
@@ -96,102 +93,80 @@ $is_active = function($path) use ($current_uri, $base_url) {
             </div>
         </nav>
     </div>
+</header>
 
-    <!-- Mobile Navigation Menu (Overlay) -->
-    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white dark:bg-slate-950 md:hidden transition-all duration-300 ease-in-out transform translate-x-full opacity-0 pointer-events-none">
-        <div class="flex flex-col h-full">
-            <div class="flex items-center justify-between p-4 border-b dark:border-white/10">
-                <div class="flex items-center space-x-3">
-                    <img src="/BudgetBuddy-/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-10 w-10 rounded-lg object-cover">
-                    <span class="text-xl font-bold text-gray-900 dark:text-white font-outfit">BudgetBuddy</span>
+<!-- Mobile Navigation Menu (Overlay) - Moved outside header for better stacking -->
+<div id="mobile-menu" class="fixed inset-0 z-[100] bg-white dark:bg-slate-950 md:hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform translate-x-full opacity-0 pointer-events-none">
+    <div class="flex flex-col h-full">
+        <div class="flex items-center justify-between p-6 border-b dark:border-white/10">
+            <div class="flex items-center space-x-3">
+                <img src="/BudgetBuddy-/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-10 w-10 rounded-lg object-cover">
+                <span class="text-xl font-bold text-gray-900 dark:text-white font-outfit">BudgetBuddy</span>
+            </div>
+            <button type="button" id="close-menu-button" class="p-2 rounded-xl text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-8 flex flex-col space-y-8">
+            <a href="/BudgetBuddy-/" class="text-3xl font-bold transition-all <?php echo $is_active('/'); ?>">Home</a>
+            <a href="/BudgetBuddy-/blog" class="text-3xl font-bold transition-all <?php echo $is_active('/blog'); ?>">Blog</a>
+            <a href="/BudgetBuddy-/contact" class="text-3xl font-bold transition-all <?php echo $is_active('/contact'); ?>">Contact</a>
+            
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <div class="h-px w-full bg-gray-100 dark:bg-white/5"></div>
+                <a href="/BudgetBuddy-/transactions" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
+                <a href="/BudgetBuddy-/analytics" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
+                <div class="pt-8 space-y-4">
+                    <?php 
+                        $text = 'Go to Dashboard';
+                        $type = 'a';
+                        $href = '/BudgetBuddy-/dashboard';
+                        $variant = 'primary';
+                        $size = 'lg';
+                        $class = 'w-full py-4 rounded-2xl shadow-xl';
+                        include APP_PATH . '/views/includes/Button.php';
+                    ?>
+                    <?php 
+                        $text = 'Sign Out';
+                        $type = 'a';
+                        $href = '/BudgetBuddy-/logout';
+                        $variant = 'outline';
+                        $size = 'lg';
+                        $class = 'w-full py-4 rounded-2xl border-rose-100 text-rose-600 hover:bg-rose-50';
+                        include APP_PATH . '/views/includes/Button.php';
+                    ?>
                 </div>
-                <button type="button" id="close-menu-button" class="p-2 rounded-md text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-6 flex flex-col space-y-6">
-                <a href="/BudgetBuddy-/" class="text-2xl font-semibold transition-colors <?php echo $is_active('/'); ?>">Home</a>
-                <a href="/BudgetBuddy-/blog" class="text-2xl font-semibold transition-colors <?php echo $is_active('/blog'); ?>">Blog</a>
-                <a href="/BudgetBuddy-/contact" class="text-2xl font-semibold transition-colors <?php echo $is_active('/contact'); ?>">Contact</a>
-                
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <hr class="border-gray-100 dark:border-white/10" />
-                    <a href="/BudgetBuddy-/transactions" class="text-2xl font-semibold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
-                    <a href="/BudgetBuddy-/analytics" class="text-2xl font-semibold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
-                    <div class="pt-6 space-y-4">
-                        <?php 
-                            $text = 'Go to Dashboard';
-                            $type = 'a';
-                            $href = '/BudgetBuddy-/dashboard';
-                            $variant = 'primary';
-                            $size = 'md';
-                            $class = 'w-full py-3';
-                            include APP_PATH . '/views/includes/Button.php';
-                        ?>
-                        <?php 
-                            $text = 'Sign Out';
-                            $type = 'a';
-                            $href = '/BudgetBuddy-/logout';
-                            $variant = 'outline';
-                            $size = 'md';
-                            $class = 'w-full py-3 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700';
-                            include APP_PATH . '/views/includes/Button.php';
-                        ?>
-                    </div>
-                <?php else: ?>
-                    <div class="pt-8 space-y-4">
-                        <?php 
-                            $text = 'Sign In';
-                            $type = 'a';
-                            $href = '/BudgetBuddy-/login';
-                            $variant = 'outline';
-                            $size = 'md';
-                            $class = 'w-full py-3 dark:border-white/10 dark:text-slate-300';
-                            include APP_PATH . '/views/includes/Button.php';
-                        ?>
-                        <?php 
-                            $text = 'Get Started';
-                            $type = 'a';
-                            $href = '/BudgetBuddy-/register';
-                            $variant = 'primary';
-                            $size = 'md';
-                            $class = 'w-full py-3';
-                            include APP_PATH . '/views/includes/Button.php';
-                        ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+            <?php else: ?>
+                <div class="pt-12 space-y-4">
+                    <?php 
+                        $text = 'Sign In';
+                        $type = 'a';
+                        $href = '/BudgetBuddy-/login';
+                        $variant = 'outline';
+                        $size = 'lg';
+                        $class = 'w-full py-4 rounded-2xl dark:border-white/10 dark:text-slate-300';
+                        include APP_PATH . '/views/includes/Button.php';
+                    ?>
+                    <?php 
+                        $text = 'Get Started';
+                        $type = 'a';
+                        $href = '/BudgetBuddy-/register';
+                        $variant = 'primary';
+                        $size = 'lg';
+                        $class = 'w-full py-4 rounded-2xl shadow-xl shadow-primary/20';
+                        include APP_PATH . '/views/includes/Button.php';
+                    ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
-</header>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const closeMenuButton = document.getElementById('close-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
-    const themeToggle = document.getElementById('theme-toggle');
-    const lightIcon = document.getElementById('theme-toggle-light-icon');
-    const darkIcon = document.getElementById('theme-toggle-dark-icon');
-
-    // Update icons based on current theme
-    const updateThemeIcons = () => {
-        if (document.body.classList.contains('dark')) {
-            lightIcon.classList.remove('hidden');
-            darkIcon.classList.add('hidden');
-        } else {
-            lightIcon.classList.add('hidden');
-            darkIcon.classList.remove('hidden');
-        }
-    };
-
-    updateThemeIcons();
-
-    themeToggle?.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark'));
-        updateThemeIcons();
-    });
 
     const toggleMenu = (show) => {
         if (show) {

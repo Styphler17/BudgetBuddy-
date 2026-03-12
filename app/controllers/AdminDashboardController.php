@@ -125,7 +125,8 @@ class AdminDashboardController extends BaseController {
         $this->render('admin/blog-edit', [
             'title' => 'Create New Post',
             'layout' => 'admin',
-            'mode' => 'create'
+            'mode' => 'create',
+            'post' => []
         ]);
     }
 
@@ -272,7 +273,8 @@ class AdminDashboardController extends BaseController {
         $this->render('admin/admin-edit', [
             'title' => 'Edit Admin',
             'layout' => 'admin',
-            'admin' => $adminToEdit
+            'admin' => $adminToEdit,
+            'mode' => 'edit'
         ]);
     }
 
@@ -295,7 +297,8 @@ class AdminDashboardController extends BaseController {
         $this->render('admin/admin-edit', [
             'title' => 'Create New Admin',
             'layout' => 'admin',
-            'mode' => 'create'
+            'mode' => 'create',
+            'admin' => []
         ]);
     }
 }
