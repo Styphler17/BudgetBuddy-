@@ -1,0 +1,42 @@
+# Blog Management Guide
+
+BudgetBuddy features a powerful, block-based blog management system accessible via the **Admin Panel**.
+
+## 1. Accessing the Manager
+- Navigate to `http://localhost:8081/admin-login` (or your production admin URL).
+- Log in with your administrator credentials.
+- Click on the **Blog** tab in the sidebar of the Admin Dashboard.
+
+## 2. Managing Articles
+In the Blog Manager, you can:
+- **Search & Filter**: Find articles by title, tag, or status (Draft, Published, Archived).
+- **Toggle Status**: Quickly move an article from "Draft" to "Published" using the toggle switch.
+- **Delete**: Remove outdated content using the trash icon.
+
+## 3. Creating & Editing Articles
+The editor is "block-based," allowing you to build rich layouts without writing HTML.
+
+### Essential Metadata
+- **Cover Image**: Add a URL and descriptive alt text for social sharing and the blog feed.
+- **Slug**: Automatically generated from your title, but can be customized for SEO.
+- **Tags**: Comma-separated list (e.g., `budgeting, tech, savings`).
+
+### Content Blocks
+You can add various blocks to your story:
+- **Heading**: H1 through H6 for structure.
+- **Paragraph**: Standard body text.
+- **Image**: Visuals with optional captions.
+- **Embed**: YouTube videos or external resource links.
+- **Quote**: Pull-out quotes for emphasis.
+- **List**: Clean bullet points.
+
+> [!TIP]
+> Use the **Move Up/Down** arrows to reorder your story's flow, and use **Duplicate** to maintain consistent formatting between sections.
+
+## 4. SEO & Preview
+- **Meta Title/Description**: Customize how your post appears in Google search results.
+- **Preview Link**: Direct link to see how the post looks on the live site before you share it.
+
+---
+
+*Need help? The BudgetBuddy Blog infrastructure is built for speed and SEO out of the box.*

@@ -1,19 +1,17 @@
 <IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /budgetbuddy/
-  
-  # Redirect root of subdirectory to dist/index.html
-  RewriteRule ^$ dist/index.html [L]
-  
-  # Check if the request is for a file inside the dist folder
-  # We use the relative path since RewriteBase is set
-  RewriteCond %{REQUEST_URI} !^/budgetbuddy/dist/
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^(.*)$ dist/$1 [L]
-  
-  # Route all other requests to dist/index.html (Single Page App)
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . dist/index.html [L]
+    RewriteEngine On
+    RewriteBase /BudgetBuddy-/
+
+    # Do not rewrite if it's an existing file or directory (allows dist/assets to load)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Rewrite all other requests to index.php
+    RewriteRule ^(.*)$ index.php [L,QSA]
 </IfModule>
+
+# Security: Deny access to app, config, and backend folders
+<FilesMatch "^(app|config|backend|node_modules)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
