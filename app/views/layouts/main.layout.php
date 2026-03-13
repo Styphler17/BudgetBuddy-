@@ -3,37 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title . ' | BudgetBuddy' : 'BudgetBuddy - Smart Financial Planning'; ?></title>
+    <title><?php echo isset($title) ? $title . ' | SpendScribe' : 'SpendScribe – Simple Manual Budget & Spending Tracker'; ?></title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>/public/favicon.png">
     
     <!-- Meta Tags -->
-    <meta name="description" content="Track your spending, manage budgets, and achieve financial goals with BudgetBuddy.">
+    <meta name="description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://budgetbuddy.creativeutil.com/">
-    <meta property="og:title" content="BudgetBuddy - Smart Financial Planning">
-    <meta property="og:description" content="Track your spending, manage budgets, and achieve financial goals with BudgetBuddy.">
-    <meta property="og:image" content="https://budgetbuddy.creativeutil.com/public/og-image.svg">
+    <meta property="og:url" content="https://spendscribe.creativeutil.com/">
+    <meta property="og:title" content="SpendScribe – Simple Manual Budget & Spending Tracker">
+    <meta property="og:description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta property="og:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://budgetbuddy.creativeutil.com/">
-    <meta property="twitter:title" content="BudgetBuddy - Smart Financial Planning">
-    <meta property="twitter:description" content="Track your spending, manage budgets, and achieve financial goals with BudgetBuddy.">
-    <meta property="twitter:image" content="https://budgetbuddy.creativeutil.com/public/og-image.svg">
+    <meta property="twitter:url" content="https://spendscribe.creativeutil.com/">
+    <meta property="twitter:title" content="SpendScribe – Simple Manual Budget & Spending Tracker">
+    <meta property="twitter:description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta property="twitter:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
 
     <!-- JSON-LD Structured Data (SEO & E-E-A-T) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "BudgetBuddy",
-      "url": "https://budgetbuddy.creativeutil.com/",
-      "logo": "https://budgetbuddy.creativeutil.com/public/BudgetBuddy.png",
-      "description": "Smart financial planning and expense tracking for individuals and small businesses.",
+      "name": "SpendScribe",
+      "url": "https://spendscribe.creativeutil.com/",
+      "logo": "https://spendscribe.creativeutil.com/public/SpendScribe.png",
+      "description": "SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.",
       "contactPoint": {
         "@type": "ContactPoint",
         "email": "brastyphler17@gmail.com",
@@ -45,11 +45,11 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "BudgetBuddy",
-      "url": "https://budgetbuddy.creativeutil.com/",
+      "name": "SpendScribe",
+      "url": "https://SpendScribe.creativeutil.com/",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://budgetbuddy.creativeutil.com/blog?search={search_term_string}",
+        "target": "https://SpendScribe.creativeutil.com/blog?search={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }
@@ -61,7 +61,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Custom Animations -->
-    <link rel="stylesheet" href="/public/css/animations.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/animations.css">
     
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -206,6 +206,42 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
       lucide.createIcons();
+
+      // Global Glowing Effect Controller
+      document.addEventListener('DOMContentLoaded', () => {
+          const proximity = 150;
+          
+          const handlePointerMove = (e) => {
+              const wrappers = document.querySelectorAll('.glowing-wrapper');
+              wrappers.forEach(wrapper => {
+                  const container = wrapper.querySelector('.glowing-effect-container');
+                  if (!container) return;
+                  
+                  const rect = wrapper.getBoundingClientRect();
+                  const mouseX = e.clientX;
+                  const mouseY = e.clientY;
+
+                  const centerX = rect.left + rect.width / 2;
+                  const centerY = rect.top + rect.height / 2;
+
+                  const isActive = 
+                      mouseX > rect.left - proximity &&
+                      mouseX < rect.right + proximity &&
+                      mouseY > rect.top - proximity &&
+                      mouseY < rect.bottom + proximity;
+
+                  if (isActive) {
+                      container.style.setProperty('--active', '1');
+                      const angle = Math.atan2(mouseY - centerY, mouseX - centerX) * (180 / Math.PI) + 90;
+                      container.style.setProperty('--start', angle);
+                  } else {
+                      container.style.setProperty('--active', '0');
+                  }
+              });
+          };
+
+          window.addEventListener('pointermove', handlePointerMove);
+      });
     </script>
 </body>
 </html>

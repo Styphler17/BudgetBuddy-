@@ -8,24 +8,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title . ' | BudgetBuddy' : 'BudgetBuddy'; ?></title>
+    <title><?php echo isset($title) ? $title . ' | SpendScribe' : 'SpendScribe'; ?></title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>/public/favicon.png">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://budgetbuddy.creativeutil.com/">
-    <meta property="og:title" content="BudgetBuddy - Smart Financial Planning">
-    <meta property="og:description" content="Track your spending, manage budgets, and achieve financial goals with BudgetBuddy.">
-    <meta property="og:image" content="https://budgetbuddy.creativeutil.com/public/og-image.svg">
+    <meta property="og:url" content="https://spendscribe.creativeutil.com/">
+    <meta property="og:title" content="SpendScribe – Simple Manual Budget & Spending Tracker">
+    <meta property="og:description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta property="og:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://budgetbuddy.creativeutil.com/">
-    <meta property="twitter:title" content="BudgetBuddy - Smart Financial Planning">
-    <meta property="twitter:description" content="Track your spending, manage budgets, and achieve financial goals with BudgetBuddy.">
-    <meta property="twitter:image" content="https://budgetbuddy.creativeutil.com/public/og-image.svg">
+    <meta property="twitter:url" content="https://spendscribe.creativeutil.com/">
+    <meta property="twitter:title" content="SpendScribe – Simple Manual Budget & Spending Tracker">
+    <meta property="twitter:description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta property="twitter:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Custom Animations -->
-    <link rel="stylesheet" href="/public/css/animations.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/animations.css">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>

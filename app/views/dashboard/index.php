@@ -78,7 +78,7 @@
         <div class="lg:col-span-2 glass-card p-6">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">Recent Transactions</h3>
-                <a href="/transactions" class="text-sm font-medium text-primary dark:text-accent hover:underline">View All</a>
+                <a href="<?php echo BASE_URL; ?>/transactions" class="text-sm font-medium text-primary dark:text-accent hover:underline">View All</a>
             </div>
 
             <div class="space-y-4">
@@ -123,7 +123,7 @@
                 <?php if (empty($budgetProgress)): ?>
                     <div class="text-center py-10 text-gray-500 dark:text-slate-400">
                         <p>No budgets set</p>
-                        <a href="/categories" class="text-sm text-primary dark:text-accent hover:underline mt-2 inline-block">Manage Categories</a>
+                        <a href="<?php echo BASE_URL; ?>/categories" class="text-sm text-primary dark:text-accent hover:underline mt-2 inline-block">Manage Categories</a>
                     </div>
                 <?php endif; ?>
 

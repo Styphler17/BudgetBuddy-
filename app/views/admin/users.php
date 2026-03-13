@@ -62,7 +62,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <a href="/admin/users/edit/<?php echo $u['id']; ?>" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Edit">
+                                    <a href="<?php echo BASE_URL; ?>/admin/users/edit/<?php echo $u['id']; ?>" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Edit">
                                         <i data-lucide="edit-3" class="h-4 w-4"></i>
                                     </a>
                                     <button class="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Delete">

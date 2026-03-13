@@ -7,36 +7,51 @@ $base_url = '';
 
 // Helper to check if a link is active
 $is_active = function($path) use ($current_uri, $base_url) {
-    $full_path = ($path === '/') ? $base_url . '/' : $base_url . $path;
+    $full_path = ($path === '/') ? '/' : $path;
     $normalized_uri = rtrim($current_uri, '/');
     $normalized_path = rtrim($full_path, '/');
     
-    if ($path === '/' && ($normalized_uri === $base_url || $normalized_uri === '')) {
-        return 'text-primary dark:text-accent font-bold';
-    }
+    $is_active_link = ($path === '/' && ($normalized_uri === '' || $normalized_uri === BASE_URL || $normalized_uri === '/')) ||
+                      (strpos($normalized_uri, $normalized_path) !== false && $path !== '/');
+
+    $colors = $is_active_link ? 'text-primary dark:text-accent font-bold' : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white';
     
-    return (strpos($normalized_uri, $normalized_path) === 0 && $path !== '/') ? 'text-primary dark:text-accent font-bold' : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white';
+    return [
+        'active' => $is_active_link,
+        'class' => $colors
+    ];
 };
 ?>
 <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/10 transition-all">
     <div class="container mx-auto px-4 py-2">
         <nav class="flex items-center justify-between">
             <!-- Logo Section -->
-            <a href="/" class="flex items-center space-x-3 group">
-                <img src="/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-14 w-14 rounded-2xl object-cover shadow-sm group-hover:shadow-md transition-all duration-300">
-                <span class="text-xl font-bold text-gray-900 dark:text-white font-outfit hidden md:block">BudgetBuddy</span>
+            <a href="<?php echo BASE_URL; ?>/" class="flex items-center group">
+                <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-12 w-auto object-contain transition-all duration-300">
             </a>
 
             <!-- Desktop Navigation -->
-            <div class="hidden md:flex items-center space-x-6">
-                <a href="/" class="transition-colors <?php echo $is_active('/'); ?>">Home</a>
-                <a href="/blog" class="transition-colors <?php echo $is_active('/blog'); ?>">Blog</a>
-                <a href="/contact" class="transition-colors <?php echo $is_active('/contact'); ?>">Contact</a>
-                
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="/transactions" class="transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
-                    <a href="/analytics" class="transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
-                <?php endif; ?>
+            <div class="hidden md:flex items-center space-x-8">
+                <?php 
+                    $nav_links = [
+                        ['path' => '/', 'label' => 'Home'],
+                        ['path' => '/blog', 'label' => 'Blog'],
+                        ['path' => '/contact', 'label' => 'Contact'],
+                    ];
+                    
+                    if (isset($_SESSION['user_id'])) {
+                        $nav_links[] = ['path' => '/transactions', 'label' => 'Transactions'];
+                        $nav_links[] = ['path' => '/analytics', 'label' => 'Analytics'];
+                    }
+
+                    foreach ($nav_links as $link):
+                        $state = $is_active($link['path']);
+                ?>
+                    <a href="<?php echo BASE_URL . $link['path']; ?>" class="relative py-2 transition-colors <?php echo $state['class']; ?> group/link">
+                        <?php echo $link['label']; ?>
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-primary dark:bg-accent transform origin-left transition-transform duration-300 <?php echo $state['active'] ? 'scale-x-100' : 'scale-x-0 group-hover/link:scale-x-100'; ?>"></span>
+                    </a>
+                <?php endforeach; ?>
             </div>
 
             <!-- Auth Buttons & Theme Toggle -->
@@ -49,7 +64,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                         <?php 
                             $text = 'Go to Dashboard';
                             $type = 'a';
-                            $href = '/dashboard';
+                            $href = BASE_URL . '/dashboard';
                             $variant = 'primary';
                             $size = 'sm';
                             include APP_PATH . '/views/includes/Button.php';
@@ -57,7 +72,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                         <?php 
                             $text = 'Sign Out';
                             $type = 'a';
-                            $href = '/logout';
+                            $href = BASE_URL . '/logout';
                             $variant = 'outline';
                             $size = 'sm';
                             $class = 'dark:border-white/10 dark:bg-transparent dark:text-white dark:hover:bg-white/5';
@@ -69,7 +84,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                         <?php 
                             $text = 'Sign In';
                             $type = 'a';
-                            $href = '/login';
+                            $href = BASE_URL . '/login';
                             $variant = 'outline';
                             $size = 'sm';
                             $class = 'dark:border-white/10 dark:bg-transparent dark:text-white dark:hover:bg-white/5';
@@ -78,7 +93,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                         <?php 
                             $text = 'Get Started';
                             $type = 'a';
-                            $href = '/register';
+                            $href = BASE_URL . '/register';
                             $variant = 'primary';
                             $size = 'sm';
                             include APP_PATH . '/views/includes/Button.php';
@@ -99,28 +114,27 @@ $is_active = function($path) use ($current_uri, $base_url) {
 <div id="mobile-menu" class="fixed inset-0 z-[100] bg-white dark:bg-slate-950 md:hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform translate-x-full opacity-0 pointer-events-none">
     <div class="flex flex-col h-full">
         <div class="flex items-center justify-between p-6 border-b dark:border-white/10">
-            <div class="flex items-center space-x-3">
-                <img src="/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-10 w-10 rounded-lg object-cover">
-                <span class="text-xl font-bold text-gray-900 dark:text-white font-outfit">BudgetBuddy</span>
+            <div class="flex items-center">
+                <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-10 w-auto object-contain">
             </div>
             <button type="button" id="close-menu-button" class="p-2 rounded-xl text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
         </div>
         <div class="flex-1 overflow-y-auto p-8 flex flex-col space-y-8">
-            <a href="/" class="text-3xl font-bold transition-all <?php echo $is_active('/'); ?>">Home</a>
-            <a href="/blog" class="text-3xl font-bold transition-all <?php echo $is_active('/blog'); ?>">Blog</a>
-            <a href="/contact" class="text-3xl font-bold transition-all <?php echo $is_active('/contact'); ?>">Contact</a>
+            <a href="<?php echo BASE_URL; ?>/" class="text-3xl font-bold transition-all <?php echo $is_active('/'); ?>">Home</a>
+            <a href="<?php echo BASE_URL; ?>/blog" class="text-3xl font-bold transition-all <?php echo $is_active('/blog'); ?>">Blog</a>
+            <a href="<?php echo BASE_URL; ?>/contact" class="text-3xl font-bold transition-all <?php echo $is_active('/contact'); ?>">Contact</a>
             
             <?php if (isset($_SESSION['user_id'])): ?>
                 <div class="h-px w-full bg-gray-100 dark:bg-white/5"></div>
-                <a href="/transactions" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
-                <a href="/analytics" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
+                <a href="<?php echo BASE_URL; ?>/transactions" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
+                <a href="<?php echo BASE_URL; ?>/analytics" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
                 <div class="pt-8 space-y-4">
                     <?php 
                         $text = 'Go to Dashboard';
                         $type = 'a';
-                        $href = '/dashboard';
+                        $href = BASE_URL . '/dashboard';
                         $variant = 'primary';
                         $size = 'lg';
                         $class = 'w-full py-4 rounded-2xl shadow-xl';
@@ -129,7 +143,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                     <?php 
                         $text = 'Sign Out';
                         $type = 'a';
-                        $href = '/logout';
+                        $href = BASE_URL . '/logout';
                         $variant = 'outline';
                         $size = 'lg';
                         $class = 'w-full py-4 rounded-2xl border-rose-100 text-rose-600 hover:bg-rose-50';
@@ -141,7 +155,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                     <?php 
                         $text = 'Sign In';
                         $type = 'a';
-                        $href = '/login';
+                        $href = BASE_URL . '/login';
                         $variant = 'outline';
                         $size = 'lg';
                         $class = 'w-full py-4 rounded-2xl dark:border-white/10 dark:text-slate-300';
@@ -150,7 +164,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                     <?php 
                         $text = 'Get Started';
                         $type = 'a';
-                        $href = '/register';
+                        $href = BASE_URL . '/register';
                         $variant = 'primary';
                         $size = 'lg';
                         $class = 'w-full py-4 rounded-2xl shadow-xl shadow-primary/20';

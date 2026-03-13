@@ -134,7 +134,7 @@ $GLOBALS['_modal_styles_loaded'] = true;
             <h2 class="text-2xl font-black text-gray-900 font-outfit">New Transaction</h2>
             <p class="text-sm text-gray-500 mt-1">Record an income or expense.</p>
         </div>
-        <form method="POST" action="/BudgetBuddy-/transactions/create" class="space-y-4">
+        <form method="POST" action="/SpendScribe-/transactions/create" class="space-y-4">
             <div class="grid grid-cols-2 gap-3">
                 <label class="flex items-center gap-2 p-3 rounded-2xl border-2 border-accent bg-accent/5 cursor-pointer has-[:checked]:border-accent has-[:checked]:bg-accent/10">
                     <input type="radio" name="type" value="income" checked class="accent-accent"> <span class="text-sm font-bold text-gray-700">Income</span>
@@ -180,7 +180,7 @@ $GLOBALS['_modal_styles_loaded'] = true;
             <h2 class="text-2xl font-black text-gray-900 font-outfit">Edit Transaction</h2>
             <p class="text-sm text-gray-500 mt-1">Update this transaction's details.</p>
         </div>
-        <form method="POST" action="/BudgetBuddy-/transactions/update" class="space-y-4" id="edit-tx-form">
+        <form method="POST" action="/SpendScribe-/transactions/update" class="space-y-4" id="edit-tx-form">
             <input type="hidden" name="id" id="edit-tx-id">
             <div class="grid grid-cols-2 gap-3">
                 <label class="flex items-center gap-2 p-3 rounded-2xl border-2 border-gray-200 cursor-pointer">
@@ -229,7 +229,7 @@ $GLOBALS['_modal_styles_loaded'] = true;
             <h2 class="text-2xl font-black text-gray-900 font-outfit">Delete Transaction?</h2>
             <p class="text-sm text-gray-500 mt-2" id="delete-tx-name"></p>
         </div>
-        <form method="POST" action="/BudgetBuddy-/transactions/delete">
+        <form method="POST" action="/SpendScribe-/transactions/delete">
             <input type="hidden" name="id" id="delete-tx-id">
             <div class="flex gap-3">
                 <button type="button" onclick="closeModal('tx-delete')" class="flex-1 h-11 rounded-2xl border border-gray-200 text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all">Cancel</button>

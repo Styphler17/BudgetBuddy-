@@ -24,6 +24,7 @@ $variants = [
     'ghost' => 'bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white',
     'destructive' => 'bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/20 dark:shadow-none',
     'success' => 'bg-green-600 text-white hover:bg-green-700 shadow-lg shadow-green-600/20 dark:shadow-none',
+    'glow' => 'bg-white dark:bg-slate-900 text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 btn-glow-sophisticated',
 ];
 
 // Size classes
@@ -39,12 +40,18 @@ $finalClasses = "{$baseClasses} {$variantClass} {$sizeClass} {$class}";
 
 if ($type === 'a'): ?>
     <a href="<?php echo $href; ?>" class="<?php echo $finalClasses; ?>" <?php echo $id ? "id='$id'" : ''; ?> <?php echo $attr; ?>>
-        <?php if ($icon): ?><i data-lucide="<?php echo $icon; ?>" class="mr-2 <?php echo $size === 'sm' ? 'w-3 h-3' : ($size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'); ?>"></i><?php endif; ?>
-        <?php echo htmlspecialchars($text); ?>
+        <?php if ($variant === 'glow'): ?><div class="glowing-effect-container" style="position: absolute; z-index: 0;"></div><?php endif; ?>
+        <span class="relative z-10 flex items-center">
+            <?php if ($icon): ?><i data-lucide="<?php echo $icon; ?>" class="mr-2 <?php echo $size === 'sm' ? 'w-3 h-3' : ($size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'); ?>"></i><?php endif; ?>
+            <?php echo htmlspecialchars($text); ?>
+        </span>
     </a>
 <?php else: ?>
     <button type="<?php echo $type; ?>" class="<?php echo $finalClasses; ?>" <?php echo $id ? "id='$id'" : ''; ?> <?php echo $attr; ?>>
-        <?php if ($icon): ?><i data-lucide="<?php echo $icon; ?>" class="mr-2 <?php echo $size === 'sm' ? 'w-3 h-3' : ($size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'); ?>"></i><?php endif; ?>
-        <?php echo htmlspecialchars($text); ?>
+        <?php if ($variant === 'glow'): ?><div class="glowing-effect-container" style="position: absolute; z-index: 0;"></div><?php endif; ?>
+        <span class="relative z-10 flex items-center">
+            <?php if ($icon): ?><i data-lucide="<?php echo $icon; ?>" class="mr-2 <?php echo $size === 'sm' ? 'w-3 h-3' : ($size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'); ?>"></i><?php endif; ?>
+            <?php echo htmlspecialchars($text); ?>
+        </span>
     </button>
 <?php endif; ?>

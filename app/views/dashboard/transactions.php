@@ -19,7 +19,7 @@
     <!-- Add Form (Hidden by default) -->
     <div id="add-tx-form" class="hidden bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
         <h3 class="text-lg font-bold text-gray-900 mb-4 font-outfit">New Transaction</h3>
-        <form action="/transactions/create" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form action="<?php echo BASE_URL; ?>/transactions/create" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="space-y-1">
                 <label class="text-xs font-bold text-gray-500 uppercase">Amount</label>
                 <input type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
@@ -77,7 +77,7 @@
                         <p class="font-bold <?php echo $tx['type'] === 'income' ? 'text-green-600' : 'text-gray-900'; ?>">
                             <?php echo $tx['type'] === 'income' ? '+' : '-'; ?>$<?php echo number_format($tx['amount'], 2); ?>
                         </p>
-                        <a href="/transactions/delete/<?php echo $tx['id']; ?>" class="p-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all" onclick="return confirm('Delete this transaction?')">
+                        <a href="<?php echo BASE_URL; ?>/transactions/delete/<?php echo $tx['id']; ?>" class="p-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all" onclick="return confirm('Delete this transaction?')">
                             <i data-lucide="trash-2" class="h-4 w-4"></i>
                         </a>
                     </div>

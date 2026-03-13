@@ -17,7 +17,7 @@ class AuthController extends BaseController {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_email'] = $user['email'];
-                $this->redirect('/BudgetBuddy-/dashboard');
+                $this->redirect('/dashboard');
             } else {
                 $error = "Invalid email or password.";
             }
@@ -42,7 +42,7 @@ class AuthController extends BaseController {
                 $_SESSION['admin_id'] = $admin['id'];
                 $_SESSION['admin_name'] = $admin['name'];
                 $_SESSION['admin_email'] = $admin['email'];
-                $this->redirect('/BudgetBuddy-/admin');
+                $this->redirect('/admin');
             } else {
                 $error = "Invalid admin credentials.";
             }
@@ -69,7 +69,7 @@ class AuthController extends BaseController {
             // Basic validation
             if (!empty($data['email']) && !empty($data['password'])) {
                 if ($userModel->create($data)) {
-                    $this->redirect('/BudgetBuddy-/login');
+                    $this->redirect('/login');
                 } else {
                     $error = "Failed to create account. Email might already exist.";
                 }
@@ -94,6 +94,6 @@ class AuthController extends BaseController {
     
     public function logout() {
         session_destroy();
-        $this->redirect('/BudgetBuddy-/');
+        $this->redirect('/');
     }
 }

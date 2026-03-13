@@ -13,7 +13,7 @@
     <!-- Add Goal Form (Hidden by default) -->
     <div id="add-goal-form" class="hidden bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
         <h3 class="text-lg font-bold text-gray-900 mb-4 font-outfit">New Goal</h3>
-        <form action="/goals/create" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <form action="<?php echo BASE_URL; ?>/goals/create" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="space-y-1">
                 <label class="text-xs font-bold text-gray-500 uppercase">Goal Name</label>
                 <input type="text" name="name" placeholder="e.g. New Car" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
                         <button class="p-1 text-gray-400 hover:text-gray-900 transition-colors"><i data-lucide="edit-3" class="h-4 w-4"></i></button>
-                        <a href="/goals/delete/<?php echo $goal['id']; ?>" class="p-1 text-gray-400 hover:text-red-500 transition-colors" onclick="return confirm('Delete this goal?')"><i data-lucide="trash-2" class="h-4 w-4"></i></a>
+                        <a href="<?php echo BASE_URL; ?>/goals/delete/<?php echo $goal['id']; ?>" class="p-1 text-gray-400 hover:text-red-500 transition-colors" onclick="return confirm('Delete this goal?')"><i data-lucide="trash-2" class="h-4 w-4"></i></a>
                     </div>
                 </div>
 

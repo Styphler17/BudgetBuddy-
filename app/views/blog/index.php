@@ -3,13 +3,13 @@
     <section class="bg-gray-50 dark:bg-slate-900/50 py-20 pt-32">
         <div class="container mx-auto max-w-5xl px-6 text-center">
             <nav class="mb-8 flex justify-center text-sm text-gray-500 dark:text-slate-400 font-medium">
-                <a href="/" class="hover:text-primary dark:hover:text-accent transition-colors">Home</a>
+                <a href="<?php echo BASE_URL; ?>/" class="hover:text-primary dark:hover:text-accent transition-colors">Home</a>
                 <span class="mx-3 text-gray-300 dark:text-slate-700">/</span>
                 <span class="text-gray-900 dark:text-white">Blog</span>
             </nav>
             
             <span class="inline-block px-4 py-1.5 rounded-full border border-primary/10 dark:border-accent/20 text-[10px] font-black uppercase tracking-[0.35em] text-primary dark:text-accent mb-6 bg-white dark:bg-slate-900 shadow-sm relative overflow-hidden">
-                <span class="relative z-10">BudgetBuddy Blog</span>
+                <span class="relative z-10">SpendScribe Blog</span>
                 <div class="absolute inset-0 animate-shimmer opacity-10 dark:opacity-20 bg-gradient-to-r from-transparent via-primary/5 dark:via-accent/5 to-transparent"></div>
             </span>
             
@@ -23,7 +23,7 @@
 
             <!-- Search and Sort Interface -->
             <div class="mt-12 max-w-3xl mx-auto space-y-6">
-                <form id="search-form" action="/blog" method="GET" class="flex flex-col md:flex-row items-center gap-4">
+                <form id="search-form" action="<?php echo BASE_URL; ?>/blog" method="GET" class="flex flex-col md:flex-row items-center gap-4">
                     <div class="relative w-full group">
                         <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500 group-focus-within:text-primary dark:group-focus-within:text-accent transition-colors"></i>
                         <input 
@@ -54,13 +54,13 @@
                         <?php foreach ($popularTags as $tag): 
                             $isActive = ($currentTag === $tag);
                         ?>
-                            <a href="/blog?tag=<?php echo urlencode($tag); ?>" 
+                            <a href="<?php echo BASE_URL; ?>/blog?tag=<?php echo urlencode($tag); ?>" 
                                class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all <?php echo $isActive ? 'bg-primary dark:bg-accent text-white dark:text-primary shadow-md' : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-400 border border-gray-200 dark:border-white/10 hover:border-primary/40 dark:hover:border-accent/40 hover:text-primary dark:hover:text-accent'; ?>">
                                 <?php echo htmlspecialchars($tag); ?>
                             </a>
                         <?php endforeach; ?>
                         <?php if (!empty($currentSearch) || !empty($currentTag)): ?>
-                            <a href="/blog" class="ml-2 p-2 text-gray-400 dark:text-slate-500 hover:text-red-500 transition-colors" title="Clear Filters">
+                            <a href="<?php echo BASE_URL; ?>/blog" class="ml-2 p-2 text-gray-400 dark:text-slate-500 hover:text-red-500 transition-colors" title="Clear Filters">
                                 <i data-lucide="x-circle" class="h-5 w-5"></i>
                             </a>
                         <?php endif; ?>
@@ -89,37 +89,41 @@
                             <div class="animate-slide-up">
                                 <h2 class="text-xs font-black text-gray-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-8 flex items-center gap-4">
                                     <span class="h-px w-12 bg-gray-200 dark:bg-slate-800"></span>
-                                                                Featured Blog
-                                                            </h2>
-                                                            <a href="/<?php echo $featuredPost['slug']; ?>" class="group block">
-                                                                <article class="grid lg:grid-cols-12 gap-0 border border-gray-100 dark:border-white/5 rounded-[2.5rem] overflow-hidden bg-white dark:bg-slate-900 shadow-2xl dark:shadow-none shadow-gray-200/50 hover:shadow-primary/10 dark:hover:bg-slate-800/50 transition-all duration-700">                                        <div class="lg:col-span-7 aspect-video relative overflow-hidden">
-                                            <img 
-                                                src="<?php echo htmlspecialchars($featuredPost['cover_image_url'] ?? 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&auto=format&fit=crop&q=60'); ?>" 
-                                                alt="<?php echo htmlspecialchars($featuredPost['title']); ?>"
-                                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
-                                            >
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                        </div>
-                                        <div class="lg:col-span-5 p-10 md:p-16 flex flex-col justify-center">
-                                            <div class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-primary dark:text-accent mb-6">
-                                                <span class="px-2 py-1 bg-primary/10 dark:bg-accent/10 rounded-md">Editor's Choice</span>
-                                                <span class="text-gray-400 dark:text-slate-500"><?php echo $featuredPost['reading_time'] ?? 5; ?> min read</span>
+                                    Featured Blog
+                                </h2>
+                                <div class="glowing-wrapper">
+                                    <div class="glowing-effect-container"></div>
+                                    <a href="<?php echo BASE_URL; ?>/<?php echo $featuredPost['slug']; ?>" class="group block relative z-10">
+                                        <article class="grid lg:grid-cols-12 gap-0 border border-gray-100 dark:border-white/5 rounded-[2.5rem] overflow-hidden bg-white dark:bg-slate-900 shadow-2xl dark:shadow-none shadow-gray-200/50 hover:shadow-primary/10 dark:hover:bg-slate-800/50 transition-all duration-700">
+                                            <div class="lg:col-span-7 aspect-video relative overflow-hidden">
+                                                <img 
+                                                    src="<?php echo htmlspecialchars($featuredPost['cover_image_url'] ?? 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&auto=format&fit=crop&q=60'); ?>" 
+                                                    alt="<?php echo htmlspecialchars($featuredPost['title']); ?>"
+                                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                                                >
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                                             </div>
-                                            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 font-outfit leading-tight group-hover:text-primary dark:group-hover:text-accent transition-colors">
-                                                <?php echo htmlspecialchars($featuredPost['title']); ?>
-                                            </h2>
-                                            <p class="text-gray-600 dark:text-slate-300 mb-8 line-clamp-3 text-lg leading-relaxed font-medium">
-                                                <?php echo htmlspecialchars($featuredPost['excerpt'] ?? ''); ?>
-                                            </p>
-                                            <div class="flex items-center justify-between pt-8 border-t border-gray-50 dark:border-white/5">
-                                                <span class="text-sm font-bold text-gray-400 dark:text-slate-500"><?php echo date('M d, Y', strtotime($featuredPost['created_at'])); ?></span>
-                                                <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-primary dark:text-accent">
-                                                    Read article <i data-lucide="arrow-right" class="h-4 w-4"></i>
-                                                </span>
+                                            <div class="lg:col-span-5 p-10 md:p-16 flex flex-col justify-center">
+                                                <div class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-primary dark:text-accent mb-6">
+                                                    <span class="px-2 py-1 bg-primary/10 dark:bg-accent/10 rounded-md">Editor's Choice</span>
+                                                    <span class="text-gray-400 dark:text-slate-500"><?php echo $featuredPost['reading_time'] ?? 5; ?> min read</span>
+                                                </div>
+                                                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 font-outfit leading-tight group-hover:text-primary dark:group-hover:text-accent transition-colors">
+                                                    <?php echo htmlspecialchars($featuredPost['title']); ?>
+                                                </h2>
+                                                <p class="text-gray-600 dark:text-slate-300 mb-8 line-clamp-3 text-lg leading-relaxed font-medium">
+                                                    <?php echo htmlspecialchars($featuredPost['excerpt'] ?? ''); ?>
+                                                </p>
+                                                <div class="flex items-center justify-between pt-8 border-t border-gray-50 dark:border-white/5">
+                                                    <span class="text-sm font-bold text-gray-400 dark:text-slate-500"><?php echo date('M d, Y', strtotime($featuredPost['created_at'])); ?></span>
+                                                    <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-primary dark:text-accent">
+                                                        Read article <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </article>
-                                </a>
+                                        </article>
+                                    </a>
+                                </div>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -135,39 +139,42 @@
                             <?php 
                             foreach ($otherPosts as $index => $post): 
                             ?>
-                                <a href="/<?php echo $post['slug']; ?>" class="group block">
-                                    <article class="flex flex-col h-full bg-white dark:bg-transparent transition-all">
-                                        <div class="aspect-[16/11] overflow-hidden rounded-2xl relative mb-4 border border-gray-100 dark:border-white/10 shadow-sm group-hover:shadow-xl dark:group-hover:shadow-none group-hover:shadow-primary/5 dark:group-hover:bg-slate-900 transition-all duration-500">
-                                            <img 
-                                                src="<?php echo htmlspecialchars($post['cover_image_url'] ?? 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop&q=60'); ?>" 
-                                                alt="<?php echo htmlspecialchars($post['title']); ?>"
-                                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                                            >
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                            <?php if(!empty($post['tags'])): ?>
-                                                <span class="absolute top-3 left-3 z-20 px-2 py-0.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-md text-[8px] font-black uppercase text-primary dark:text-accent tracking-widest shadow-sm">
-                                                    <?php echo htmlspecialchars(is_array($post['tags']) ? $post['tags'][0] : explode(',', $post['tags'])[0]); ?>
-                                                </span>
-                                            <?php endif; ?>
-                                        </div>
-                                        <div class="flex-grow flex flex-col">
-                                            <div class="flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-2">
-                                                <span><?php echo date('M d', strtotime($post['created_at'])); ?></span>
-                                                <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-slate-700"></span>
-                                                <span class="text-primary dark:text-accent"><?php echo $post['reading_time'] ?? 1; ?>m read</span>
+                                <div class="glowing-wrapper">
+                                    <div class="glowing-effect-container"></div>
+                                    <a href="<?php echo BASE_URL; ?>/<?php echo $post['slug']; ?>" class="group block relative z-10 h-full">
+                                        <article class="flex flex-col h-full bg-white dark:bg-slate-900 rounded-[1.5rem] overflow-hidden transition-all">
+                                            <div class="aspect-[16/11] overflow-hidden relative mb-4">
+                                                <img 
+                                                    src="<?php echo htmlspecialchars($post['cover_image_url'] ?? 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop&q=60'); ?>" 
+                                                    alt="<?php echo htmlspecialchars($post['title']); ?>"
+                                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                                                >
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                                <?php if(!empty($post['tags'])): ?>
+                                                    <span class="absolute top-3 left-3 z-20 px-2 py-0.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-md text-[8px] font-black uppercase text-primary dark:text-accent tracking-widest shadow-sm">
+                                                        <?php echo htmlspecialchars(is_array($post['tags']) ? $post['tags'][0] : explode(',', $post['tags'])[0]); ?>
+                                                    </span>
+                                                <?php endif; ?>
                                             </div>
-                                            <h3 class="text-base font-bold text-gray-900 dark:text-white mb-2 font-outfit leading-snug group-hover:text-primary dark:group-hover:text-accent transition-colors line-clamp-2">
-                                                <?php echo htmlspecialchars($post['title']); ?>
-                                            </h3>
-                                            <p class="text-xs text-gray-600 dark:text-slate-400 line-clamp-2 mb-4 font-medium leading-relaxed flex-grow">
-                                                <?php echo htmlspecialchars($post['excerpt'] ?? ''); ?>
-                                            </p>
-                                            <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-900 dark:text-slate-300 group-hover:text-primary dark:group-hover:text-accent transition-all">
-                                                Read article <i data-lucide="arrow-right" class="h-3 w-3 -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all"></i>
-                                            </span>
-                                        </div>
-                                    </article>
-                                </a>
+                                            <div class="flex-grow flex flex-col p-5 pt-0">
+                                                <div class="flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-2">
+                                                    <span><?php echo date('M d', strtotime($post['created_at'])); ?></span>
+                                                    <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-slate-700"></span>
+                                                    <span class="text-primary dark:text-accent"><?php echo $post['reading_time'] ?? 1; ?>m read</span>
+                                                </div>
+                                                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-2 font-outfit leading-snug group-hover:text-primary dark:group-hover:text-accent transition-colors line-clamp-2">
+                                                    <?php echo htmlspecialchars($post['title']); ?>
+                                                </h3>
+                                                <p class="text-xs text-gray-600 dark:text-slate-400 line-clamp-2 mb-4 font-medium leading-relaxed flex-grow">
+                                                    <?php echo htmlspecialchars($post['excerpt'] ?? ''); ?>
+                                                </p>
+                                                <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-900 dark:text-slate-300 group-hover:text-primary dark:group-hover:text-accent transition-all">
+                                                    Read article <i data-lucide="arrow-right" class="h-3 w-3 -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all"></i>
+                                                </span>
+                                            </div>
+                                        </article>
+                                    </a>
+                                </div>
                             <?php endforeach; ?>
                         </div>
 
@@ -232,10 +239,10 @@
             <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
             
             <h2 class="text-4xl md:text-5xl font-bold text-white font-outfit tracking-tighter mb-6">
-                Stay ahead of the <span class="text-accent italic font-medium">market curve</span>
+                Master your <span class="text-accent italic font-medium">personal budget</span>
             </h2>
             <p class="text-primary-foreground/70 dark:text-slate-400 text-lg font-medium max-w-2xl mx-auto mb-12 leading-relaxed">
-                Get weekly money tips, foundational budgeting tactics, and next-level wealth moves delivered to your inbox.
+                Get weekly tips on building consistent tracking habits, ditching complex spreadsheets, and gaining clarity over your daily expenses.
             </p>
             <form id="newsletter-form" class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
                 <input type="email" name="user_email" placeholder="Enter your email" class="flex-grow h-14 px-6 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/10 text-white placeholder:text-white/40 outline-none focus:bg-white/20 dark:focus:bg-white/10 transition-all font-bold" required>

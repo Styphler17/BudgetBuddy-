@@ -52,7 +52,7 @@
                     <h3 class="text-2xl font-black text-gray-900 font-outfit tracking-tight">Public Profile</h3>
                     <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">Your name, email and currency preferences.</p>
                 </div>
-                <form method="POST" action="/BudgetBuddy-/settings/profile" class="space-y-6">
+                <form method="POST" action="/SpendScribe-/settings/profile" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-3">
                             <label class="text-[10px] font-black text-primary uppercase tracking-[0.2em] ml-1">Full Name</label>
@@ -98,7 +98,7 @@
                     <h3 class="text-2xl font-black text-gray-900 font-outfit tracking-tight">Change Password</h3>
                     <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">Use a strong password of at least 6 characters.</p>
                 </div>
-                <form method="POST" action="/BudgetBuddy-/settings/password" class="space-y-6">
+                <form method="POST" action="/SpendScribe-/settings/password" class="space-y-6">
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-primary uppercase tracking-[0.2em] ml-1">Current Password</label>
                         <div class="relative">
@@ -156,7 +156,7 @@
         </div>
         <div class="flex gap-3">
             <button type="button" onclick="closeModal('delete-account')" class="flex-1 h-11 rounded-2xl border border-gray-200 text-sm font-bold text-gray-600">Cancel</button>
-            <form method="POST" action="/BudgetBuddy-/settings/delete-account" class="flex-1">
+            <form method="POST" action="/SpendScribe-/settings/delete-account" class="flex-1">
                 <button type="submit" class="w-full h-11 rounded-2xl bg-rose-500 text-white text-sm font-bold">Delete Everything</button>
             </form>
         </div>

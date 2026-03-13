@@ -3,7 +3,7 @@
     <section class="bg-gray-50 dark:bg-slate-900/50 py-16 pt-32">
         <div class="container mx-auto max-w-4xl px-6 text-center">
             <nav class="mb-6 flex justify-center text-sm text-gray-500 dark:text-slate-400">
-                <a href="/" class="hover:text-primary dark:hover:text-accent">Home</a>
+                <a href="<?php echo BASE_URL; ?>/" class="hover:text-primary dark:hover:text-accent">Home</a>
                 <span class="mx-2">&rarr;</span>
                 <span class="text-gray-900 dark:text-white font-medium">Security</span>
             </nav>
@@ -27,44 +27,56 @@
     <section class="container mx-auto px-6 py-16">
         <div class="max-w-4xl mx-auto space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
-                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6">
-                        <i data-lucide="lock" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                <div class="glowing-wrapper">
+                    <div class="glowing-effect-container"></div>
+                    <div class="relative bg-white dark:bg-slate-900 p-8 rounded-[1.5rem] border border-gray-200 dark:border-white/10 shadow-sm h-full z-10">
+                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6">
+                            <i data-lucide="lock" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-outfit">Data Encryption</h3>
+                        <p class="text-gray-600 dark:text-slate-400 leading-relaxed">
+                            We use AES-256 encryption to protect your data at rest and TLS 1.2+ for data in transit. Your sensitive information is never stored in plain text.
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-outfit">Data Encryption</h3>
-                    <p class="text-gray-600 dark:text-slate-400 leading-relaxed">
-                        We use AES-256 encryption to protect your data at rest and TLS 1.2+ for data in transit. Your sensitive information is never stored in plain text.
-                    </p>
                 </div>
 
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
-                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-6">
-                        <i data-lucide="user-check" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                <div class="glowing-wrapper">
+                    <div class="glowing-effect-container"></div>
+                    <div class="relative bg-white dark:bg-slate-900 p-8 rounded-[1.5rem] border border-gray-200 dark:border-white/10 shadow-sm h-full z-10">
+                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-6">
+                            <i data-lucide="user-check" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-outfit">Authentication</h3>
+                        <p class="text-gray-600 dark:text-slate-400 leading-relaxed">
+                            Secure password hashing using bcrypt ensures your credentials remain safe even in the unlikely event of a data breach.
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-outfit">Authentication</h3>
-                    <p class="text-gray-600 dark:text-slate-400 leading-relaxed">
-                        Secure password hashing using bcrypt ensures your credentials remain safe even in the unlikely event of a data breach.
-                    </p>
                 </div>
 
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
-                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-6">
-                        <i data-lucide="eye-off" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                <div class="glowing-wrapper">
+                    <div class="glowing-effect-container"></div>
+                    <div class="relative bg-white dark:bg-slate-900 p-8 rounded-[1.5rem] border border-gray-200 dark:border-white/10 shadow-sm h-full z-10">
+                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-6">
+                            <i data-lucide="eye-off" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-outfit">Privacy First</h3>
+                        <p class="text-gray-600 dark:text-slate-400 leading-relaxed">
+                            We follow a privacy-by-design approach. We never sell your personal data to third parties or advertisers.
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-outfit">Privacy First</h3>
-                    <p class="text-gray-600 dark:text-slate-400 leading-relaxed">
-                        We follow a privacy-by-design approach. We never sell your personal data to third parties or advertisers.
-                    </p>
                 </div>
 
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
-                    <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-6">
-                        <i data-lucide="refresh-cw" class="w-6 h-6 text-orange-600 dark:text-orange-400"></i>
+                <div class="glowing-wrapper">
+                    <div class="glowing-effect-container"></div>
+                    <div class="relative bg-white dark:bg-slate-900 p-8 rounded-[1.5rem] border border-gray-200 dark:border-white/10 shadow-sm h-full z-10">
+                        <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-6">
+                            <i data-lucide="refresh-cw" class="w-6 h-6 text-orange-600 dark:text-orange-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-outfit">Regular Audits</h3>
+                        <p class="text-gray-600 dark:text-slate-400 leading-relaxed">
+                            Our systems undergo regular security audits and penetration testing to identify and patch vulnerabilities before they can be exploited.
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-outfit">Regular Audits</h3>
-                    <p class="text-gray-600 dark:text-slate-400 leading-relaxed">
-                        Our systems undergo regular security audits and penetration testing to identify and patch vulnerabilities before they can be exploited.
-                    </p>
                 </div>
             </div>
         </div>
@@ -78,7 +90,7 @@
                 <p class="text-gray-400 mb-8 leading-relaxed">
                     We take security seriously. If you've discovered a vulnerability, please report it to our security team immediately.
                 </p>
-                <a href="/contact" class="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-accent text-gray-900 dark:text-primary font-bold rounded-xl hover:scale-105 transition-all shadow-xl dark:shadow-none">
+                <a href="<?php echo BASE_URL; ?>/contact" class="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-accent text-gray-900 dark:text-primary font-bold rounded-xl hover:scale-105 transition-all shadow-xl dark:shadow-none">
                     Report Vulnerability
                 </a>
             </div>
@@ -89,5 +101,36 @@
 <script>
     window.addEventListener('load', () => {
         lucide.createIcons();
+
+        // Glowing Effect Controller
+        const wrappers = document.querySelectorAll('.glowing-wrapper');
+        const proximity = 100;
+
+        const handlePointerMove = (e) => {
+            wrappers.forEach(wrapper => {
+                const container = wrapper.querySelector('.glowing-effect-container');
+                const rect = wrapper.getBoundingClientRect();
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                const isActive = 
+                    mouseX > rect.left - proximity &&
+                    mouseX < rect.right + proximity &&
+                    mouseY > rect.top - proximity &&
+                    mouseY < rect.bottom + proximity;
+
+                if (isActive) {
+                    container.style.setProperty('--active', '1');
+                    const angle = Math.atan2(mouseY - centerY, mouseX - centerX) * (180 / Math.PI) + 90;
+                    container.style.setProperty('--start', angle);
+                } else {
+                    container.style.setProperty('--active', '0');
+                }
+            });
+        };
+
+        window.addEventListener('pointermove', handlePointerMove);
     });
 </script>

@@ -1,9 +1,9 @@
 <?php
 /**
- * BudgetBuddy Router – handles URI mapping including CRUD sub-routes
+ * SpendScribe Router – handles URI mapping including CRUD sub-routes
  */
 class Router {
-    private $basePath = '/BudgetBuddy-';
+    private $basePath = '/SpendScribe-';
 
     public function handleRequest() {
         $uri = $_SERVER['REQUEST_URI'];

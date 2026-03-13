@@ -108,7 +108,7 @@
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 space-y-6 relative">
         <button onclick="closeModal('goal-create')" class="absolute top-5 right-5 h-8 w-8 flex items-center justify-center rounded-xl text-gray-400 hover:bg-gray-100">✕</button>
         <div><h2 class="text-2xl font-black text-gray-900 font-outfit">New Savings Goal</h2></div>
-        <form method="POST" action="/BudgetBuddy-/goals/create" class="space-y-4">
+        <form method="POST" action="/SpendScribe-/goals/create" class="space-y-4">
             <div>
                 <label class="block text-xs font-black text-primary uppercase tracking-widest mb-2">Goal Name</label>
                 <input type="text" name="name" required placeholder="e.g. Emergency Fund, Vacation" class="bb-input w-full">
@@ -147,7 +147,7 @@
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 space-y-6 relative">
         <button onclick="closeModal('goal-edit')" class="absolute top-5 right-5 h-8 w-8 flex items-center justify-center rounded-xl text-gray-400 hover:bg-gray-100">✕</button>
         <div><h2 class="text-2xl font-black text-gray-900 font-outfit">Edit Goal</h2></div>
-        <form method="POST" action="/BudgetBuddy-/goals/update" class="space-y-4">
+        <form method="POST" action="/SpendScribe-/goals/update" class="space-y-4">
             <input type="hidden" name="id" id="edit-goal-id">
             <div>
                 <label class="block text-xs font-black text-primary uppercase tracking-widest mb-2">Goal Name</label>
@@ -190,7 +190,7 @@
             <h2 class="text-2xl font-black text-gray-900 font-outfit">Update Progress</h2>
             <p class="text-sm text-gray-500 mt-1" id="progress-goal-info"></p>
         </div>
-        <form method="POST" action="/BudgetBuddy-/goals/update" class="space-y-4">
+        <form method="POST" action="/SpendScribe-/goals/update" class="space-y-4">
             <input type="hidden" name="id" id="progress-goal-id">
             <input type="hidden" name="name" id="progress-goal-name-hidden">
             <input type="hidden" name="target_amount" id="progress-goal-target-hidden">
@@ -218,7 +218,7 @@
             <h2 class="text-2xl font-black text-gray-900 font-outfit">Delete Goal?</h2>
             <p class="text-sm text-gray-500 mt-2" id="delete-goal-name"></p>
         </div>
-        <form method="POST" action="/BudgetBuddy-/goals/delete" class="flex gap-3">
+        <form method="POST" action="/SpendScribe-/goals/delete" class="flex gap-3">
             <input type="hidden" name="id" id="delete-goal-id">
             <button type="button" onclick="closeModal('goal-delete')" class="flex-1 h-11 rounded-2xl border border-gray-200 text-sm font-bold text-gray-600">Cancel</button>
             <button type="submit" class="flex-1 h-11 rounded-2xl bg-rose-500 text-white text-sm font-bold">Delete</button>

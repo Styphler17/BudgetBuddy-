@@ -9,7 +9,7 @@ class DashboardController extends BaseController {
 
     public function __construct() {
         if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/BudgetBuddy-/login');
+            $this->redirect('/login');
         }
         $this->userId = $_SESSION['user_id'];
     }
@@ -93,13 +93,13 @@ class DashboardController extends BaseController {
             ];
             $transactionModel->create($data);
         }
-        $this->redirect('/BudgetBuddy-/transactions');
+        $this->redirect('/transactions');
     }
 
     public function transactionDelete($id) {
         $transactionModel = new Transaction();
         $transactionModel->delete($id);
-        $this->redirect('/BudgetBuddy-/transactions');
+        $this->redirect('/transactions');
     }
 
     public function analytics() {
@@ -158,13 +158,13 @@ class DashboardController extends BaseController {
             ];
             $accountModel->create($data);
         }
-        $this->redirect('/BudgetBuddy-/accounts');
+        $this->redirect('/accounts');
     }
 
     public function accountDelete($id) {
         $accountModel = new Account();
         $accountModel->delete($id);
-        $this->redirect('/BudgetBuddy-/accounts');
+        $this->redirect('/accounts');
     }
 
     public function settings() {
@@ -181,7 +181,7 @@ class DashboardController extends BaseController {
                 ];
                 $userModel->update($this->userId, $data);
                 $_SESSION['user_name'] = $data['name'];
-                $this->redirect('/BudgetBuddy-/settings');
+                $this->redirect('/settings');
             }
             
             if ($action === 'update_password') {
@@ -191,7 +191,7 @@ class DashboardController extends BaseController {
                     $data = ['password_hash' => password_hash($password, PASSWORD_DEFAULT)];
                     $userModel->update($this->userId, $data);
                 }
-                $this->redirect('/BudgetBuddy-/settings');
+                $this->redirect('/settings');
             }
         }
         
@@ -225,13 +225,13 @@ class DashboardController extends BaseController {
             ];
             $goalModel->create($data);
         }
-        $this->redirect('/BudgetBuddy-/goals');
+        $this->redirect('/goals');
     }
 
     public function goalDelete($id) {
         $goalModel = new Goal();
         $goalModel->delete($id);
-        $this->redirect('/BudgetBuddy-/goals');
+        $this->redirect('/goals');
     }
 
     public function categories() {
@@ -257,13 +257,13 @@ class DashboardController extends BaseController {
             ];
             $categoryModel->create($data);
         }
-        $this->redirect('/BudgetBuddy-/categories');
+        $this->redirect('/categories');
     }
 
     public function categoryDelete($id) {
         $categoryModel = new Category();
         $categoryModel->delete($id);
-        $this->redirect('/BudgetBuddy-/categories');
+        $this->redirect('/categories');
     }
 
     public function notifications() {

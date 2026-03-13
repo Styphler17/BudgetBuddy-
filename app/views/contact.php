@@ -6,7 +6,7 @@
                 Get in Touch
             </h1>
             <p class="text-xl text-gray-600 dark:text-slate-300 mb-6 font-medium">
-                Have questions about BudgetBuddy? We'd love to hear from you.
+                Have questions about SpendScribe? We'd love to hear from you.
                 Send us a message and we'll respond as soon as possible.
             </p>
             <span class="inline-flex items-center rounded-full border border-primary/10 dark:border-accent/20 bg-primary/5 dark:bg-accent/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary dark:text-accent mb-4 shadow-sm relative overflow-hidden">
@@ -44,22 +44,25 @@
             ];
 
             foreach ($methods as $m): ?>
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm text-center hover-lift transition-all">
-                    <div class="w-16 h-16 bg-primary/10 dark:bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <i data-lucide="<?php echo $m['icon']; ?>" class="w-8 h-8 text-primary dark:text-accent"></i>
+                <div class="glowing-wrapper">
+                    <div class="glowing-effect-container"></div>
+                    <div class="relative bg-white dark:bg-slate-900 p-8 rounded-[1.5rem] border border-gray-200 dark:border-white/10 shadow-sm text-center transition-all h-full z-10">
+                        <div class="w-16 h-16 bg-primary/10 dark:bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="<?php echo $m['icon']; ?>" class="w-8 h-8 text-primary dark:text-accent"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1 font-outfit"><?php echo $m['title']; ?></h3>
+                        <p class="text-sm text-gray-500 dark:text-slate-400 mb-4 font-medium"><?php echo $m['description']; ?></p>
+                        <p class="font-bold text-gray-900 dark:text-white mb-6"><?php echo $m['contact']; ?></p>
+                        <?php 
+                            $text = 'Contact Now';
+                            $type = 'a';
+                            $href = $m['action'];
+                            $variant = 'outline';
+                            $size = 'md';
+                            $class = 'rounded-xl border-2 dark:border-white/10 h-11 px-8 dark:text-white dark:hover:bg-white/5';
+                            include APP_PATH . '/views/includes/Button.php';
+                        ?>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1 font-outfit"><?php echo $m['title']; ?></h3>
-                    <p class="text-sm text-gray-500 dark:text-slate-400 mb-4 font-medium"><?php echo $m['description']; ?></p>
-                    <p class="font-bold text-gray-900 dark:text-white mb-6"><?php echo $m['contact']; ?></p>
-                    <?php 
-                        $text = 'Contact Now';
-                        $type = 'a';
-                        $href = $m['action'];
-                        $variant = 'outline';
-                        $size = 'md';
-                        $class = 'rounded-xl border-2 dark:border-white/10 h-11 px-8 dark:text-white dark:hover:bg-white/5';
-                        include APP_PATH . '/views/includes/Button.php';
-                    ?>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -171,7 +174,7 @@
                 <?php
                 $faqs = [
                     ["q" => "Is my financial data safe?", "a" => "Yes, we use bank-level 256-bit encryption and industry-standard security protocols to ensure your data remains private and secure."],
-                    ["q" => "How much does BudgetBuddy cost?", "a" => "We offer a free version with all essential features. Premium plans with advanced analytics start at $4.99/month."],
+                    ["q" => "How much does SpendScribe cost?", "a" => "We offer a free version with all essential features. Premium plans with advanced analytics start at $4.99/month."],
                     ["q" => "Can I export my transaction history?", "a" => "Absolutely. You can export your data in CSV or PDF format anytime from your settings page."],
                     ["q" => "How do I link my bank account?", "a" => "Currently, we support manual entry and CSV imports. Automatic bank syncing is coming in late 2026."],
                     ["q" => "What happens if I delete my account?", "a" => "If you choose to delete your account, all your data is permanently wiped from our servers immediately. This cannot be undone."]
@@ -237,5 +240,40 @@
 
     window.addEventListener('load', () => {
         lucide.createIcons();
+
+        // Glowing Effect Controller
+        const wrappers = document.querySelectorAll('.glowing-wrapper');
+        const proximity = 100; // Activation distance
+
+        const handlePointerMove = (e) => {
+            wrappers.forEach(wrapper => {
+                const container = wrapper.querySelector('.glowing-effect-container');
+                const rect = wrapper.getBoundingClientRect();
+                
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                const isActive = 
+                    mouseX > rect.left - proximity &&
+                    mouseX < rect.right + proximity &&
+                    mouseY > rect.top - proximity &&
+                    mouseY < rect.bottom + proximity;
+
+                if (isActive) {
+                    container.style.setProperty('--active', '1');
+                    
+                    // Calculate angle
+                    const angle = Math.atan2(mouseY - centerY, mouseX - centerX) * (180 / Math.PI) + 90;
+                    container.style.setProperty('--start', angle);
+                } else {
+                    container.style.setProperty('--active', '0');
+                }
+            });
+        };
+
+        window.addEventListener('pointermove', handlePointerMove);
     });
 </script>

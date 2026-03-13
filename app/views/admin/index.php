@@ -116,7 +116,7 @@
             <?php endforeach; ?>
         </div>
         <div class="p-4 bg-gray-50 border-t border-gray-100 text-center">
-            <a href="/admin/logs" class="text-xs font-bold text-primary hover:underline uppercase tracking-widest">View all logs</a>
+            <a href="<?php echo BASE_URL; ?>/admin/logs" class="text-xs font-bold text-primary hover:underline uppercase tracking-widest">View all logs</a>
         </div>
     </div>
 </div>

@@ -4,7 +4,7 @@
             <h1 class="text-2xl font-bold text-gray-900 font-outfit"><?php echo $mode === 'create' ? 'Create New Post' : 'Edit Post'; ?></h1>
             <p class="text-sm text-gray-500"><?php echo $mode === 'create' ? 'Draft a new story for your audience.' : 'Update your existing blog story.'; ?></p>
         </div>
-        <a href="/admin/blog" class="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center gap-1">
+        <a href="<?php echo BASE_URL; ?>/admin/blog" class="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center gap-1">
             <i data-lucide="arrow-left" class="h-4 w-4"></i>
             Back to list
         </a>
@@ -74,7 +74,7 @@
             </div>
 
             <div class="pt-6 border-t border-gray-100 dark:border-white/5 flex justify-end gap-3">
-                <a href="/admin/blog" class="px-6 py-2 border border-gray-300 dark:border-white/10 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Cancel</a>
+                <a href="<?php echo BASE_URL; ?>/admin/blog" class="px-6 py-2 border border-gray-300 dark:border-white/10 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Cancel</a>
                 <button type="submit" class="px-6 py-2 bg-primary dark:bg-accent text-white dark:text-primary font-bold rounded-md hover:bg-primary/90 transition-all shadow-md active:scale-95">
                     <?php echo $mode === 'create' ? 'Create Post' : 'Save Changes'; ?>
                 </button>

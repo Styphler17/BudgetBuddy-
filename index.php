@@ -1,12 +1,21 @@
 <?php
 /**
- * BudgetBuddy - PHP MVC Entry Point
+ * SpendScribe - PHP MVC Entry Point
  */
 
-// Error reporting for development
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Define Environment Mode
+define('APP_ENV', 'production'); // Set to 'development' for local testing
+
+// Error reporting configuration
+if (APP_ENV === 'development') {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', 0);
+    ini_set('display_startup_errors', 0);
+    error_reporting(0);
+}
 
 // Session Start
 if (session_status() === PHP_SESSION_NONE) {
@@ -17,6 +26,13 @@ if (session_status() === PHP_SESSION_NONE) {
 define('ROOT_PATH', __DIR__);
 define('APP_PATH', ROOT_PATH . '/app');
 define('CONFIG_PATH', ROOT_PATH . '/config');
+
+// Base URL detection
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['SERVER_PORT'] == 443 ? 'https://' : 'http://';
+$host = $_SERVER['HTTP_HOST'];
+$script_name = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+$base_url = rtrim($protocol . $host . $script_name, '/');
+define('BASE_URL', $base_url);
 
 // Autoloader - Controllers, Models, and Router
 spl_autoload_register(function ($class) {

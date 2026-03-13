@@ -16,7 +16,7 @@
             </div>
             
             <div class="p-8 pt-0">
-                <form action="/admin-login" method="POST" class="space-y-4 text-left">
+                <form action="<?php echo BASE_URL; ?>/admin-login" method="POST" class="space-y-4 text-left">
                     <?php if (isset($error)): ?>
                         <div class="p-3 rounded-md bg-red-500/20 border border-red-500/50 text-red-200 text-sm">
                             <?php echo htmlspecialchars($error); ?>
@@ -71,7 +71,7 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-slate-200/85">
                         User login?
-                        <a href="/login" class="font-medium text-primary hover:text-white underline underline-offset-4">
+                        <a href="<?php echo BASE_URL; ?>/login" class="font-medium text-primary hover:text-white underline underline-offset-4">
                             Go to User Login
                         </a>
                     </p>

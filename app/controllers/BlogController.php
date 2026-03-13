@@ -48,7 +48,7 @@ class BlogController extends BaseController {
         $popularTags = array_slice(array_keys($tags), 0, 8);
 
         $this->render('blog/index', [
-            'title' => 'BudgetBuddy Blog | Money Moves That Matter',
+            'title' => 'SpendScribe Blog | Money Moves That Matter',
             'posts' => $posts,
             'featuredPost' => ($page === 1 && empty($search) && empty($tag)) ? ($posts[0] ?? null) : null,
             'otherPosts' => ($page === 1 && empty($search) && empty($tag)) ? array_slice($posts, 1) : $posts,
@@ -69,7 +69,7 @@ class BlogController extends BaseController {
         $post = $this->blogModel->findBySlug($slug);
         
         if (!$post) {
-            $this->redirect('/BudgetBuddy-/blog');
+            $this->redirect('/blog');
         }
 
         $this->render('blog/show', [

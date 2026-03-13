@@ -6,8 +6,7 @@ class AdminDashboardController extends BaseController {
     
     public function __construct() {
         if (!isset($_SESSION['admin_id'])) {
-            header('Location: /BudgetBuddy-/admin-login');
-            exit;
+            $this->redirect('/admin-login');
         }
     }
 
@@ -57,7 +56,7 @@ class AdminDashboardController extends BaseController {
         $userModel = new User();
         $user = $userModel->findById($id);
 
-        if (!$user) $this->redirect('/BudgetBuddy-/admin/users');
+        if (!$user) $this->redirect('/admin/users');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
@@ -70,7 +69,7 @@ class AdminDashboardController extends BaseController {
             if ($userModel->update($id, $data)) {
                 $adminModel = new Admin();
                 $adminModel->logAction($_SESSION['admin_id'], 'update_user', 'user', $id, "Updated user: " . $data['name']);
-                $this->redirect('/BudgetBuddy-/admin/users');
+                $this->redirect('/admin/users');
             }
         }
 
@@ -118,7 +117,7 @@ class AdminDashboardController extends BaseController {
             if ($blogModel->create($data)) {
                 $adminModel = new Admin();
                 $adminModel->logAction($_SESSION['admin_id'], 'create_blog', 'system', null, "Created post: " . $data['title']);
-                $this->redirect('/BudgetBuddy-/admin/blog');
+                $this->redirect('/admin/blog');
             }
         }
 
@@ -134,7 +133,7 @@ class AdminDashboardController extends BaseController {
         $blogModel = new Blog();
         $post = $blogModel->findById($id);
 
-        if (!$post) $this->redirect('/BudgetBuddy-/admin/blog');
+        if (!$post) $this->redirect('/admin/blog');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
@@ -151,7 +150,7 @@ class AdminDashboardController extends BaseController {
             if ($blogModel->update($id, $data)) {
                 $adminModel = new Admin();
                 $adminModel->logAction($_SESSION['admin_id'], 'update_blog', 'system', $id, "Updated post: " . $data['title']);
-                $this->redirect('/BudgetBuddy-/admin/blog');
+                $this->redirect('/admin/blog');
             }
         }
 
@@ -168,7 +167,7 @@ class AdminDashboardController extends BaseController {
         $adminModel = new Admin();
         $adminModel->logAction($_SESSION['admin_id'], 'delete_blog', 'system', $id, "Deleted post ID: " . $id);
         $blogModel->delete($id);
-        $this->redirect('/BudgetBuddy-/admin/blog');
+        $this->redirect('/admin/blog');
     }
 
     public function blogUpload() {
@@ -183,7 +182,7 @@ class AdminDashboardController extends BaseController {
             $targetPath = $uploadDir . $filename;
             
             if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-                $url = '/BudgetBuddy-/public/blog/' . $filename;
+                $url = '/public/blog/' . $filename;
                 $this->json(['url' => $url]);
             } else {
                 $this->json(['error' => 'Failed to move uploaded file.'], 500);
@@ -208,7 +207,7 @@ class AdminDashboardController extends BaseController {
                 $_SESSION['admin_name'] = $data['name'];
                 $_SESSION['admin_email'] = $data['email'];
                 $adminModel->logAction($admin['id'], 'update_profile', 'system', $admin['id'], "Updated profile details");
-                $this->redirect('/BudgetBuddy-/admin/profile');
+                $this->redirect('/admin/profile');
             }
         }
 
@@ -252,7 +251,7 @@ class AdminDashboardController extends BaseController {
             }
         }
 
-        if (!$adminToEdit) $this->redirect('/BudgetBuddy-/admin/admins');
+        if (!$adminToEdit) $this->redirect('/admin/admins');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
@@ -266,7 +265,7 @@ class AdminDashboardController extends BaseController {
             
             if ($adminModel->update($id, $data)) {
                 $adminModel->logAction($_SESSION['admin_id'], 'update_admin', 'system', $id, "Updated admin: " . $data['name']);
-                $this->redirect('/BudgetBuddy-/admin/admins');
+                $this->redirect('/admin/admins');
             }
         }
 
@@ -290,7 +289,7 @@ class AdminDashboardController extends BaseController {
             
             if ($adminModel->create($data)) {
                 $adminModel->logAction($_SESSION['admin_id'], 'create_admin', 'system', null, "Created admin: " . $data['name']);
-                $this->redirect('/BudgetBuddy-/admin/admins');
+                $this->redirect('/admin/admins');
             }
         }
 

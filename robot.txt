@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://budgetbuddy.creativeutil.com/sitemap.xml
+Sitemap: https://spendscribe.creativeutil.com/sitemap.xml

@@ -96,7 +96,7 @@
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 space-y-6 relative">
         <button onclick="closeModal('acc-create')" class="absolute top-5 right-5 h-8 w-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100">✕</button>
         <div><h2 class="text-2xl font-black text-gray-900 font-outfit">Add Account</h2></div>
-        <form method="POST" action="/BudgetBuddy-/accounts/create" class="space-y-4">
+        <form method="POST" action="/SpendScribe-/accounts/create" class="space-y-4">
             <div>
                 <label class="block text-xs font-black text-primary uppercase tracking-widest mb-2">Account Name</label>
                 <input type="text" name="name" required placeholder="e.g. Main Checking" class="bb-input w-full">
@@ -138,7 +138,7 @@
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 space-y-6 relative">
         <button onclick="closeModal('acc-edit')" class="absolute top-5 right-5 h-8 w-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100">✕</button>
         <div><h2 class="text-2xl font-black text-gray-900 font-outfit">Edit Account</h2></div>
-        <form method="POST" action="/BudgetBuddy-/accounts/update" class="space-y-4">
+        <form method="POST" action="/SpendScribe-/accounts/update" class="space-y-4">
             <input type="hidden" name="id" id="edit-acc-id">
             <div>
                 <label class="block text-xs font-black text-primary uppercase tracking-widest mb-2">Account Name</label>
@@ -183,7 +183,7 @@
             <h2 class="text-2xl font-black text-gray-900 font-outfit">Delete Account?</h2>
             <p class="text-sm text-gray-500 mt-2" id="delete-acc-name"></p>
         </div>
-        <form method="POST" action="/BudgetBuddy-/accounts/delete" class="flex gap-3">
+        <form method="POST" action="/SpendScribe-/accounts/delete" class="flex gap-3">
             <input type="hidden" name="id" id="delete-acc-id">
             <button type="button" onclick="closeModal('acc-delete')" class="flex-1 h-11 rounded-2xl border border-gray-200 text-sm font-bold text-gray-600">Cancel</button>
             <button type="submit" class="flex-1 h-11 rounded-2xl bg-rose-500 text-white text-sm font-bold">Delete</button>

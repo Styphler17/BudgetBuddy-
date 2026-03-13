@@ -1,7 +1,7 @@
 <div class="p-4 sm:p-6 space-y-6">
     <div>
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white font-outfit">Settings</h1>
-        <p class="text-gray-500 dark:text-slate-400 text-sm sm:text-base">Customize your BudgetBuddy experience</p>
+        <p class="text-gray-500 dark:text-slate-400 text-sm sm:text-base">Customize your SpendScribe experience</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -12,7 +12,7 @@
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">Profile Settings</h2>
             </div>
             
-            <form action="/settings" method="POST" class="space-y-4">
+            <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
                 <input type="hidden" name="action" value="update_profile">
                 <div class="space-y-2">
                     <label class="text-sm font-medium text-gray-700 dark:text-slate-300">Display Name</label>
@@ -64,7 +64,7 @@
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">Security</h2>
             </div>
             
-            <form action="/settings" method="POST" class="space-y-4">
+            <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
                 <input type="hidden" name="action" value="update_password">
                 <div class="space-y-2">
                     <label class="text-sm font-medium text-gray-700 dark:text-slate-300">New Password</label>
@@ -97,7 +97,7 @@
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">Currency Preferences</h2>
             </div>
             
-            <p class="text-sm text-gray-500 dark:text-slate-400">Choose the currency BudgetBuddy should display for your budgets and reports.</p>
+            <p class="text-sm text-gray-500 dark:text-slate-400">Choose the currency SpendScribe should display for your budgets and reports.</p>
             
             <div class="space-y-2">
                 <label class="text-sm font-medium text-gray-700 dark:text-slate-300">Preferred Currency</label>

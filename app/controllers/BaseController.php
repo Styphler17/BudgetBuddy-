@@ -51,9 +51,12 @@ class BaseController {
     }
 
     /**
-     * Redirect to a URL
+     * Redirect to a URL (automatically prepends BASE_URL for relative paths)
      */
     protected function redirect($url) {
+        if (strpos($url, 'http') !== 0) {
+            $url = BASE_URL . '/' . ltrim($url, '/');
+        }
         header("Location: " . $url);
         exit;
     }

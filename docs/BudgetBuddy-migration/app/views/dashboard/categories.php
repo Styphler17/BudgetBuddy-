@@ -92,7 +92,7 @@
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 space-y-6 relative">
         <button onclick="closeModal('cat-create')" class="absolute top-5 right-5 h-8 w-8 flex items-center justify-center rounded-xl text-gray-400 hover:bg-gray-100">✕</button>
         <div><h2 class="text-2xl font-black text-gray-900 font-outfit">New Category</h2></div>
-        <form method="POST" action="/BudgetBuddy-/categories/create" class="space-y-4">
+        <form method="POST" action="/SpendScribe-/categories/create" class="space-y-4">
             <div>
                 <label class="block text-xs font-black text-primary uppercase tracking-widest mb-2">Category Name</label>
                 <input type="text" name="name" required placeholder="e.g. Groceries, Transport" class="bb-input w-full">
@@ -124,7 +124,7 @@
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 space-y-6 relative">
         <button onclick="closeModal('cat-edit')" class="absolute top-5 right-5 h-8 w-8 flex items-center justify-center rounded-xl text-gray-400 hover:bg-gray-100">✕</button>
         <div><h2 class="text-2xl font-black text-gray-900 font-outfit">Edit Category</h2></div>
-        <form method="POST" action="/BudgetBuddy-/categories/update" class="space-y-4">
+        <form method="POST" action="/SpendScribe-/categories/update" class="space-y-4">
             <input type="hidden" name="id" id="edit-cat-id">
             <div>
                 <label class="block text-xs font-black text-primary uppercase tracking-widest mb-2">Category Name</label>
@@ -163,7 +163,7 @@
             <p class="text-sm text-gray-500 mt-2" id="delete-cat-name"></p>
             <p class="text-xs text-rose-500 mt-1">Transactions in this category will be uncategorised.</p>
         </div>
-        <form method="POST" action="/BudgetBuddy-/categories/delete" class="flex gap-3">
+        <form method="POST" action="/SpendScribe-/categories/delete" class="flex gap-3">
             <input type="hidden" name="id" id="delete-cat-id">
             <button type="button" onclick="closeModal('cat-delete')" class="flex-1 h-11 rounded-2xl border border-gray-200 text-sm font-bold text-gray-600">Cancel</button>
             <button type="submit" class="flex-1 h-11 rounded-2xl bg-rose-500 text-white text-sm font-bold">Delete</button>

@@ -1,17 +1,22 @@
 <?php
 /**
- * BudgetBuddy Router
+ * SpendScribe Router
  * Handles URI mapping to Controllers and Methods using a switch-case structure.
  */
 
 class Router {
-    private $basePath = '/';
+    private $basePath;
+
+    public function __construct() {
+        // Automatically detect if we are in a subdirectory
+        $this->basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+    }
 
     public function handleRequest() {
         $uri = $_SERVER['REQUEST_URI'];
         
-        // Normalize the request path
-        if (strpos($uri, $this->basePath) === 0) {
+        // Normalize the request path by removing the detected basePath
+        if ($this->basePath !== '' && strpos($uri, $this->basePath) === 0) {
             $uri = substr($uri, strlen($this->basePath));
         }
         $uri = strtok($uri, '?');
