@@ -15,16 +15,16 @@
         <h3 class="text-lg font-bold text-gray-900 mb-4 font-outfit">New Goal</h3>
         <form action="<?php echo BASE_URL; ?>/goals/create" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Goal Name</label>
-                <input type="text" name="name" placeholder="e.g. New Car" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="goal_name" class="text-xs font-bold text-gray-500 uppercase">Goal Name</label>
+                <input id="goal_name" type="text" name="name" placeholder="e.g. New Car" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Target Amount</label>
-                <input type="number" name="target_amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="goal_target" class="text-xs font-bold text-gray-500 uppercase">Target Amount</label>
+                <input id="goal_target" type="number" name="target_amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Target Date</label>
-                <input type="date" name="deadline" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="goal_deadline" class="text-xs font-bold text-gray-500 uppercase">Target Date</label>
+                <input id="goal_deadline" type="date" name="deadline" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="md:col-span-3 flex justify-end">
                 <button type="submit" class="px-6 h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Create Goal</button>

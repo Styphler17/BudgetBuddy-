@@ -14,22 +14,22 @@
         <form id="blog-edit-form" action="" method="POST" class="p-8 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Title</label>
-                    <input type="text" name="title" value="<?php echo htmlspecialchars($post['title'] ?? ''); ?>" placeholder="Enter post title" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800" required>
+                    <label for="blog_title" class="text-sm font-bold text-gray-700 dark:text-slate-300">Title</label>
+                    <input id="blog_title" type="text" name="title" value="<?php echo htmlspecialchars($post['title'] ?? ''); ?>" placeholder="Enter post title" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800" required>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Slug</label>
-                    <input type="text" name="slug" value="<?php echo htmlspecialchars($post['slug'] ?? ''); ?>" placeholder="leave-blank-for-auto" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
+                    <label for="blog_slug" class="text-sm font-bold text-gray-700 dark:text-slate-300">Slug</label>
+                    <input id="blog_slug" type="text" name="slug" value="<?php echo htmlspecialchars($post['slug'] ?? ''); ?>" placeholder="leave-blank-for-auto" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
                 </div>
             </div>
 
             <div class="space-y-2">
-                <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Excerpt</label>
-                <textarea name="excerpt" rows="3" class="w-full border border-gray-300 dark:border-white/10 rounded-md p-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800 resize-none" placeholder="Short summary for the listing page..."><?php echo htmlspecialchars($post['excerpt'] ?? ''); ?></textarea>
+                <label for="blog_excerpt" class="text-sm font-bold text-gray-700 dark:text-slate-300">Excerpt</label>
+                <textarea id="blog_excerpt" name="excerpt" rows="3" class="w-full border border-gray-300 dark:border-white/10 rounded-md p-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800 resize-none" placeholder="Short summary for the listing page..."><?php echo htmlspecialchars($post['excerpt'] ?? ''); ?></textarea>
             </div>
 
             <div class="space-y-2">
-                <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Content Body</label>
+                <label for="blog-content" class="text-sm font-bold text-gray-700 dark:text-slate-300">Content Body</label>
                 <textarea id="blog-content" name="content" class="hidden"><?php 
                     if (isset($post['content'])) {
                         if (is_array($post['content'])) {
@@ -43,7 +43,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Cover Image URL</label>
+                    <label for="cover_image_url" class="text-sm font-bold text-gray-700 dark:text-slate-300">Cover Image URL</label>
                     <div class="flex gap-2">
                         <input type="text" id="cover_image_url" name="cover_image_url" value="<?php echo htmlspecialchars($post['cover_image_url'] ?? ''); ?>" placeholder="https://..." class="flex-1 h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
                         <input type="file" id="blog-image-input" class="hidden" accept="image/*">
@@ -53,23 +53,23 @@
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Reading Time (minutes)</label>
-                    <input type="number" name="reading_time" value="<?php echo $post['reading_time'] ?? 5; ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
+                    <label for="blog_reading_time" class="text-sm font-bold text-gray-700 dark:text-slate-300">Reading Time (minutes)</label>
+                    <input id="blog_reading_time" type="number" name="reading_time" value="<?php echo $post['reading_time'] ?? 5; ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Status</label>
-                    <select name="status" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none appearance-none bg-white dark:bg-slate-800">
+                    <label for="blog_status" class="text-sm font-bold text-gray-700 dark:text-slate-300">Status</label>
+                    <select id="blog_status" name="status" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none appearance-none bg-white dark:bg-slate-800">
                         <option value="draft" <?php echo ($post['status'] ?? '') === 'draft' ? 'selected' : ''; ?>>Draft</option>
                         <option value="published" <?php echo ($post['status'] ?? '') === 'published' ? 'selected' : ''; ?>>Published</option>
                         <option value="archived" <?php echo ($post['status'] ?? '') === 'archived' ? 'selected' : ''; ?>>Archived</option>
                     </select>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Tags (comma separated)</label>
-                    <input type="text" name="tags" value="<?php echo htmlspecialchars(is_array($post['tags'] ?? null) ? implode(',', $post['tags']) : ($post['tags'] ?? '')); ?>" placeholder="budgeting, goals, news" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
+                    <label for="blog_tags" class="text-sm font-bold text-gray-700 dark:text-slate-300">Tags (comma separated)</label>
+                    <input id="blog_tags" type="text" name="tags" value="<?php echo htmlspecialchars(is_array($post['tags'] ?? null) ? implode(',', $post['tags']) : ($post['tags'] ?? '')); ?>" placeholder="budgeting, goals, news" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
                 </div>
             </div>
 

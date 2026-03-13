@@ -49,7 +49,8 @@
                 <h3 class="font-bold text-white uppercase tracking-widest text-xs">Stay Updated</h3>
                 <p class="text-sm text-gray-400">Get weekly money tips and platform updates directly to your inbox.</p>
                 <form action="#" method="POST" class="flex gap-2">
-                    <input type="email" placeholder="Email address" class="bg-gray-800 border-none rounded-lg px-4 py-2 text-sm flex-grow focus:ring-2 focus:ring-primary outline-none text-white">
+                    <label for="newsletter_email" class="sr-only">Email address</label>
+                    <input type="email" id="newsletter_email" name="newsletter_email" placeholder="Email address" class="bg-gray-800 border-none rounded-lg px-4 py-2 text-sm flex-grow focus:ring-2 focus:ring-primary outline-none text-white" required>
                     <button type="submit" class="bg-primary hover:bg-primary/90 text-white font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-widest transition-all">
                         Join
                     </button>

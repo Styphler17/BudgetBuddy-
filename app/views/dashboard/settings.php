@@ -15,12 +15,12 @@
             <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
                 <input type="hidden" name="action" value="update_profile">
                 <div class="space-y-2">
-                    <label class="text-sm font-medium text-gray-700 dark:text-slate-300">Display Name</label>
-                    <input type="text" name="name" value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none">
+                    <label for="profile_name" class="text-sm font-medium text-gray-700 dark:text-slate-300">Display Name</label>
+                    <input id="profile_name" type="text" name="name" value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none">
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium text-gray-700 dark:text-slate-300">Email Address</label>
-                    <input type="email" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none">
+                    <label for="profile_email" class="text-sm font-medium text-gray-700 dark:text-slate-300">Email Address</label>
+                    <input id="profile_email" type="email" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none">
                 </div>
                 <button type="submit" class="inline-flex items-center justify-center rounded-md bg-primary dark:bg-accent px-4 py-2 text-sm font-medium text-white dark:text-primary hover:bg-primary/90 transition-colors w-full sm:w-auto">
                     Save Changes
@@ -67,7 +67,7 @@
             <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
                 <input type="hidden" name="action" value="update_password">
                 <div class="space-y-2">
-                    <label class="text-sm font-medium text-gray-700 dark:text-slate-300">New Password</label>
+                    <label for="set-pass" class="text-sm font-medium text-gray-700 dark:text-slate-300">New Password</label>
                     <div class="relative">
                         <input id="set-pass" type="password" name="password" placeholder="••••••••" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md pl-3 pr-10 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>
                         <button type="button" onclick="togglePassword('set-pass', 'set-eye-1')" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium text-gray-700 dark:text-slate-300">Confirm New Password</label>
+                    <label for="set-confirm" class="text-sm font-medium text-gray-700 dark:text-slate-300">Confirm New Password</label>
                     <div class="relative">
                         <input id="set-confirm" type="password" name="confirm_password" placeholder="••••••••" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md pl-3 pr-10 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>
                         <button type="button" onclick="togglePassword('set-confirm', 'set-eye-2')" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
@@ -99,19 +99,25 @@
             
             <p class="text-sm text-gray-500 dark:text-slate-400">Choose the currency SpendScribe should display for your budgets and reports.</p>
             
-            <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-slate-300">Preferred Currency</label>
-                <select class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none appearance-none bg-white dark:bg-slate-800">
-                    <option value="USD">USD ($) - US Dollar</option>
-                    <option value="EUR">EUR (€) - Euro</option>
-                    <option value="GBP">GBP (£) - British Pound</option>
-                    <option value="JPY">JPY (¥) - Japanese Yen</option>
-                    <option value="CAD">CAD ($) - Canadian Dollar</option>
-                    <option value="AUD">AUD ($) - Australian Dollar</option>
-                    <option value="GHS">GHS (₵) - Ghanaian Cedi</option>
-                    <option value="NGN">NGN (₦) - Nigerian Naira</option>
-                </select>
-            </div>
+            <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-2">
+                <input type="hidden" name="action" value="update_currency">
+                <label for="preferred_currency" class="text-sm font-medium text-gray-700 dark:text-slate-300">Preferred Currency</label>
+                <div class="flex gap-2">
+                    <select id="preferred_currency" name="currency" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none appearance-none bg-white dark:bg-slate-800">
+                        <option value="USD">USD ($) - US Dollar</option>
+                        <option value="EUR">EUR (€) - Euro</option>
+                        <option value="GBP">GBP (£) - British Pound</option>
+                        <option value="JPY">JPY (¥) - Japanese Yen</option>
+                        <option value="CAD">CAD ($) - Canadian Dollar</option>
+                        <option value="AUD">AUD ($) - Australian Dollar</option>
+                        <option value="GHS">GHS (₵) - Ghanaian Cedi</option>
+                        <option value="NGN">NGN (₦) - Nigerian Naira</option>
+                    </select>
+                    <button type="submit" class="inline-flex items-center justify-center rounded-md bg-primary dark:bg-accent px-4 text-sm font-medium text-white dark:text-primary hover:bg-primary/90 transition-colors">
+                        Save
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

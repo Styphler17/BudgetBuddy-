@@ -26,30 +26,30 @@
         </div>
         <form action="<?php echo BASE_URL; ?>/accounts/transfer" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">From Account</label>
-                <select name="from_account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none bg-white" required>
+                <label for="from_account_id" class="text-xs font-bold text-gray-500 uppercase">From Account</label>
+                <select id="from_account_id" name="from_account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none bg-white" required>
                     <?php foreach ($accounts as $acc): ?>
                         <option value="<?php echo $acc['id']; ?>"><?php echo $acc['name']; ?> ($<?php echo number_format($acc['balance'], 2); ?>)</option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">To Account</label>
-                <select name="to_account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none bg-white" required>
+                <label for="to_account_id" class="text-xs font-bold text-gray-500 uppercase">To Account</label>
+                <select id="to_account_id" name="to_account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none bg-white" required>
                     <?php foreach ($accounts as $acc): ?>
                         <option value="<?php echo $acc['id']; ?>"><?php echo $acc['name']; ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Amount</label>
-                <input type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none focus:ring-2 focus:ring-primary/20" required>
+                <label for="transfer_amount" class="text-xs font-bold text-gray-500 uppercase">Amount</label>
+                <input id="transfer_amount" type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none focus:ring-2 focus:ring-primary/20" required>
             </div>
             <div class="flex items-end">
                 <button type="submit" class="w-full h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Execute Transfer</button>
             </div>
             <div class="md:col-span-4">
-                <input type="text" name="description" placeholder="Optional notes..." class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none">
+                <input id="transfer_description" type="text" name="description" placeholder="Optional notes..." class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none">
             </div>
         </form>
     </div>
@@ -59,12 +59,12 @@
         <h3 class="text-lg font-bold text-gray-900 mb-4 font-outfit">New Account</h3>
         <form action="<?php echo BASE_URL; ?>/accounts/create" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Account Name</label>
-                <input type="text" name="name" placeholder="e.g. Main Checking" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="account_name" class="text-xs font-bold text-gray-500 uppercase">Account Name</label>
+                <input id="account_name" type="text" name="name" placeholder="e.g. Main Checking" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Type</label>
-                <select name="type" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                <label for="account_type" class="text-xs font-bold text-gray-500 uppercase">Type</label>
+                <select id="account_type" name="type" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
                     <option value="checking">Checking</option>
                     <option value="savings">Savings</option>
                     <option value="credit">Credit Card</option>
@@ -73,8 +73,8 @@
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Initial Balance</label>
-                <input type="number" name="balance" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="account_balance" class="text-xs font-bold text-gray-500 uppercase">Initial Balance</label>
+                <input id="account_balance" type="number" name="balance" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="md:col-span-3 flex justify-end">
                 <button type="submit" class="px-6 h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Save Account</button>

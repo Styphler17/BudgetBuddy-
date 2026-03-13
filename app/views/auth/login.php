@@ -115,7 +115,7 @@
 
                         <div class="space-y-2">
                             <div class="flex items-center justify-between ml-1">
-                                <label for="password" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest">
+                                <label for="login-password" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest">
                                     Password
                                 </label>
                                 <a
@@ -145,6 +145,7 @@
                             <input
                                 type="checkbox"
                                 id="remember"
+                                name="remember"
                                 class="h-4 w-4 rounded border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 text-primary dark:text-accent focus:ring-primary dark:focus:ring-accent"
                             />
                             <label for="remember" class="text-sm font-bold text-gray-600 dark:text-slate-400">

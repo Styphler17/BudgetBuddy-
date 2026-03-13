@@ -26,12 +26,12 @@
     <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
         <form method="GET" action="<?php echo BASE_URL; ?>/transactions" class="grid grid-cols-1 md:grid-cols-6 gap-4">
             <div class="space-y-1">
-                <label class="text-[10px] font-bold text-gray-500 uppercase">Search</label>
-                <input type="text" name="search" value="<?php echo htmlspecialchars($filters['search'] ?? ''); ?>" placeholder="Description..." class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none focus:ring-2 focus:ring-primary/20">
+                <label for="filter_search" class="text-[10px] font-bold text-gray-500 uppercase">Search</label>
+                <input id="filter_search" type="text" name="search" value="<?php echo htmlspecialchars($filters['search'] ?? ''); ?>" placeholder="Description..." class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none focus:ring-2 focus:ring-primary/20">
             </div>
             <div class="space-y-1">
-                <label class="text-[10px] font-bold text-gray-500 uppercase">Category</label>
-                <select name="category_id" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
+                <label for="filter_category_id" class="text-[10px] font-bold text-gray-500 uppercase">Category</label>
+                <select id="filter_category_id" name="category_id" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
                     <option value="">All Categories</option>
                     <?php foreach ($categories as $cat): ?>
                         <option value="<?php echo $cat['id']; ?>" <?php echo (isset($filters['category_id']) && $filters['category_id'] == $cat['id']) ? 'selected' : ''; ?>>
@@ -41,8 +41,8 @@
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-[10px] font-bold text-gray-500 uppercase">Account</label>
-                <select name="account_id" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
+                <label for="filter_account_id" class="text-[10px] font-bold text-gray-500 uppercase">Account</label>
+                <select id="filter_account_id" name="account_id" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
                     <option value="">All Accounts</option>
                     <?php foreach ($accounts as $acc): ?>
                         <option value="<?php echo $acc['id']; ?>" <?php echo (isset($filters['account_id']) && $filters['account_id'] == $acc['id']) ? 'selected' : ''; ?>>
@@ -52,16 +52,16 @@
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-[10px] font-bold text-gray-500 uppercase">Type</label>
-                <select name="type" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
+                <label for="filter_type" class="text-[10px] font-bold text-gray-500 uppercase">Type</label>
+                <select id="filter_type" name="type" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
                     <option value="">All Types</option>
                     <option value="income" <?php echo ($filters['type'] ?? '') === 'income' ? 'selected' : ''; ?>>Income</option>
                     <option value="expense" <?php echo ($filters['type'] ?? '') === 'expense' ? 'selected' : ''; ?>>Expense</option>
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-[10px] font-bold text-gray-500 uppercase">From Date</label>
-                <input type="date" name="start_date" value="<?php echo $filters['start_date'] ?? ''; ?>" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none">
+                <label for="filter_start_date" class="text-[10px] font-bold text-gray-500 uppercase">From Date</label>
+                <input id="filter_start_date" type="date" name="start_date" value="<?php echo $filters['start_date'] ?? ''; ?>" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none">
             </div>
             <div class="flex items-end gap-2">
                 <button type="submit" class="flex-1 h-9 bg-gray-900 text-white text-xs font-bold rounded-md hover:bg-gray-800 transition-colors">Apply</button>
@@ -77,16 +77,16 @@
         <h3 class="text-lg font-bold text-gray-900 mb-4 font-outfit">New Transaction</h3>
         <form action="<?php echo BASE_URL; ?>/transactions/create" method="POST" class="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Amount</label>
-                <input type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="amount" class="text-xs font-bold text-gray-500 uppercase">Amount</label>
+                <input id="amount" type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Description</label>
-                <input type="text" name="description" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="description" class="text-xs font-bold text-gray-500 uppercase">Description</label>
+                <input id="description" type="text" name="description" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Category</label>
-                <select name="category_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                <label for="category_id" class="text-xs font-bold text-gray-500 uppercase">Category</label>
+                <select id="category_id" name="category_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
                     <option value="">Uncategorized</option>
                     <?php foreach ($categories as $cat): ?>
                         <option value="<?php echo $cat['id']; ?>"><?php echo $cat['emoji']; ?> <?php echo $cat['name']; ?></option>
@@ -94,16 +94,16 @@
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Account</label>
-                <select name="account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white" required>
+                <label for="account_id" class="text-xs font-bold text-gray-500 uppercase">Account</label>
+                <select id="account_id" name="account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white" required>
                     <?php foreach ($accounts as $acc): ?>
                         <option value="<?php echo $acc['id']; ?>"><?php echo $acc['name']; ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Type</label>
-                <select name="type" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                <label for="type" class="text-xs font-bold text-gray-500 uppercase">Type</label>
+                <select id="type" name="type" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
                 </select>

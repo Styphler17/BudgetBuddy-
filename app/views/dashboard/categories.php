@@ -15,16 +15,16 @@
         <h3 class="text-lg font-bold text-gray-900 mb-4 font-outfit">New Category</h3>
         <form action="<?php echo BASE_URL; ?>/categories/create" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Category Name</label>
-                <input type="text" name="name" placeholder="e.g. Groceries" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="category_name" class="text-xs font-bold text-gray-500 uppercase">Category Name</label>
+                <input id="category_name" type="text" name="name" placeholder="e.g. Groceries" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Budget Limit</label>
-                <input type="number" name="budget" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="category_budget" class="text-xs font-bold text-gray-500 uppercase">Budget Limit</label>
+                <input id="category_budget" type="number" name="budget" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Emoji</label>
-                <input type="text" name="emoji" placeholder="🛒" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required maxlength="2">
+                <label for="category_emoji" class="text-xs font-bold text-gray-500 uppercase">Emoji</label>
+                <input id="category_emoji" type="text" name="emoji" placeholder="🛒" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required maxlength="2">
             </div>
             <div class="md:col-span-3 flex justify-end">
                 <button type="submit" class="px-6 h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Create Category</button>

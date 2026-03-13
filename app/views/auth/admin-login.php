@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="space-y-2">
-                        <label for="password" class="text-sm font-medium text-slate-100">
+                        <label for="admin-password" class="text-sm font-medium text-slate-100">
                             Password
                         </label>
                         <div class="relative">

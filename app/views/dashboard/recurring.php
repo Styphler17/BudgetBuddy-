@@ -15,16 +15,16 @@
         <h3 class="text-lg font-bold text-gray-900 mb-4 font-outfit">New Recurring Rule</h3>
         <form action="<?php echo BASE_URL; ?>/recurring/create" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Amount</label>
-                <input type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="recurring_amount" class="text-xs font-bold text-gray-500 uppercase">Amount</label>
+                <input id="recurring_amount" type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Description</label>
-                <input type="text" name="description" placeholder="e.g. Netflix Subscription" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="recurring_description" class="text-xs font-bold text-gray-500 uppercase">Description</label>
+                <input id="recurring_description" type="text" name="description" placeholder="e.g. Netflix Subscription" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Frequency</label>
-                <select name="frequency" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                <label for="recurring_frequency" class="text-xs font-bold text-gray-500 uppercase">Frequency</label>
+                <select id="recurring_frequency" name="frequency" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly" selected>Monthly</option>
@@ -32,23 +32,23 @@
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Type</label>
-                <select name="type" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                <label for="recurring_type" class="text-xs font-bold text-gray-500 uppercase">Type</label>
+                <select id="recurring_type" name="type" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Account</label>
-                <select name="account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white" required>
+                <label for="recurring_account_id" class="text-xs font-bold text-gray-500 uppercase">Account</label>
+                <select id="recurring_account_id" name="account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white" required>
                     <?php foreach ($accounts as $acc): ?>
                         <option value="<?php echo $acc['id']; ?>"><?php echo $acc['name']; ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Category</label>
-                <select name="category_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                <label for="recurring_category_id" class="text-xs font-bold text-gray-500 uppercase">Category</label>
+                <select id="recurring_category_id" name="category_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
                     <option value="">Uncategorized</option>
                     <?php foreach ($categories as $cat): ?>
                         <option value="<?php echo $cat['id']; ?>"><?php echo $cat['emoji']; ?> <?php echo $cat['name']; ?></option>
@@ -56,8 +56,8 @@
                 </select>
             </div>
             <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-500 uppercase">Start Date</label>
-                <input type="date" name="start_date" value="<?php echo date('Y-m-d'); ?>" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
+                <label for="recurring_start_date" class="text-xs font-bold text-gray-500 uppercase">Start Date</label>
+                <input id="recurring_start_date" type="date" name="start_date" value="<?php echo date('Y-m-d'); ?>" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="flex items-end">
                 <button type="submit" class="w-full h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Activate Rule</button>

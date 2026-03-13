@@ -13,19 +13,19 @@
     <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden max-w-2xl">
         <form id="user-edit-form" action="" method="POST" class="p-8 space-y-6">
             <div class="space-y-2">
-                <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Full Name</label>
-                <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>
+                <label for="user_name" class="text-sm font-bold text-gray-700 dark:text-slate-300">Full Name</label>
+                <input id="user_name" type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>
             </div>
 
             <div class="space-y-2">
-                <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Email Address</label>
-                <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>
+                <label for="user_email" class="text-sm font-bold text-gray-700 dark:text-slate-300">Email Address</label>
+                <input id="user_email" type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-gray-700 dark:text-slate-300">Preferred Currency</label>
-                    <select name="currency" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
+                    <label for="user_currency" class="text-sm font-bold text-gray-700 dark:text-slate-300">Preferred Currency</label>
+                    <select id="user_currency" name="currency" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none bg-white dark:bg-slate-800">
                         <option value="USD" <?php echo ($user['currency'] ?? '') === 'USD' ? 'selected' : ''; ?>>USD ($) - US Dollar</option>
                         <option value="EUR" <?php echo ($user['currency'] ?? '') === 'EUR' ? 'selected' : ''; ?>>EUR (€) - Euro</option>
                         <option value="GBP" <?php echo ($user['currency'] ?? '') === 'GBP' ? 'selected' : ''; ?>>GBP (£) - British Pound</option>
