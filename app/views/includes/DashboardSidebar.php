@@ -6,6 +6,7 @@ $current_page = $_SERVER['REQUEST_URI'];
 $menu_items = [
     ['title' => 'Dashboard', 'url' => '/dashboard', 'icon' => 'layout-dashboard'],
     ['title' => 'Transactions', 'url' => '/transactions', 'icon' => 'file-text'],
+    ['title' => 'Recurring', 'url' => '/recurring', 'icon' => 'calendar-days'],
     ['title' => 'Analytics', 'url' => '/analytics', 'icon' => 'pie-chart'],
     ['title' => 'Budget Goals', 'url' => '/goals', 'icon' => 'trending-up'],
     ['title' => 'Accounts', 'url' => '/accounts', 'icon' => 'wallet'],

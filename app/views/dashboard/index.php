@@ -144,5 +144,36 @@
                 <?php endforeach; ?>
             </div>
         </div>
+
+        <!-- Savings Goals -->
+        <div class="glass-card p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">Savings Goals</h3>
+                <a href="<?php echo BASE_URL; ?>/goals" class="text-sm font-medium text-primary dark:text-accent hover:underline">Manage</a>
+            </div>
+            
+            <div class="space-y-6">
+                <?php if (empty($goals)): ?>
+                    <div class="text-center py-10 text-gray-500 dark:text-slate-400">
+                        <p>No goals set yet</p>
+                    </div>
+                <?php endif; ?>
+
+                <?php foreach ($goals as $goal): 
+                    $goalPercentage = $goal['target_amount'] > 0 ? ($goal['current_amount'] / $goal['target_amount']) * 100 : 0;
+                ?>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-end">
+                        <p class="text-sm font-medium text-gray-700 dark:text-slate-300"><?php echo htmlspecialchars($goal['name']); ?></p>
+                        <p class="text-xs text-gray-500 dark:text-slate-400"><?php echo round($goalPercentage); ?>%</p>
+                    </div>
+                    <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full bg-accent rounded-full transition-all" style="width: <?php echo min($goalPercentage, 100); ?>%"></div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 dark:text-slate-500 text-right">$<?php echo number_format($goal['current_amount'], 0); ?> / $<?php echo number_format($goal['target_amount'], 0); ?></p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </div>
 </div>

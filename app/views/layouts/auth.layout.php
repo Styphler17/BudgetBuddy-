@@ -35,45 +35,9 @@
     <!-- Custom Animations -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/animations.css">
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            DEFAULT: "#10237f", // Navy
-                            foreground: "#ffffff",
-                        },
-                        secondary: {
-                            DEFAULT: "#1e293b",
-                            foreground: "#ffffff",
-                        },
-                        accent: {
-                            DEFAULT: "#a2db21", // Lime
-                            foreground: "#10237f",
-                        },
-                        brand: {
-                            DEFAULT: "#100fb0", // Indigo
-                            foreground: "#ffffff",
-                        }
-                    },
-                    fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
-                        outfit: ['Outfit', 'sans-serif'],
-                    },
-                    fontWeight: {
-                        display: '900',
-                        h1: '700',
-                        h2: '600',
-                        body: '400',
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind CSS (Static Build) -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/style.css">
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -87,19 +51,6 @@
         h2, .text-h2 { font-family: 'Outfit', sans-serif; font-weight: 600; }
     </style>
     <script>
-        // Dark mode initialization - 3 State Support
-        (function() {
-            const savedTheme = localStorage.getItem('theme-mode') || 'system';
-            const isDark = savedTheme === 'dark' || 
-                (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
-            if (isDark) {
-                document.body.classList.add('dark');
-            } else {
-                document.body.classList.remove('dark');
-            }
-        })();
-
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -115,6 +66,20 @@
     </script>
 </head>
 <body class="min-h-screen flex flex-col bg-white dark:bg-slate-950 text-gray-900 dark:text-slate-100 transition-colors duration-300">
+    <script>
+        // Dark mode initialization - 3 State Support
+        (function() {
+            const savedTheme = localStorage.getItem('theme-mode') || 'system';
+            const isDark = savedTheme === 'dark' || 
+                (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            if (isDark) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        })();
+    </script>
     <!-- Header/Navigation -->
     <?php require_once APP_PATH . '/views/includes/Header.php'; ?>
 

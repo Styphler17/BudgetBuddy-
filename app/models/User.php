@@ -76,13 +76,23 @@ class User {
     }
     
     /**
-     * Verify user password
+     * Verify user password and status
      */
     public function verify($email, $password) {
         $user = $this->findByEmail($email);
-        if ($user && password_verify($password, $user['password_hash'])) {
+        if ($user && $user['is_active'] && password_verify($password, $user['password_hash'])) {
             return $user;
         }
         return false;
+    }
+
+    /**
+     * Delete user account and all associated data
+     */
+    public function delete($id) {
+        // Cascading deletes should be handled by DB foreign keys, but we can be explicit if needed.
+        // The schema shows ON DELETE CASCADE for most tables.
+        $stmt = $this->db->prepare("DELETE FROM users WHERE id = ?");
+        return $stmt->execute([$id]);
     }
 }

@@ -134,9 +134,12 @@
                 <p class="text-sm font-medium text-red-600">Delete Account</p>
                 <p class="text-sm text-gray-500 dark:text-slate-400">Permanently delete your account and all data</p>
             </div>
-            <button class="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors">
-                Delete
-            </button>
+            <form action="<?php echo BASE_URL; ?>/settings" method="POST" onsubmit="return confirm('CRITICAL: This will permanently delete your account and all transaction history. This action cannot be undone. Proceed?');">
+                <input type="hidden" name="action" value="delete_account">
+                <button type="submit" class="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors w-full sm:w-auto">
+                    Delete My Account
+                </button>
+            </form>
         </div>
     </div>
 </div>

@@ -104,32 +104,56 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
         });
 
-        // Trends Data (Simple 7-day summary)
+        // Trends Data (Last 30 days)
+        <?php
+        $trendLabels = [];
+        $incomeData = [];
+        $expenseData = [];
+        foreach ($dailyStats as $stat) {
+            $trendLabels[] = date('M d', strtotime($stat['date']));
+            $incomeData[] = (float)$stat['income'];
+            $expenseData[] = (float)$stat['expense'];
+        }
+        ?>
+
         new Chart(document.getElementById('trendsBarChart'), {
             type: 'bar',
             data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                labels: <?php echo json_encode($trendLabels); ?>,
                 datasets: [
-                    { label: 'Income', data: [0, 0, 0, <?php echo $income; ?>], backgroundColor: '#10b981' },
-                    { label: 'Expenses', data: [0, 0, 0, <?php echo $expense; ?>], backgroundColor: '#ef4444' }
+                    { label: 'Income', data: <?php echo json_encode($incomeData); ?>, backgroundColor: '#10b981' },
+                    { label: 'Expenses', data: <?php echo json_encode($expenseData); ?>, backgroundColor: '#ef4444' }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
         });
 
         new Chart(document.getElementById('expenseLineChart'), {
             type: 'line',
             data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                labels: <?php echo json_encode($trendLabels); ?>,
                 datasets: [{
-                    label: 'Trend',
-                    data: [0, 0, 0, <?php echo $expense; ?>],
+                    label: 'Expense Trend',
+                    data: <?php echo json_encode($expenseData); ?>,
                     borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
                     tension: 0.4,
-                    fill: false
+                    fill: true
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
         });
     });
 </script>

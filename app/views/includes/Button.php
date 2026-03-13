@@ -55,3 +55,8 @@ if ($type === 'a'): ?>
         </span>
     </button>
 <?php endif; ?>
+
+<?php
+// Cleanup variables to prevent leakage to the next include
+unset($text, $type, $href, $variant, $size, $icon, $class, $id, $attr);
+?>

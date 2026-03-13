@@ -12,6 +12,30 @@ class DashboardController extends BaseController {
             $this->redirect('/login');
         }
         $this->userId = $_SESSION['user_id'];
+        $this->processRecurring();
+    }
+
+    private function processRecurring() {
+        $rtModel = new RecurringTransaction();
+        $txModel = new Transaction();
+        $due = $rtModel->getDue($this->userId);
+
+        foreach ($due as $item) {
+            // Create the transaction
+            $txModel->create([
+                'user_id' => $this->userId,
+                'account_id' => $item['account_id'],
+                'category_id' => $item['category_id'],
+                'amount' => $item['amount'],
+                'description' => $item['description'] . " (Recurring)",
+                'type' => $item['type'],
+                'date' => date('Y-m-d')
+            ]);
+
+            // Update next run date
+            $nextRun = RecurringTransaction::calculateNextRun($item['frequency'], date('Y-m-d'));
+            $rtModel->updateRunDates($item['id'], date('Y-m-d'), $nextRun);
+        }
     }
 
     public function index() {
@@ -27,6 +51,7 @@ class DashboardController extends BaseController {
         $accounts = $accountModel->getByUserId($this->userId);
         $recentTransactions = $transactionModel->getByUserId($this->userId, 5);
         $categories = $categoryModel->getByUserId($this->userId);
+        $goals = (new Goal())->getByUserId($this->userId);
 
         // Calculate spending per category for the budget progress section
         $budgetProgress = [];
@@ -65,18 +90,36 @@ class DashboardController extends BaseController {
             ],
             'recentTransactions' => $recentTransactions,
             'accounts' => $accounts,
-            'budgetProgress' => $budgetProgress
+            'budgetProgress' => $budgetProgress,
+            'goals' => $goals
         ]);
     }
 
     public function transactions() {
         $transactionModel = new Transaction();
-        $transactions = $transactionModel->getByUserId($this->userId, 100);
+        $categoryModel = new Category();
+        $accountModel = new Account();
+
+        $filters = [
+            'search' => $_GET['search'] ?? null,
+            'category_id' => $_GET['category_id'] ?? null,
+            'account_id' => $_GET['account_id'] ?? null,
+            'type' => $_GET['type'] ?? null,
+            'start_date' => $_GET['start_date'] ?? null,
+            'end_date' => $_GET['end_date'] ?? null,
+        ];
+
+        $transactions = $transactionModel->getByUserId($this->userId, 100, $filters);
+        $categories = $categoryModel->getByUserId($this->userId);
+        $accounts = $accountModel->getByUserId($this->userId);
         
         $this->render('dashboard/transactions', [
             'title' => 'Transactions',
             'layout' => 'dashboard',
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'categories' => $categories,
+            'accounts' => $accounts,
+            'filters' => $filters
         ]);
     }
 
@@ -85,6 +128,7 @@ class DashboardController extends BaseController {
             $transactionModel = new Transaction();
             $data = [
                 'user_id' => $this->userId,
+                'account_id' => $_POST['account_id'] ?: null,
                 'category_id' => $_POST['category_id'] ?: null,
                 'amount' => $_POST['amount'],
                 'description' => $_POST['description'],
@@ -94,6 +138,76 @@ class DashboardController extends BaseController {
             $transactionModel->create($data);
         }
         $this->redirect('/transactions');
+    }
+
+    public function transactionExport() {
+        $filters = [
+            'search' => $_GET['search'] ?? null,
+            'category_id' => $_GET['category_id'] ?? null,
+            'account_id' => $_GET['account_id'] ?? null,
+            'type' => $_GET['type'] ?? null,
+            'start_date' => $_GET['start_date'] ?? null,
+            'end_date' => $_GET['end_date'] ?? null,
+        ];
+        
+        $transactionModel = new Transaction();
+        $transactions = $transactionModel->getForExport($this->userId, $filters);
+
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="transactions_export_' . date('Y-m-d') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['Date', 'Description', 'Category', 'Account', 'Type', 'Amount']);
+
+        foreach ($transactions as $tx) {
+            fputcsv($output, [
+                $tx['date'], 
+                $tx['description'], 
+                $tx['category_name'] ?? 'N/A', 
+                $tx['account_name'] ?? 'N/A', 
+                ucfirst($tx['type']), 
+                number_format($tx['amount'], 2)
+            ]);
+        }
+        fclose($output);
+        exit;
+    }
+
+    public function transferCreate() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $fromId = $_POST['from_account_id'];
+            $toId = $_POST['to_account_id'];
+            $amount = $_POST['amount'];
+            $date = $_POST['date'] ?: date('Y-m-d');
+            $transferId = uniqid('tr_');
+
+            $txModel = new Transaction();
+            
+            // Withdrawal from source
+            $txModel->create([
+                'user_id' => $this->userId,
+                'account_id' => $fromId,
+                'amount' => $amount,
+                'description' => $_POST['description'] ?: "Transfer to account #$toId",
+                'type' => 'expense',
+                'is_transfer' => 1,
+                'transfer_id' => $transferId,
+                'date' => $date
+            ]);
+
+            // Deposit into destination
+            $txModel->create([
+                'user_id' => $this->userId,
+                'account_id' => $toId,
+                'amount' => $amount,
+                'description' => $_POST['description'] ?: "Transfer from account #$fromId",
+                'type' => 'income',
+                'is_transfer' => 1,
+                'transfer_id' => $transferId,
+                'date' => $date
+            ]);
+        }
+        $this->redirect('/accounts');
     }
 
     public function transactionDelete($id) {
@@ -111,6 +225,10 @@ class DashboardController extends BaseController {
         
         $income = $transactionModel->getTotals($this->userId, 'income', date('Y-m-01'), date('Y-m-d'));
         $expense = $transactionModel->getTotals($this->userId, 'expense', date('Y-m-01'), date('Y-m-d'));
+
+        // Get daily stats for the last 30 days
+        $startDate = date('Y-m-d', strtotime('-30 days'));
+        $dailyStats = $transactionModel->getDailyStats($this->userId, $startDate, date('Y-m-d'));
 
         // Calculate spending per category
         $categoryData = [];
@@ -130,6 +248,7 @@ class DashboardController extends BaseController {
             'transactions' => $transactions,
             'categories' => $categories,
             'categoryData' => $categoryData,
+            'dailyStats' => $dailyStats,
             'income' => $income,
             'expense' => $expense
         ]);
@@ -192,6 +311,12 @@ class DashboardController extends BaseController {
                     $userModel->update($this->userId, $data);
                 }
                 $this->redirect('/settings');
+            }
+
+            if ($action === 'delete_account') {
+                $userModel->delete($this->userId);
+                session_destroy();
+                $this->redirect('/');
             }
         }
         
@@ -272,5 +397,47 @@ class DashboardController extends BaseController {
             'title' => 'Notifications',
             'layout' => 'dashboard'
         ]);
+    }
+
+    public function recurring() {
+        $rtModel = new RecurringTransaction();
+        $categoryModel = new Category();
+        $accountModel = new Account();
+
+        $recurring = $rtModel->getByUserId($this->userId);
+        $categories = $categoryModel->getByUserId($this->userId);
+        $accounts = $accountModel->getByUserId($this->userId);
+
+        $this->render('dashboard/recurring', [
+            'title' => 'Recurring Transactions',
+            'layout' => 'dashboard',
+            'recurring' => $recurring,
+            'categories' => $categories,
+            'accounts' => $accounts
+        ]);
+    }
+
+    public function recurringCreate() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $rtModel = new RecurringTransaction();
+            $data = [
+                'user_id' => $this->userId,
+                'account_id' => $_POST['account_id'],
+                'category_id' => $_POST['category_id'] ?: null,
+                'amount' => $_POST['amount'],
+                'description' => $_POST['description'],
+                'type' => $_POST['type'],
+                'frequency' => $_POST['frequency'],
+                'start_date' => $_POST['start_date'] ?: date('Y-m-d')
+            ];
+            $rtModel->create($data);
+        }
+        $this->redirect('/recurring');
+    }
+
+    public function recurringDelete($id) {
+        $rtModel = new RecurringTransaction();
+        $rtModel->delete($id);
+        $this->redirect('/recurring');
     }
 }

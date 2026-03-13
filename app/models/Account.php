@@ -41,6 +41,14 @@ class Account {
     }
 
     /**
+     * Adjust account balance (increase or decrease)
+     */
+    public function adjustBalance($id, $amount) {
+        $stmt = $this->db->prepare("UPDATE accounts SET balance = balance + ? WHERE id = ?");
+        return $stmt->execute([$amount, $id]);
+    }
+
+    /**
      * Delete account
      */
     public function delete($id) {

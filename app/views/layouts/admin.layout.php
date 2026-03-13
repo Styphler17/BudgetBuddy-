@@ -11,7 +11,9 @@
     <title><?php echo $title ?? 'Admin Panel'; ?> - SpendScribe Intelligence Hub</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>/public/favicon.png">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS (Static Build) -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/style.css">
+    
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tiny.cloud/1/ky4xtv1lrw74kgz3s89jm1m0tw6d1supmj4xpnbibfjk5qkz/tinymce/8/tinymce.min.js" referrerpolicy="origin"></script>
@@ -20,47 +22,6 @@
         <!-- Custom Animations -->
         <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/animations.css">
         
-        <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#10237f",
-                        accent: "#a2db21",
-                        brand: "#100fb0",
-                        secondary: "#055448",
-                    },
-                    fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
-                        outfit: ['Outfit', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        toast: "0px 32px 64px -16px rgba(0,0,0,0.30), 0px 16px 32px -8px rgba(0,0,0,0.30), 0px 8px 16px -4px rgba(0,0,0,0.24), 0px 4px 8px -2px rgba(0,0,0,0.24), 0px -8px 16px -1px rgba(0,0,0,0.16), 0px 2px 4px -1px rgba(0,0,0,0.24), 0px 0px 0px 1px rgba(0,0,0,1.00), inset 0px 0px 0px 1px rgba(255,255,255,0.08), inset 0px 1px 0px 0px rgba(255,255,255,0.20)"
-                    },
-                    animation: {
-                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; transition: background-color 0.3s ease, color 0.3s ease; }
         body.dark { background-color: #020617; color: #f1f5f9; }
@@ -76,19 +37,6 @@
         .dark .text-gray-600 { color: #cbd5e1 !important; }
     </style>
     <script>
-        // Dark mode initialization - 3 State Support
-        (function() {
-            const savedTheme = localStorage.getItem('theme-mode') || 'system';
-            const isDark = savedTheme === 'dark' || 
-                (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
-            if (isDark) {
-                document.body.classList.add('dark');
-            } else {
-                document.body.classList.remove('dark');
-            }
-        })();
-
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -104,6 +52,20 @@
     </script>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased overflow-x-hidden">
+    <script>
+        // Dark mode initialization - 3 State Support
+        (function() {
+            const savedTheme = localStorage.getItem('theme-mode') || 'system';
+            const isDark = savedTheme === 'dark' || 
+                (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            if (isDark) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        })();
+    </script>
     
     <!-- Sidebar Wrapper -->
     <div class="flex min-h-screen">

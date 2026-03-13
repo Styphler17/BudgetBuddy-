@@ -4,10 +4,54 @@
             <h1 class="text-3xl font-bold text-gray-900 font-outfit">Accounts</h1>
             <p class="text-gray-500 text-sm sm:text-base">Manage your bank accounts, credit cards, and investments</p>
         </div>
-        <button onclick="document.getElementById('add-account-form').classList.toggle('hidden')" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90 transition-colors w-full sm:w-auto">
-            <i data-lucide="plus" class="h-4 w-4 mr-2"></i>
-            Add Account
-        </button>
+        <div class="flex flex-col sm:flex-row gap-2">
+            <button onclick="document.getElementById('transfer-modal').classList.toggle('hidden')" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors w-full sm:w-auto">
+                <i data-lucide="repeat" class="h-4 w-4 mr-2"></i>
+                Transfer
+            </button>
+            <button onclick="document.getElementById('add-account-form').classList.toggle('hidden')" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90 transition-colors w-full sm:w-auto">
+                <i data-lucide="plus" class="h-4 w-4 mr-2"></i>
+                Add Account
+            </button>
+        </div>
+    </div>
+
+    <!-- Transfer Modal (Hidden by default) -->
+    <div id="transfer-modal" class="hidden bg-white p-6 rounded-xl border border-gray-200 shadow-sm animate-fade-in">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-gray-900 font-outfit">Transfer Between Accounts</h3>
+            <button onclick="document.getElementById('transfer-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+        </div>
+        <form action="<?php echo BASE_URL; ?>/accounts/transfer" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">From Account</label>
+                <select name="from_account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none bg-white" required>
+                    <?php foreach ($accounts as $acc): ?>
+                        <option value="<?php echo $acc['id']; ?>"><?php echo $acc['name']; ?> ($<?php echo number_format($acc['balance'], 2); ?>)</option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">To Account</label>
+                <select name="to_account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none bg-white" required>
+                    <?php foreach ($accounts as $acc): ?>
+                        <option value="<?php echo $acc['id']; ?>"><?php echo $acc['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">Amount</label>
+                <input type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none focus:ring-2 focus:ring-primary/20" required>
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="w-full h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Execute Transfer</button>
+            </div>
+            <div class="md:col-span-4">
+                <input type="text" name="description" placeholder="Optional notes..." class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm outline-none">
+            </div>
+        </form>
     </div>
 
     <!-- Add Account Form (Hidden by default) -->

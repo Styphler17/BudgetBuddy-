@@ -93,7 +93,16 @@ class Router {
                 $action = $segments[1] ?? 'list';
                 if ($action === 'create') $controller->transactionCreate();
                 elseif ($action === 'delete' && isset($segments[2])) $controller->transactionDelete($segments[2]);
+                elseif ($action === 'export') $controller->transactionExport();
                 else $controller->transactions();
+                break;
+
+            case 'recurring':
+                $controller = new DashboardController();
+                $action = $segments[1] ?? 'list';
+                if ($action === 'create') $controller->recurringCreate();
+                elseif ($action === 'delete' && isset($segments[2])) $controller->recurringDelete($segments[2]);
+                else $controller->recurring();
                 break;
 
             case 'analytics':
@@ -106,6 +115,7 @@ class Router {
                 $action = $segments[1] ?? 'list';
                 if ($action === 'create') $controller->accountCreate();
                 elseif ($action === 'delete' && isset($segments[2])) $controller->accountDelete($segments[2]);
+                elseif ($action === 'transfer') $controller->transferCreate();
                 else $controller->accounts();
                 break;
 

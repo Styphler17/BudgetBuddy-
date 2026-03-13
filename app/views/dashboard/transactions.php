@@ -10,16 +10,72 @@
         <div>
             <h1 class="text-2xl font-bold text-gray-900 font-outfit">Transactions</h1>
         </div>
-        <button onclick="document.getElementById('add-tx-form').classList.toggle('hidden')" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
-            <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
-            Add
-        </button>
+        <div class="flex gap-2">
+            <a href="<?php echo BASE_URL; ?>/transactions/export?<?php echo http_build_query($_GET); ?>" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                <i data-lucide="download" class="mr-2 h-4 w-4"></i>
+                Export CSV
+            </a>
+            <button onclick="document.getElementById('add-tx-form').classList.toggle('hidden')" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
+                <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
+                Add
+            </button>
+        </div>
     </header>
+
+    <!-- Filter Bar -->
+    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+        <form method="GET" action="<?php echo BASE_URL; ?>/transactions" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-gray-500 uppercase">Search</label>
+                <input type="text" name="search" value="<?php echo htmlspecialchars($filters['search'] ?? ''); ?>" placeholder="Description..." class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none focus:ring-2 focus:ring-primary/20">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-gray-500 uppercase">Category</label>
+                <select name="category_id" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
+                    <option value="">All Categories</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?php echo $cat['id']; ?>" <?php echo (isset($filters['category_id']) && $filters['category_id'] == $cat['id']) ? 'selected' : ''; ?>>
+                            <?php echo $cat['emoji']; ?> <?php echo $cat['name']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-gray-500 uppercase">Account</label>
+                <select name="account_id" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
+                    <option value="">All Accounts</option>
+                    <?php foreach ($accounts as $acc): ?>
+                        <option value="<?php echo $acc['id']; ?>" <?php echo (isset($filters['account_id']) && $filters['account_id'] == $acc['id']) ? 'selected' : ''; ?>>
+                            <?php echo $acc['name']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-gray-500 uppercase">Type</label>
+                <select name="type" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none bg-white">
+                    <option value="">All Types</option>
+                    <option value="income" <?php echo ($filters['type'] ?? '') === 'income' ? 'selected' : ''; ?>>Income</option>
+                    <option value="expense" <?php echo ($filters['type'] ?? '') === 'expense' ? 'selected' : ''; ?>>Expense</option>
+                </select>
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-gray-500 uppercase">From Date</label>
+                <input type="date" name="start_date" value="<?php echo $filters['start_date'] ?? ''; ?>" class="w-full h-9 border border-gray-300 rounded-md px-3 text-xs outline-none">
+            </div>
+            <div class="flex items-end gap-2">
+                <button type="submit" class="flex-1 h-9 bg-gray-900 text-white text-xs font-bold rounded-md hover:bg-gray-800 transition-colors">Apply</button>
+                <a href="<?php echo BASE_URL; ?>/transactions" class="h-9 w-9 flex items-center justify-center bg-gray-100 text-gray-500 rounded-md hover:bg-gray-200" title="Reset Filters">
+                    <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                </a>
+            </div>
+        </form>
+    </div>
 
     <!-- Add Form (Hidden by default) -->
     <div id="add-tx-form" class="hidden bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
         <h3 class="text-lg font-bold text-gray-900 mb-4 font-outfit">New Transaction</h3>
-        <form action="<?php echo BASE_URL; ?>/transactions/create" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form action="<?php echo BASE_URL; ?>/transactions/create" method="POST" class="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div class="space-y-1">
                 <label class="text-xs font-bold text-gray-500 uppercase">Amount</label>
                 <input type="number" name="amount" step="0.01" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
@@ -29,14 +85,31 @@
                 <input type="text" name="description" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" required>
             </div>
             <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">Category</label>
+                <select name="category_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                    <option value="">Uncategorized</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?php echo $cat['id']; ?>"><?php echo $cat['emoji']; ?> <?php echo $cat['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">Account</label>
+                <select name="account_id" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white" required>
+                    <?php foreach ($accounts as $acc): ?>
+                        <option value="<?php echo $acc['id']; ?>"><?php echo $acc['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="space-y-1">
                 <label class="text-xs font-bold text-gray-500 uppercase">Type</label>
                 <select name="type" class="w-full h-10 border border-gray-300 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
                 </select>
             </div>
-            <div class="flex items-end">
-                <button type="submit" class="w-full h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Save</button>
+            <div class="flex items-end md:col-span-5">
+                <button type="submit" class="w-full md:w-auto px-10 h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Save Transaction</button>
             </div>
         </form>
     </div>
@@ -50,7 +123,7 @@
         <div class="divide-y divide-gray-100">
             <?php if (empty($transactions)): ?>
                 <div class="p-12 text-center text-gray-500">
-                    <p>No transactions found.</p>
+                    <p>No transactions found matching your filters.</p>
                 </div>
             <?php else: ?>
                 <?php foreach ($transactions as $tx): ?>
@@ -64,8 +137,15 @@
                             <?php endif; ?>
                         </div>
                         <div>
-                            <p class="font-medium text-gray-900"><?php echo htmlspecialchars($tx['description']); ?></p>
+                            <div class="flex items-center gap-2">
+                                <p class="font-medium text-gray-900"><?php echo htmlspecialchars($tx['description']); ?></p>
+                                <?php if ($tx['is_transfer']): ?>
+                                    <span class="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[8px] font-bold uppercase rounded">Transfer</span>
+                                <?php endif; ?>
+                            </div>
                             <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                                 <span><?php echo htmlspecialchars($tx['account_name'] ?? 'N/A'); ?></span>
+                                 <span>•</span>
                                  <span><?php echo htmlspecialchars($tx['category_name'] ?? ucfirst($tx['type'])); ?></span>
                                  <span>•</span>
                                  <span><?php echo date('M d, Y', strtotime($tx['date'])); ?></span>
