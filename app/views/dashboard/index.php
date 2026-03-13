@@ -9,7 +9,7 @@
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
             <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white font-outfit tracking-tight">Dashboard Overview</h1>
-            <p class="text-gray-500 dark:text-slate-400 font-medium mt-1">Welcome back, <?php echo $_SESSION['user_name'] ?? 'User'; ?>! Here's what's happening with your money.</p>
+            <p class="text-gray-500 dark:text-slate-300 font-medium mt-1">Welcome back, <?php echo $_SESSION['user_name'] ?? 'User'; ?>! Here's what's happening with your money.</p>
         </div>
         <div class="flex items-center gap-3">
             <?php 
@@ -83,7 +83,7 @@
 
             <div class="space-y-4">
                 <?php if (empty($recentTransactions)): ?>
-                    <div class="text-center py-10 text-gray-500 dark:text-slate-400">
+                    <div class="text-center py-10 text-gray-500 dark:text-slate-300">
                         <p>No recent activity</p>
                     </div>
                 <?php endif; ?>
@@ -95,12 +95,12 @@
                             <?php if ($tx['category_emoji']): ?>
                                 <span><?php echo $tx['category_emoji']; ?></span>
                             <?php else: ?>
-                                <i data-lucide="<?php echo $tx['type'] === 'income' ? 'arrow-up-right' : 'arrow-down-left'; ?>" class="h-5 w-5 text-gray-500 dark:text-slate-400"></i>
+                                <i data-lucide="<?php echo $tx['type'] === 'income' ? 'arrow-up-right' : 'arrow-down-left'; ?>" class="h-5 w-5 text-gray-500 dark:text-slate-300"></i>
                             <?php endif; ?>
                         </div>
                         <div>
                             <p class="font-medium text-gray-900 dark:text-white"><?php echo htmlspecialchars($tx['description']); ?></p>
-                            <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                            <p class="text-xs text-gray-500 dark:text-slate-300 mt-1">
                                 <?php echo date('M d, Y', strtotime($tx['date'])); ?>
                             </p>
                         </div>
@@ -121,7 +121,7 @@
             
             <div class="space-y-6">
                 <?php if (empty($budgetProgress)): ?>
-                    <div class="text-center py-10 text-gray-500 dark:text-slate-400">
+                    <div class="text-center py-10 text-gray-500 dark:text-slate-300">
                         <p>No budgets set</p>
                         <a href="<?php echo BASE_URL; ?>/categories" class="text-sm text-primary dark:text-accent hover:underline mt-2 inline-block">Manage Categories</a>
                     </div>
@@ -131,7 +131,7 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-end">
                         <p class="text-sm font-medium text-gray-700 dark:text-slate-300"><?php echo htmlspecialchars($budget['name']); ?></p>
-                        <p class="text-sm text-gray-500 dark:text-slate-400">$<?php echo number_format($budget['spent'], 0); ?> / $<?php echo number_format($budget['limit'], 0); ?></p>
+                        <p class="text-sm text-gray-500 dark:text-slate-300">$<?php echo number_format($budget['spent'], 0); ?> / $<?php echo number_format($budget['limit'], 0); ?></p>
                     </div>
                     <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div class="h-full rounded-full transition-all <?php 
@@ -154,7 +154,7 @@
             
             <div class="space-y-6">
                 <?php if (empty($goals)): ?>
-                    <div class="text-center py-10 text-gray-500 dark:text-slate-400">
+                    <div class="text-center py-10 text-gray-500 dark:text-slate-300">
                         <p>No goals set yet</p>
                     </div>
                 <?php endif; ?>
@@ -165,7 +165,7 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-end">
                         <p class="text-sm font-medium text-gray-700 dark:text-slate-300"><?php echo htmlspecialchars($goal['name']); ?></p>
-                        <p class="text-xs text-gray-500 dark:text-slate-400"><?php echo round($goalPercentage); ?>%</p>
+                        <p class="text-xs text-gray-500 dark:text-slate-300"><?php echo round($goalPercentage); ?>%</p>
                     </div>
                     <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div class="h-full bg-accent rounded-full transition-all" style="width: <?php echo min($goalPercentage, 100); ?>%"></div>

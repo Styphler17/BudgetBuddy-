@@ -14,7 +14,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
     $is_active_link = ($path === '/' && ($normalized_uri === '' || $normalized_uri === BASE_URL || $normalized_uri === '/')) ||
                       (strpos($normalized_uri, $normalized_path) !== false && $path !== '/');
 
-    $colors = $is_active_link ? 'text-primary dark:text-accent font-bold' : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white';
+    $colors = $is_active_link ? 'text-primary dark:text-accent font-bold' : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white';
     
     return [
         'active' => $is_active_link,
@@ -102,7 +102,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                 <?php endif; ?>
 
                 <!-- Mobile Menu Button -->
-                <button type="button" id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                <button type="button" id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
@@ -128,8 +128,8 @@ $is_active = function($path) use ($current_uri, $base_url) {
             
             <?php if (isset($_SESSION['user_id'])): ?>
                 <div class="h-px w-full bg-gray-100 dark:bg-white/5"></div>
-                <a href="<?php echo BASE_URL; ?>/transactions" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
-                <a href="<?php echo BASE_URL; ?>/analytics" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
+                <a href="<?php echo BASE_URL; ?>/transactions" class="text-xl font-bold text-gray-600 dark:text-slate-300 transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
+                <a href="<?php echo BASE_URL; ?>/analytics" class="text-xl font-bold text-gray-600 dark:text-slate-300 transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
                 <div class="pt-8 space-y-4">
                     <?php 
                         $text = 'Go to Dashboard';

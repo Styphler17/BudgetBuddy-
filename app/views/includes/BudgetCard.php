@@ -29,14 +29,18 @@ $progressColors = [
 
 $currentStyle = $variantStyles[$variant] ?? $variantStyles['default'];
 $progressColor = $progressColors[$variant] ?? $progressColors['default'];
+
+// Defensive defaults
+$title = $title ?? 'Metric';
+$amount = $amount ?? '$0.00';
 ?>
 
 <div class="glowing-wrapper">
     <div class="glowing-effect-container"></div>
     <div class="glass-card p-6 border-l-4 hover-lift active:scale-[0.98] transition-all duration-300 <?php echo $currentStyle; ?> relative z-10 h-full">
         <div class="flex items-start justify-between mb-4">
-            <p class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest">
-                <?php echo htmlspecialchars($title); ?>
+            <p class="text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest">
+                <?php echo htmlspecialchars((string)$title); ?>
             </p>
             <?php if (isset($icon)): ?>
                 <div class="text-primary dark:text-accent">
@@ -45,7 +49,7 @@ $progressColor = $progressColors[$variant] ?? $progressColors['default'];
             <?php endif; ?>
         </div>
         <p class="text-3xl font-display text-gray-900 dark:text-white mb-2">
-            <?php echo htmlspecialchars($amount); ?>
+            <?php echo htmlspecialchars((string)$amount); ?>
         </p>
         <?php if (isset($percentage)): ?>
             <div class="flex items-center gap-2">
@@ -55,10 +59,15 @@ $progressColor = $progressColors[$variant] ?? $progressColors['default'];
                         style="width: <?php echo min($percentage, 100); ?>%"
                     ></div>
                 </div>
-                <span class="text-xs font-bold text-gray-500 dark:text-slate-400">
+                <span class="text-xs font-bold text-gray-500 dark:text-slate-300">
                     <?php echo $percentage; ?>%
                 </span>
             </div>
         <?php endif; ?>
     </div>
 </div>
+
+<?php
+// Cleanup
+unset($title, $amount, $percentage, $icon, $variant, $data);
+?>

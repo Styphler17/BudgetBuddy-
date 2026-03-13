@@ -7,7 +7,7 @@
 <header id="dashboard-topbar" class="sticky top-0 z-30 h-16 sm:h-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-gray-200 dark:border-white/10 px-4 sm:px-6 flex items-center justify-between transition-all">
     <!-- Mobile Toggle -->
     <div class="flex items-center gap-2 flex-shrink-0">
-        <button id="mobile-sidebar-toggle" class="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-600 dark:text-slate-400 transition-colors">
+        <button id="mobile-sidebar-toggle" class="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-600 dark:text-slate-300 transition-colors">
             <i data-lucide="menu" class="h-6 w-6"></i>
         </button>
         <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe" class="h-8 w-auto block lg:hidden object-contain">

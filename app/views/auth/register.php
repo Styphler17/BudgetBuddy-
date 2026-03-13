@@ -57,7 +57,7 @@
                         Step 1 of 2 — Account Details
                     </div>
                     <h2 class="text-3xl font-bold text-gray-900 dark:text-white font-outfit tracking-tight">Create Account</h2>
-                    <p class="text-gray-500 dark:text-slate-400 font-medium">
+                    <p class="text-gray-500 dark:text-slate-300 font-medium">
                         Join SpendScribe to start managing your finances
                     </p>
                 </div>
@@ -88,7 +88,7 @@
                         <?php endif; ?>
 
                         <div class="space-y-2">
-                            <label for="name" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
+                            <label for="name" class="text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest ml-1">
                                 Full Name
                             </label>
                             <div class="relative group">
@@ -105,7 +105,7 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label for="email" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
+                            <label for="email" class="text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest ml-1">
                                 Email
                             </label>
                             <div class="relative group">
@@ -123,7 +123,7 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label for="reg-password" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
+                            <label for="reg-password" class="text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest ml-1">
                                 Password
                             </label>
                             <div class="relative group">
@@ -153,7 +153,7 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label for="currency" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
+                            <label for="currency" class="text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest ml-1">
                                 Preferred Currency
                             </label>
                             <div class="relative group">
@@ -184,7 +184,7 @@
                                 class="mt-1 h-4 w-4 rounded border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 text-primary dark:text-accent focus:ring-primary dark:focus:ring-accent"
                                 required
                             />
-                            <label for="terms" class="text-xs font-medium text-gray-600 dark:text-slate-400 leading-relaxed">
+                            <label for="terms" class="text-xs font-medium text-gray-600 dark:text-slate-300 leading-relaxed">
                                 I agree to the <a href="<?php echo BASE_URL; ?>/terms" class="text-primary dark:text-accent hover:underline font-bold">Terms of Service</a> and <a href="<?php echo BASE_URL; ?>/privacy-policy" class="text-primary dark:text-accent hover:underline font-bold">Privacy Policy</a>.
                             </label>
                         </div>
@@ -200,7 +200,7 @@
                     </form>
 
                     <div class="mt-8 text-center">
-                        <p class="text-sm text-gray-600 dark:text-slate-400 font-medium font-body">
+                        <p class="text-sm text-gray-600 dark:text-slate-300 font-medium font-body">
                             Already have an account?
                             <a href="<?php echo BASE_URL; ?>/login" class="font-bold text-primary dark:text-accent hover:underline ml-1">
                                 Sign in instead

@@ -64,14 +64,14 @@ class User {
      */
     public function create($data) {
         $sql = "INSERT INTO users (name, email, password_hash, currency, is_active, email_verified, created_at, updated_at) 
-                VALUES (:name, :email, :password_hash, :currency, 1, 0, NOW(), NOW())";
+                VALUES (?, ?, ?, ?, 1, 0, NOW(), NOW())";
         
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password_hash' => password_hash($data['password'], PASSWORD_DEFAULT),
-            'currency' => $data['currency'] ?? 'USD'
+            $data['name'],
+            $data['email'],
+            password_hash($data['password'], PASSWORD_DEFAULT),
+            $data['currency'] ?? 'USD'
         ]);
     }
     
@@ -80,9 +80,30 @@ class User {
      */
     public function verify($email, $password) {
         $user = $this->findByEmail($email);
-        if ($user && $user['is_active'] && password_verify($password, $user['password_hash'])) {
-            return $user;
+        $log_file = dirname(dirname(__DIR__)) . '/login_debug.log';
+        
+        if (!$user) {
+            file_put_contents($log_file, date('[Y-m-d H:i:s]') . " FAIL: User not found ($email)\n", FILE_APPEND);
+            return false;
         }
+
+        if (empty($user['password_hash'])) {
+            file_put_contents($log_file, date('[Y-m-d H:i:s]') . " FAIL: Empty hash for $email\n", FILE_APPEND);
+            return false;
+        }
+
+        // Check password
+        if (password_verify($password, $user['password_hash'])) {
+            if (isset($user['is_active']) && $user['is_active'] == 0) {
+                file_put_contents($log_file, date('[Y-m-d H:i:s]') . " FAIL: Inactive account ($email)\n", FILE_APPEND);
+                return false;
+            }
+            file_put_contents($log_file, date('[Y-m-d H:i:s]') . " SUCCESS: Login for $email\n", FILE_APPEND);
+            return $user;
+        } else {
+            file_put_contents($log_file, date('[Y-m-d H:i:s]') . " FAIL: password_verify failed for $email\n", FILE_APPEND);
+        }
+        
         return false;
     }
 

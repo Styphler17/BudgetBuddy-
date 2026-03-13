@@ -52,7 +52,7 @@
                 <div class="flex gap-1 text-yellow-400 text-lg">
                     <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
-                <span class="text-gray-600 dark:text-slate-400 leading-relaxed italic">
+                <span class="text-gray-600 dark:text-slate-300 leading-relaxed italic">
                     "SpendScribe completely changed how I manage my finances. The visual analytics make it incredibly easy to see exactly where my money is going."
                 </span>
                 <span class="text-primary dark:text-accent font-bold mt-1">— Sarah Jenkins, Designer</span>
@@ -65,7 +65,7 @@
             <div class="relative w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden animate-slide-in-right z-10">
                 <div class="p-8 flex flex-col items-center space-y-4 text-center">
                     <h2 class="text-3xl font-bold text-gray-900 dark:text-white font-outfit tracking-tight">Welcome Back</h2>
-                    <p class="text-gray-500 dark:text-slate-400 font-medium">
+                    <p class="text-gray-500 dark:text-slate-300 font-medium">
                         Sign in to your SpendScribe account
                     </p>
                 </div>
@@ -96,7 +96,7 @@
                         <?php endif; ?>
 
                         <div class="space-y-2">
-                            <label for="email" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest ml-1">
+                            <label for="email" class="text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest ml-1">
                                 Email Address
                             </label>
                             <div class="relative group">
@@ -115,7 +115,7 @@
 
                         <div class="space-y-2">
                             <div class="flex items-center justify-between ml-1">
-                                <label for="login-password" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest">
+                                <label for="login-password" class="text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest">
                                     Password
                                 </label>
                                 <a
@@ -148,7 +148,7 @@
                                 name="remember"
                                 class="h-4 w-4 rounded border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 text-primary dark:text-accent focus:ring-primary dark:focus:ring-accent"
                             />
-                            <label for="remember" class="text-sm font-bold text-gray-600 dark:text-slate-400">
+                            <label for="remember" class="text-sm font-bold text-gray-600 dark:text-slate-300">
                                 Remember me for 30 days
                             </label>
                         </div>
@@ -165,7 +165,7 @@
                     </form>
 
                     <div class="mt-8 text-center">
-                        <p class="text-sm text-gray-600 dark:text-slate-400 font-medium">
+                        <p class="text-sm text-gray-600 dark:text-slate-300 font-medium">
                             Don't have an account?
                             <a href="<?php echo BASE_URL; ?>/register" class="font-bold text-primary dark:text-accent hover:underline ml-1">
                                 Create one free

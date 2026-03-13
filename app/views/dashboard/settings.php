@@ -1,7 +1,7 @@
 <div class="p-4 sm:p-6 space-y-6">
     <div>
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white font-outfit">Settings</h1>
-        <p class="text-gray-500 dark:text-slate-400 text-sm sm:text-base">Customize your SpendScribe experience</p>
+        <p class="text-gray-500 dark:text-slate-300 text-sm sm:text-base">Customize your SpendScribe experience</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -70,7 +70,7 @@
                     <label for="set-pass" class="text-sm font-medium text-gray-700 dark:text-slate-300">New Password</label>
                     <div class="relative">
                         <input id="set-pass" type="password" name="password" placeholder="••••••••" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md pl-3 pr-10 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>
-                        <button type="button" onclick="togglePassword('set-pass', 'set-eye-1')" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
+                        <button type="button" onclick="togglePassword('set-pass', 'set-eye-1')" class="absolute right-3 top-2.5 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-white transition-colors">
                             <i id="set-eye-1" data-lucide="eye" class="h-4 w-4"></i>
                         </button>
                     </div>
@@ -79,7 +79,7 @@
                     <label for="set-confirm" class="text-sm font-medium text-gray-700 dark:text-slate-300">Confirm New Password</label>
                     <div class="relative">
                         <input id="set-confirm" type="password" name="confirm_password" placeholder="••••••••" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md pl-3 pr-10 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>
-                        <button type="button" onclick="togglePassword('set-confirm', 'set-eye-2')" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
+                        <button type="button" onclick="togglePassword('set-confirm', 'set-eye-2')" class="absolute right-3 top-2.5 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-white transition-colors">
                             <i id="set-eye-2" data-lucide="eye" class="h-4 w-4"></i>
                         </button>
                     </div>
@@ -97,7 +97,7 @@
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">Currency Preferences</h2>
             </div>
             
-            <p class="text-sm text-gray-500 dark:text-slate-400">Choose the currency SpendScribe should display for your budgets and reports.</p>
+            <p class="text-sm text-gray-500 dark:text-slate-300">Choose the currency SpendScribe should display for your budgets and reports.</p>
             
             <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-2">
                 <input type="hidden" name="action" value="update_currency">
@@ -128,7 +128,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <p class="text-sm font-medium text-gray-900 dark:text-white">Export Data</p>
-                <p class="text-sm text-gray-500 dark:text-slate-400">Download all your financial data</p>
+                <p class="text-sm text-gray-500 dark:text-slate-300">Download all your financial data</p>
             </div>
             <button class="inline-flex items-center justify-center rounded-md border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                 Export
@@ -138,7 +138,7 @@
         <div class="border-t border-gray-100 dark:border-white/5 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <p class="text-sm font-medium text-red-600">Delete Account</p>
-                <p class="text-sm text-gray-500 dark:text-slate-400">Permanently delete your account and all data</p>
+                <p class="text-sm text-gray-500 dark:text-slate-300">Permanently delete your account and all data</p>
             </div>
             <form action="<?php echo BASE_URL; ?>/settings" method="POST" onsubmit="return confirm('CRITICAL: This will permanently delete your account and all transaction history. This action cannot be undone. Proceed?');">
                 <input type="hidden" name="action" value="delete_account">

@@ -6,7 +6,7 @@
                 <a href="<?php echo BASE_URL; ?>/" class="flex items-center group">
                     <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
                 </a>
-                <p class="text-gray-400 max-w-sm leading-relaxed">
+                <p class="text-gray-400 dark:text-slate-300 max-w-sm leading-relaxed">
                     Smart budgeting made simple. Join thousands of users who have taken control of their financial future with our intelligent platform.
                 </p>
                 <div class="flex items-center gap-4 pt-2">
@@ -47,7 +47,7 @@
             <!-- Newsletter Column -->
             <div class="lg:col-span-4 space-y-6">
                 <h3 class="font-bold text-white uppercase tracking-widest text-xs">Stay Updated</h3>
-                <p class="text-sm text-gray-400">Get weekly money tips and platform updates directly to your inbox.</p>
+                <p class="text-sm text-gray-400 dark:text-slate-300">Get weekly money tips and platform updates directly to your inbox.</p>
                 <form action="#" method="POST" class="flex gap-2">
                     <label for="newsletter_email" class="sr-only">Email address</label>
                     <input type="email" id="newsletter_email" name="newsletter_email" placeholder="Email address" class="bg-gray-800 border-none rounded-lg px-4 py-2 text-sm flex-grow focus:ring-2 focus:ring-primary outline-none text-white" required>
@@ -55,14 +55,14 @@
                         Join
                     </button>
                 </form>
-                <div class="flex items-center gap-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                <div class="flex items-center gap-2 text-[10px] font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest">
                     <i data-lucide="shield-check" class="h-3 w-3"></i>
                     Zero Spam. Unsubscribe anytime.
                 </div>
             </div>
         </div>
 
-        <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-500">
+        <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-500 dark:text-slate-300">
             <p>© <?php echo date('Y'); ?> SpendScribe. All rights reserved.</p>
             <div class="flex gap-8">
                 <a href="<?php echo BASE_URL; ?>/terms" class="hover:text-white transition-colors">Terms</a>

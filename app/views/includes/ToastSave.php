@@ -6,7 +6,7 @@
             <div id="toast-save-content" class="flex items-center gap-2 text-slate-900 dark:text-white transition-all duration-300">
                 <!-- Initial State -->
                 <div id="state-initial" class="flex items-center gap-2">
-                    <div class="text-slate-500 dark:text-slate-400">
+                    <div class="text-slate-500 dark:text-slate-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" class="text-current">
                             <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" stroke="currentColor">
                                 <circle cx="9" cy="9" r="7.25"></circle>

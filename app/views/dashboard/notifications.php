@@ -8,15 +8,15 @@
     <!-- Header -->
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-extrabold text-gray-900 font-outfit tracking-tight">Notifications</h1>
-            <p class="text-gray-500 font-medium mt-1">Stay updated with your financial activity and alerts.</p>
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white font-outfit tracking-tight">Notifications</h1>
+            <p class="text-gray-500 dark:text-slate-300 font-medium mt-1">Stay updated with your financial activity and alerts.</p>
         </div>
-        <button class="text-sm font-bold text-primary hover:underline">Mark all as read</button>
+        <button class="text-sm font-bold text-primary dark:text-accent hover:underline">Mark all as read</button>
     </header>
 
     <!-- Notification List -->
     <div class="glass-card overflow-hidden">
-        <div class="divide-y divide-gray-100/50">
+        <div class="divide-y divide-gray-100/50 dark:divide-white/5">
             <?php 
             $notifications = [
                 ['title' => 'Budget Alert: Food & Drink', 'message' => "You've spent 90% of your budget for Food & Drink. Slow down!", 'time' => '2 hours ago', 'type' => 'warning', 'icon' => 'alert-triangle', 'read' => false],
@@ -36,16 +36,16 @@
                     case 'system': $iconColor = 'text-brand'; $bgColor = 'bg-brand/5'; break;
                 }
             ?>
-            <div class="p-8 flex items-start gap-6 hover:bg-primary/[0.01] transition-all group relative <?php echo $n['read'] ? '' : 'bg-primary/[0.03] lg:before:absolute lg:before:left-0 lg:before:top-0 lg:before:bottom-0 lg:before:w-1 lg:before:bg-primary'; ?>">
-                <div class="h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-black/5 <?php echo $bgColor; ?> <?php echo $iconColor; ?> group-hover:scale-110 transition-transform duration-500">
+            <div class="p-8 flex items-start gap-6 hover:bg-primary/[0.01] transition-all group relative <?php echo $n['read'] ? '' : 'bg-primary/[0.03] dark:bg-slate-800/20 lg:before:absolute lg:before:left-0 lg:before:top-0 lg:before:bottom-0 lg:before:w-1 lg:before:bg-primary'; ?>">
+                <div class="h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-black/5 dark:border-white/10 <?php echo $bgColor; ?> dark:bg-slate-900 <?php echo $iconColor; ?> group-hover:scale-110 transition-transform duration-500">
                     <i data-lucide="<?php echo $n['icon']; ?>" class="h-6 w-6"></i>
                 </div>
                 <div class="flex-1 space-y-2">
                     <div class="flex items-center justify-between">
-                        <h4 class="text-lg font-black text-gray-900 font-outfit tracking-tight"><?php echo $n['title']; ?></h4>
-                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]"><?php echo $n['time']; ?></span>
+                        <h4 class="text-lg font-black text-gray-900 dark:text-white font-outfit tracking-tight"><?php echo $n['title']; ?></h4>
+                        <span class="text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-[0.2em]"><?php echo $n['time']; ?></span>
                     </div>
-                    <p class="text-sm text-gray-500 leading-relaxed font-medium max-w-2xl"><?php echo $n['message']; ?></p>
+                    <p class="text-sm text-gray-500 dark:text-slate-300 leading-relaxed font-medium max-w-2xl"><?php echo $n['message']; ?></p>
                 </div>
                 <?php if (!$n['read']): ?>
                 <div class="h-3 w-3 rounded-full bg-primary mt-3 shadow-[0_0_10px_rgba(16,35,127,0.3)]"></div>
@@ -54,8 +54,8 @@
             <?php endforeach; ?>
         </div>
         
-        <div class="p-8 bg-primary/5 text-center">
-            <button class="h-12 px-8 rounded-2xl bg-white border border-primary/5 text-xs font-black uppercase tracking-widest text-gray-500 hover:text-primary hover:shadow-xl transition-all active:scale-95">
+        <div class="p-8 bg-primary/5 dark:bg-slate-900/50 text-center">
+            <button class="h-12 px-8 rounded-2xl bg-white dark:bg-slate-800 border border-primary/5 dark:border-white/5 text-xs font-black uppercase tracking-widest text-gray-500 dark:text-slate-400 hover:text-primary dark:hover:text-accent hover:shadow-xl transition-all active:scale-95">
                 Load older notifications
             </button>
         </div>

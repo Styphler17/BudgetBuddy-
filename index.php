@@ -4,7 +4,7 @@
  */
 
 // Define Environment Mode
-define('APP_ENV', 'production'); // Set to 'development' for local testing
+define('APP_ENV', 'development'); // TEMPORARILY set to development to see the error
 
 // Error reporting configuration
 if (APP_ENV === 'development') {

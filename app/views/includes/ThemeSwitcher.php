@@ -4,13 +4,13 @@
     <div id="theme-indicator" class="absolute h-8 w-8 border border-primary/20 dark:border-accent/50 rounded-lg transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] shadow-sm"></div>
     
     <!-- Options -->
-    <button data-theme="system" title="System Theme" class="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+    <button data-theme="system" title="System Theme" class="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white transition-colors">
         <i data-lucide="monitor-cog" class="h-4 w-4"></i>
     </button>
-    <button data-theme="light" title="Light Theme" class="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+    <button data-theme="light" title="Light Theme" class="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white transition-colors">
         <i data-lucide="sun" class="h-4 w-4"></i>
     </button>
-    <button data-theme="dark" title="Dark Theme" class="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+    <button data-theme="dark" title="Dark Theme" class="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white transition-colors">
         <i data-lucide="moon-star" class="h-4 w-4"></i>
     </button>
 </div>
@@ -55,14 +55,14 @@ const ThemeSwitcher = {
         // Update UI
         this.buttons.forEach((btn, index) => {
             if (btn.getAttribute('data-theme') === theme) {
-                btn.classList.remove('text-gray-500', 'dark:text-slate-400');
+                btn.classList.remove('text-gray-500', 'dark:text-slate-300');
                 btn.classList.add('text-primary', 'dark:text-accent', 'font-bold');
                 
                 // Move indicator
                 const offset = 4 + (index * 32);
                 this.indicator.style.left = `${offset}px`;
             } else {
-                btn.classList.add('text-gray-500', 'dark:text-slate-400');
+                btn.classList.add('text-gray-500', 'dark:text-slate-300');
                 btn.classList.remove('text-primary', 'dark:text-accent', 'font-bold');
             }
         });

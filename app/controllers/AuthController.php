@@ -7,7 +7,7 @@ class AuthController extends BaseController {
     
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? '';
+            $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
             
             $userModel = new User();
@@ -19,6 +19,7 @@ class AuthController extends BaseController {
                 $_SESSION['user_email'] = $user['email'];
                 $this->redirect('/dashboard');
             } else {
+                // Log the failure reason (User model will log specific verify failures)
                 $error = "Invalid email or password.";
             }
         }
