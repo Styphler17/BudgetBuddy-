@@ -12,7 +12,7 @@
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">Profile Settings</h2>
             </div>
             
-            <form action="/BudgetBuddy-/settings" method="POST" class="space-y-4">
+            <form action="/settings" method="POST" class="space-y-4">
                 <input type="hidden" name="action" value="update_profile">
                 <div class="space-y-2">
                     <label class="text-sm font-medium text-gray-700 dark:text-slate-300">Display Name</label>
@@ -64,7 +64,7 @@
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">Security</h2>
             </div>
             
-            <form action="/BudgetBuddy-/settings" method="POST" class="space-y-4">
+            <form action="/settings" method="POST" class="space-y-4">
                 <input type="hidden" name="action" value="update_password">
                 <div class="space-y-2">
                     <label class="text-sm font-medium text-gray-700 dark:text-slate-300">New Password</label>

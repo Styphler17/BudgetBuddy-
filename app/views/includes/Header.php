@@ -3,7 +3,7 @@
  * Header Component - Adapted from React Header.tsx
  */
 $current_uri = $_SERVER['REQUEST_URI'];
-$base_url = '/BudgetBuddy-';
+$base_url = '';
 
 // Helper to check if a link is active
 $is_active = function($path) use ($current_uri, $base_url) {
@@ -22,20 +22,20 @@ $is_active = function($path) use ($current_uri, $base_url) {
     <div class="container mx-auto px-4 py-2">
         <nav class="flex items-center justify-between">
             <!-- Logo Section -->
-            <a href="/BudgetBuddy-/" class="flex items-center space-x-3 group">
-                <img src="/BudgetBuddy-/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-14 w-14 rounded-2xl object-cover shadow-sm group-hover:shadow-md transition-all duration-300">
+            <a href="/" class="flex items-center space-x-3 group">
+                <img src="/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-14 w-14 rounded-2xl object-cover shadow-sm group-hover:shadow-md transition-all duration-300">
                 <span class="text-xl font-bold text-gray-900 dark:text-white font-outfit hidden md:block">BudgetBuddy</span>
             </a>
 
             <!-- Desktop Navigation -->
             <div class="hidden md:flex items-center space-x-6">
-                <a href="/BudgetBuddy-/" class="transition-colors <?php echo $is_active('/'); ?>">Home</a>
-                <a href="/BudgetBuddy-/blog" class="transition-colors <?php echo $is_active('/blog'); ?>">Blog</a>
-                <a href="/BudgetBuddy-/contact" class="transition-colors <?php echo $is_active('/contact'); ?>">Contact</a>
+                <a href="/" class="transition-colors <?php echo $is_active('/'); ?>">Home</a>
+                <a href="/blog" class="transition-colors <?php echo $is_active('/blog'); ?>">Blog</a>
+                <a href="/contact" class="transition-colors <?php echo $is_active('/contact'); ?>">Contact</a>
                 
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="/BudgetBuddy-/transactions" class="transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
-                    <a href="/BudgetBuddy-/analytics" class="transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
+                    <a href="/transactions" class="transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
+                    <a href="/analytics" class="transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
                 <?php endif; ?>
             </div>
 
@@ -49,7 +49,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                         <?php 
                             $text = 'Go to Dashboard';
                             $type = 'a';
-                            $href = '/BudgetBuddy-/dashboard';
+                            $href = '/dashboard';
                             $variant = 'primary';
                             $size = 'sm';
                             include APP_PATH . '/views/includes/Button.php';
@@ -57,7 +57,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                         <?php 
                             $text = 'Sign Out';
                             $type = 'a';
-                            $href = '/BudgetBuddy-/logout';
+                            $href = '/logout';
                             $variant = 'outline';
                             $size = 'sm';
                             $class = 'dark:border-white/10 dark:bg-transparent dark:text-white dark:hover:bg-white/5';
@@ -69,7 +69,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                         <?php 
                             $text = 'Sign In';
                             $type = 'a';
-                            $href = '/BudgetBuddy-/login';
+                            $href = '/login';
                             $variant = 'outline';
                             $size = 'sm';
                             $class = 'dark:border-white/10 dark:bg-transparent dark:text-white dark:hover:bg-white/5';
@@ -78,7 +78,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                         <?php 
                             $text = 'Get Started';
                             $type = 'a';
-                            $href = '/BudgetBuddy-/register';
+                            $href = '/register';
                             $variant = 'primary';
                             $size = 'sm';
                             include APP_PATH . '/views/includes/Button.php';
@@ -100,7 +100,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
     <div class="flex flex-col h-full">
         <div class="flex items-center justify-between p-6 border-b dark:border-white/10">
             <div class="flex items-center space-x-3">
-                <img src="/BudgetBuddy-/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-10 w-10 rounded-lg object-cover">
+                <img src="/public/BudgetBuddy.png" alt="BudgetBuddy Logo" class="h-10 w-10 rounded-lg object-cover">
                 <span class="text-xl font-bold text-gray-900 dark:text-white font-outfit">BudgetBuddy</span>
             </div>
             <button type="button" id="close-menu-button" class="p-2 rounded-xl text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
@@ -108,19 +108,19 @@ $is_active = function($path) use ($current_uri, $base_url) {
             </button>
         </div>
         <div class="flex-1 overflow-y-auto p-8 flex flex-col space-y-8">
-            <a href="/BudgetBuddy-/" class="text-3xl font-bold transition-all <?php echo $is_active('/'); ?>">Home</a>
-            <a href="/BudgetBuddy-/blog" class="text-3xl font-bold transition-all <?php echo $is_active('/blog'); ?>">Blog</a>
-            <a href="/BudgetBuddy-/contact" class="text-3xl font-bold transition-all <?php echo $is_active('/contact'); ?>">Contact</a>
+            <a href="/" class="text-3xl font-bold transition-all <?php echo $is_active('/'); ?>">Home</a>
+            <a href="/blog" class="text-3xl font-bold transition-all <?php echo $is_active('/blog'); ?>">Blog</a>
+            <a href="/contact" class="text-3xl font-bold transition-all <?php echo $is_active('/contact'); ?>">Contact</a>
             
             <?php if (isset($_SESSION['user_id'])): ?>
                 <div class="h-px w-full bg-gray-100 dark:bg-white/5"></div>
-                <a href="/BudgetBuddy-/transactions" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
-                <a href="/BudgetBuddy-/analytics" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
+                <a href="/transactions" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/transactions'); ?>">Transactions</a>
+                <a href="/analytics" class="text-xl font-bold text-gray-600 dark:text-slate-400 transition-colors <?php echo $is_active('/analytics'); ?>">Analytics</a>
                 <div class="pt-8 space-y-4">
                     <?php 
                         $text = 'Go to Dashboard';
                         $type = 'a';
-                        $href = '/BudgetBuddy-/dashboard';
+                        $href = '/dashboard';
                         $variant = 'primary';
                         $size = 'lg';
                         $class = 'w-full py-4 rounded-2xl shadow-xl';
@@ -129,7 +129,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                     <?php 
                         $text = 'Sign Out';
                         $type = 'a';
-                        $href = '/BudgetBuddy-/logout';
+                        $href = '/logout';
                         $variant = 'outline';
                         $size = 'lg';
                         $class = 'w-full py-4 rounded-2xl border-rose-100 text-rose-600 hover:bg-rose-50';
@@ -141,7 +141,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                     <?php 
                         $text = 'Sign In';
                         $type = 'a';
-                        $href = '/BudgetBuddy-/login';
+                        $href = '/login';
                         $variant = 'outline';
                         $size = 'lg';
                         $class = 'w-full py-4 rounded-2xl dark:border-white/10 dark:text-slate-300';
@@ -150,7 +150,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
                     <?php 
                         $text = 'Get Started';
                         $type = 'a';
-                        $href = '/BudgetBuddy-/register';
+                        $href = '/register';
                         $variant = 'primary';
                         $size = 'lg';
                         $class = 'w-full py-4 rounded-2xl shadow-xl shadow-primary/20';

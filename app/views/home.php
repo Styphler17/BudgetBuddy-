@@ -39,7 +39,7 @@
                             <?php 
                                 $text = 'Go to Dashboard';
                                 $type = 'a';
-                                $href = '/BudgetBuddy-/dashboard';
+                                $href = '/dashboard';
                                 $variant = 'primary';
                                 $size = 'lg';
                                 $icon = 'arrow-right';
@@ -49,7 +49,7 @@
                             <?php 
                                 $text = 'Start Free Today';
                                 $type = 'a';
-                                $href = '/BudgetBuddy-/register';
+                                $href = '/register';
                                 $variant = 'primary';
                                 $size = 'lg';
                                 $icon = 'arrow-right';
@@ -58,7 +58,7 @@
                             <?php 
                                 $text = 'Sign In';
                                 $type = 'a';
-                                $href = '/BudgetBuddy-/login';
+                                $href = '/login';
                                 $variant = 'outline';
                                 $size = 'lg';
                                 $class = 'dark:bg-transparent dark:text-accent dark:border-accent/30';
@@ -136,7 +136,7 @@
                     <?php 
                         $text = 'Learn more';
                         $type = 'a';
-                        $href = '/BudgetBuddy-/register';
+                        $href = '/register';
                         $variant = 'ghost';
                         $size = 'sm';
                         $icon = 'arrow-right';
@@ -185,7 +185,7 @@
             <?php 
                 $text = 'View all stories';
                 $type = 'a';
-                $href = '/BudgetBuddy-/blog';
+                $href = '/blog';
                 $variant = 'outline';
                 $size = 'md';
                 $class = 'bg-white dark:bg-transparent text-gray-900 dark:text-white';
@@ -211,7 +211,7 @@
                     </div>
                     <div class="p-8">
                         <h3 class="text-2xl font-h2 text-gray-900 dark:text-white mb-4 leading-tight group-hover:text-primary dark:group-hover:text-accent transition-colors"><?php echo $post['title']; ?></h3>
-                        <a href="/BudgetBuddy-/<?php echo $post['slug'] ?? 'blog'; ?>" class="inline-flex items-center text-sm font-bold text-primary dark:text-accent group-hover:gap-2 transition-all">
+                        <a href="/<?php echo $post['slug'] ?? 'blog'; ?>" class="inline-flex items-center text-sm font-bold text-primary dark:text-accent group-hover:gap-2 transition-all">
                             Read article <i data-lucide="arrow-right" class="ml-2 h-4 w-4"></i>
                         </a>
                     </div>
@@ -278,7 +278,7 @@
                     <?php 
                         $text = 'Get Started Free';
                         $type = 'a';
-                        $href = '/BudgetBuddy-/register';
+                        $href = '/register';
                         $variant = 'outline';
                         $size = 'lg';
                         $class = 'bg-white dark:bg-accent text-primary dark:text-primary border-none shadow-xl hover:scale-105';

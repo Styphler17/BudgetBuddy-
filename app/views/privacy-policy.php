@@ -3,7 +3,7 @@
     <section class="bg-gray-50 py-16 pt-32">
         <div class="container mx-auto max-w-4xl px-6 text-center">
             <nav class="mb-6 flex justify-center text-sm text-gray-500">
-                <a href="/BudgetBuddy-/" class="hover:text-primary">Home</a>
+                <a href="/" class="hover:text-primary">Home</a>
                 <span class="mx-2">&rarr;</span>
                 <span class="text-gray-900 font-medium">Privacy Policy</span>
             </nav>
@@ -134,7 +134,7 @@
                     please don't hesitate to contact us.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="/BudgetBuddy-/contact" class="inline-flex items-center justify-center px-8 py-3 bg-emerald-500 text-white font-bold rounded-md hover:bg-emerald-600 transition-colors">
+                    <a href="/contact" class="inline-flex items-center justify-center px-8 py-3 bg-emerald-500 text-white font-bold rounded-md hover:bg-emerald-600 transition-colors">
                         Contact Us
                         <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
                     </a>

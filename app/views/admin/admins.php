@@ -4,7 +4,7 @@
             <h1 class="text-2xl font-bold text-gray-900 font-outfit">Admin Management</h1>
             <p class="text-sm text-gray-500">Manage system administrators and their roles.</p>
         </div>
-        <a href="/BudgetBuddy-/admin/admins/create" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90 transition-colors">
+        <a href="/admin/admins/create" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90 transition-colors">
             <i data-lucide="user-plus" class="mr-2 h-4 w-4"></i>
             Add Admin
         </a>
@@ -45,7 +45,7 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <a href="/BudgetBuddy-/admin/admins/edit/<?php echo $a['id']; ?>" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Edit">
+                                <a href="/admin/admins/edit/<?php echo $a['id']; ?>" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Edit">
                                     <i data-lucide="edit-3" class="h-4 w-4"></i>
                                 </a>
                                 <button class="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Delete">

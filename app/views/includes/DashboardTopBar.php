@@ -10,7 +10,7 @@
         <button id="mobile-sidebar-toggle" class="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-600 dark:text-slate-400 transition-colors">
             <i data-lucide="menu" class="h-6 w-6"></i>
         </button>
-        <img src="/BudgetBuddy-/public/BudgetBuddy.png" alt="BudgetBuddy" class="h-7 w-auto block lg:hidden">
+        <img src="/public/BudgetBuddy.png" alt="BudgetBuddy" class="h-7 w-auto block lg:hidden">
     </div>
 
     <!-- Right Side Actions -->

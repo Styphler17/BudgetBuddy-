@@ -3,14 +3,14 @@
     <section class="bg-gray-50 dark:bg-slate-900/50 py-10 pt-24">
         <div class="container mx-auto max-w-4xl px-6">
             <nav class="mb-4 text-sm text-gray-500 dark:text-slate-400">
-                <a href="/BudgetBuddy-/" class="hover:text-primary dark:hover:text-accent">Home</a>
+                <a href="/" class="hover:text-primary dark:hover:text-accent">Home</a>
                 <span class="mx-2">&rarr;</span>
-                <a href="/BudgetBuddy-/blog" class="hover:text-primary dark:hover:text-accent">Blog</a>
+                <a href="/blog" class="hover:text-primary dark:hover:text-accent">Blog</a>
                 <span class="mx-2">&rarr;</span>
                 <span class="text-gray-900 dark:text-white font-medium truncate inline-block max-w-[200px] align-bottom"><?php echo htmlspecialchars($post['title']); ?></span>
             </nav>
 
-            <a href="/BudgetBuddy-/blog" class="inline-flex items-center text-primary dark:text-accent font-medium mb-6 hover:underline">
+            <a href="/blog" class="inline-flex items-center text-primary dark:text-accent font-medium mb-6 hover:underline">
                 <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i>
                 Back to all articles
             </a>
@@ -103,7 +103,7 @@
                     <div class="flex flex-wrap gap-2">
                         <?php if (!empty($post['tags'])): ?>
                             <?php foreach ($post['tags'] as $tag): ?>
-                                <a href="/BudgetBuddy-/blog?tag=<?php echo urlencode(trim($tag)); ?>" class="px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-800 text-sm text-gray-600 dark:text-slate-400 hover:bg-primary dark:hover:bg-accent hover:text-white dark:hover:text-primary transition-colors border dark:border-white/5">
+                                <a href="/blog?tag=<?php echo urlencode(trim($tag)); ?>" class="px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-800 text-sm text-gray-600 dark:text-slate-400 hover:bg-primary dark:hover:bg-accent hover:text-white dark:hover:text-primary transition-colors border dark:border-white/5">
                                     #<?php echo htmlspecialchars(trim($tag)); ?>
                                 </a>
                             <?php endforeach; ?>
@@ -125,7 +125,7 @@
                     <div class="mt-10 pt-10 border-t border-gray-200 dark:border-white/5">
                         <h3 class="font-bold text-gray-900 dark:text-white mb-2 font-outfit">Bring BudgetBuddy along</h3>
                         <p class="text-sm text-gray-600 dark:text-slate-400 mb-6 font-medium leading-relaxed">Track every goal, automate savings, and collaborate with the people who matter.</p>
-                        <a href="/BudgetBuddy-/register" class="block w-full text-center py-3 bg-primary dark:bg-accent text-white dark:text-primary font-black uppercase tracking-widest text-xs rounded-xl hover:scale-105 transition-all shadow-lg shadow-primary/20 dark:shadow-none">
+                        <a href="/register" class="block w-full text-center py-3 bg-primary dark:bg-accent text-white dark:text-primary font-black uppercase tracking-widest text-xs rounded-xl hover:scale-105 transition-all shadow-lg shadow-primary/20 dark:shadow-none">
                             Create free account
                         </a>
                     </div>

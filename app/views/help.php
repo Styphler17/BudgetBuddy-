@@ -153,7 +153,7 @@
                         <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
                     </a>
                 </div>
-                <a href="/BudgetBuddy-/contact" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors text-lg">
+                <a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors text-lg">
                     Visit Contact Page
                     <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
                 </a>

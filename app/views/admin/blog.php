@@ -12,7 +12,7 @@
             <p class="text-sm text-gray-500">Create, publish, and maintain engaging content for your audience.</p>
         </div>
         <div class="flex items-center gap-2">
-            <a href="/BudgetBuddy-/admin/blog/create" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90 transition-colors">
+            <a href="/admin/blog/create" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90 transition-colors">
                 <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
                 New Story
             </a>
@@ -67,14 +67,14 @@
                     
                     <div class="flex items-center gap-1">
                         <?php if ($status === 'published'): ?>
-                            <a href="/BudgetBuddy-/blog/<?php echo $a['slug']; ?>" target="_blank" class="p-2 text-gray-400 hover:text-primary transition-colors" title="View live">
+                            <a href="/blog/<?php echo $a['slug']; ?>" target="_blank" class="p-2 text-gray-400 hover:text-primary transition-colors" title="View live">
                                 <i data-lucide="eye" class="h-4 w-4"></i>
                             </a>
                         <?php endif; ?>
-                        <a href="/BudgetBuddy-/admin/blog/edit/<?php echo $a['id']; ?>" class="p-2 text-gray-400 hover:text-gray-900 transition-colors" title="Edit">
+                        <a href="/admin/blog/edit/<?php echo $a['id']; ?>" class="p-2 text-gray-400 hover:text-gray-900 transition-colors" title="Edit">
                             <i data-lucide="edit-3" class="h-4 w-4"></i>
                         </a>
-                        <a href="/BudgetBuddy-/admin/blog/delete/<?php echo $a['id']; ?>" class="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Delete" onclick="return confirm('Are you sure you want to delete this post?')">
+                        <a href="/admin/blog/delete/<?php echo $a['id']; ?>" class="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Delete" onclick="return confirm('Are you sure you want to delete this post?')">
                             <i data-lucide="trash-2" class="h-4 w-4"></i>
                         </a>
                     </div>

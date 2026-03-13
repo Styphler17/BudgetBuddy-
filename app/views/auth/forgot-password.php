@@ -9,7 +9,7 @@
             </div>
             
             <div class="p-8 pt-0">
-                <form action="/BudgetBuddy-/forgot-password" method="POST" class="space-y-4 text-left">
+                <form action="/forgot-password" method="POST" class="space-y-4 text-left">
                     <?php if (isset($error)): ?>
                         <div class="p-3 rounded-md bg-red-50 border border-red-200 text-red-600 text-sm">
                             <?php echo htmlspecialchars($error); ?>
@@ -42,7 +42,7 @@
                 </form>
 
                 <div class="mt-6 text-center">
-                    <a href="/BudgetBuddy-/login" class="inline-flex items-center text-sm font-medium text-primary hover:underline">
+                    <a href="/login" class="inline-flex items-center text-sm font-medium text-primary hover:underline">
                         <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i>
                         Back to Sign In
                     </a>

@@ -86,7 +86,7 @@
                     <div class="h-px flex-grow bg-gray-100 dark:bg-white/5"></div>
                 </div>
 
-                <form action="/BudgetBuddy-/login" method="POST" class="space-y-5 text-left">
+                <form action="/login" method="POST" class="space-y-5 text-left">
                     <?php if (isset($error)): ?>
                         <div class="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm font-medium">
                             <?php echo htmlspecialchars($error); ?>
@@ -117,7 +117,7 @@
                                 Password
                             </label>
                             <a
-                                href="/BudgetBuddy-/forgot-password"
+                                href="/forgot-password"
                                 class="text-xs font-bold text-primary dark:text-accent hover:underline"
                             >
                                 Forgot?
@@ -164,7 +164,7 @@
                 <div class="mt-8 text-center">
                     <p class="text-sm text-gray-600 dark:text-slate-400 font-medium">
                         Don't have an account?
-                        <a href="/BudgetBuddy-/register" class="font-bold text-primary dark:text-accent hover:underline ml-1">
+                        <a href="/register" class="font-bold text-primary dark:text-accent hover:underline ml-1">
                             Create one free
                         </a>
                     </p>

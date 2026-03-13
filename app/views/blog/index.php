@@ -3,7 +3,7 @@
     <section class="bg-gray-50 dark:bg-slate-900/50 py-20 pt-32">
         <div class="container mx-auto max-w-5xl px-6 text-center">
             <nav class="mb-8 flex justify-center text-sm text-gray-500 dark:text-slate-400 font-medium">
-                <a href="/BudgetBuddy-/" class="hover:text-primary dark:hover:text-accent transition-colors">Home</a>
+                <a href="/" class="hover:text-primary dark:hover:text-accent transition-colors">Home</a>
                 <span class="mx-3 text-gray-300 dark:text-slate-700">/</span>
                 <span class="text-gray-900 dark:text-white">Blog</span>
             </nav>
@@ -23,7 +23,7 @@
 
             <!-- Search and Sort Interface -->
             <div class="mt-12 max-w-3xl mx-auto space-y-6">
-                <form id="search-form" action="/BudgetBuddy-/blog" method="GET" class="flex flex-col md:flex-row items-center gap-4">
+                <form id="search-form" action="/blog" method="GET" class="flex flex-col md:flex-row items-center gap-4">
                     <div class="relative w-full group">
                         <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-slate-500 group-focus-within:text-primary dark:group-focus-within:text-accent transition-colors"></i>
                         <input 
@@ -54,13 +54,13 @@
                         <?php foreach ($popularTags as $tag): 
                             $isActive = ($currentTag === $tag);
                         ?>
-                            <a href="/BudgetBuddy-/blog?tag=<?php echo urlencode($tag); ?>" 
+                            <a href="/blog?tag=<?php echo urlencode($tag); ?>" 
                                class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all <?php echo $isActive ? 'bg-primary dark:bg-accent text-white dark:text-primary shadow-md' : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-400 border border-gray-200 dark:border-white/10 hover:border-primary/40 dark:hover:border-accent/40 hover:text-primary dark:hover:text-accent'; ?>">
                                 <?php echo htmlspecialchars($tag); ?>
                             </a>
                         <?php endforeach; ?>
                         <?php if (!empty($currentSearch) || !empty($currentTag)): ?>
-                            <a href="/BudgetBuddy-/blog" class="ml-2 p-2 text-gray-400 dark:text-slate-500 hover:text-red-500 transition-colors" title="Clear Filters">
+                            <a href="/blog" class="ml-2 p-2 text-gray-400 dark:text-slate-500 hover:text-red-500 transition-colors" title="Clear Filters">
                                 <i data-lucide="x-circle" class="h-5 w-5"></i>
                             </a>
                         <?php endif; ?>
@@ -91,7 +91,7 @@
                                     <span class="h-px w-12 bg-gray-200 dark:bg-slate-800"></span>
                                                                 Featured Blog
                                                             </h2>
-                                                            <a href="/BudgetBuddy-/<?php echo $featuredPost['slug']; ?>" class="group block">
+                                                            <a href="/<?php echo $featuredPost['slug']; ?>" class="group block">
                                                                 <article class="grid lg:grid-cols-12 gap-0 border border-gray-100 dark:border-white/5 rounded-[2.5rem] overflow-hidden bg-white dark:bg-slate-900 shadow-2xl dark:shadow-none shadow-gray-200/50 hover:shadow-primary/10 dark:hover:bg-slate-800/50 transition-all duration-700">                                        <div class="lg:col-span-7 aspect-video relative overflow-hidden">
                                             <img 
                                                 src="<?php echo htmlspecialchars($featuredPost['cover_image_url'] ?? 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&auto=format&fit=crop&q=60'); ?>" 
@@ -135,7 +135,7 @@
                             <?php 
                             foreach ($otherPosts as $index => $post): 
                             ?>
-                                <a href="/BudgetBuddy-/<?php echo $post['slug']; ?>" class="group block">
+                                <a href="/<?php echo $post['slug']; ?>" class="group block">
                                     <article class="flex flex-col h-full bg-white dark:bg-transparent transition-all">
                                         <div class="aspect-[16/11] overflow-hidden rounded-2xl relative mb-4 border border-gray-100 dark:border-white/10 shadow-sm group-hover:shadow-xl dark:group-hover:shadow-none group-hover:shadow-primary/5 dark:group-hover:bg-slate-900 transition-all duration-500">
                                             <img 

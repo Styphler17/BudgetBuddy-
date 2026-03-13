@@ -3,7 +3,7 @@
     <section class="bg-gray-50 dark:bg-slate-900/50 py-16 pt-32">
         <div class="container mx-auto max-w-4xl px-6 text-center">
             <nav class="mb-6 flex justify-center text-sm text-gray-500 dark:text-slate-400">
-                <a href="/BudgetBuddy-/" class="hover:text-primary dark:hover:text-accent">Home</a>
+                <a href="/" class="hover:text-primary dark:hover:text-accent">Home</a>
                 <span class="mx-2">&rarr;</span>
                 <span class="text-gray-900 dark:text-white font-medium">Cookie Policy</span>
             </nav>

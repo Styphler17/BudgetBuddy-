@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($title) ? $title . ' | BudgetBuddy App' : 'BudgetBuddy Dashboard'; ?></title>
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/BudgetBuddy-/public/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

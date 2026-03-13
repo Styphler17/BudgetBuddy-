@@ -6,10 +6,54 @@
     <title><?php echo isset($title) ? $title . ' | BudgetBuddy' : 'BudgetBuddy - Smart Financial Planning'; ?></title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/BudgetBuddy-/public/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
     
     <!-- Meta Tags -->
     <meta name="description" content="Track your spending, manage budgets, and achieve financial goals with BudgetBuddy.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://budgetbuddy.creativeutil.com/">
+    <meta property="og:title" content="BudgetBuddy - Smart Financial Planning">
+    <meta property="og:description" content="Track your spending, manage budgets, and achieve financial goals with BudgetBuddy.">
+    <meta property="og:image" content="https://budgetbuddy.creativeutil.com/public/og-image.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://budgetbuddy.creativeutil.com/">
+    <meta property="twitter:title" content="BudgetBuddy - Smart Financial Planning">
+    <meta property="twitter:description" content="Track your spending, manage budgets, and achieve financial goals with BudgetBuddy.">
+    <meta property="twitter:image" content="https://budgetbuddy.creativeutil.com/public/og-image.svg">
+
+    <!-- JSON-LD Structured Data (SEO & E-E-A-T) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "BudgetBuddy",
+      "url": "https://budgetbuddy.creativeutil.com/",
+      "logo": "https://budgetbuddy.creativeutil.com/public/BudgetBuddy.png",
+      "description": "Smart financial planning and expense tracking for individuals and small businesses.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "brastyphler17@gmail.com",
+        "contactType": "customer support"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "BudgetBuddy",
+      "url": "https://budgetbuddy.creativeutil.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://budgetbuddy.creativeutil.com/blog?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +61,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Custom Animations -->
-    <link rel="stylesheet" href="/BudgetBuddy-/public/css/animations.css">
+    <link rel="stylesheet" href="/public/css/animations.css">
     
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>

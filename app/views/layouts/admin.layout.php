@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title ?? 'Admin Panel'; ?> - BudgetBuddy Intelligence Hub</title>
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/BudgetBuddy-/public/BudgetBuddy.svg">
+    <link rel="icon" type="image/x-icon" href="/public/BudgetBuddy.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -18,7 +18,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
         
         <!-- Custom Animations -->
-        <link rel="stylesheet" href="/BudgetBuddy-/public/css/animations.css">
+        <link rel="stylesheet" href="/public/css/animations.css">
         
         <script>
         tailwind.config = {

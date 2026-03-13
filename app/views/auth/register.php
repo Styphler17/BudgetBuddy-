@@ -78,7 +78,7 @@
                     <div class="h-px flex-grow bg-gray-100 dark:bg-white/5"></div>
                 </div>
 
-                <form action="/BudgetBuddy-/register" method="POST" class="space-y-4 text-left">
+                <form action="/register" method="POST" class="space-y-4 text-left">
                     <?php if (isset($error)): ?>
                         <div class="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm font-medium">
                             <?php echo htmlspecialchars($error); ?>
@@ -183,7 +183,7 @@
                             required
                         />
                         <label for="terms" class="text-xs font-medium text-gray-600 dark:text-slate-400 leading-relaxed">
-                            I agree to the <a href="/BudgetBuddy-/terms" class="text-primary dark:text-accent hover:underline font-bold">Terms of Service</a> and <a href="/BudgetBuddy-/privacy-policy" class="text-primary dark:text-accent hover:underline font-bold">Privacy Policy</a>.
+                            I agree to the <a href="/terms" class="text-primary dark:text-accent hover:underline font-bold">Terms of Service</a> and <a href="/privacy-policy" class="text-primary dark:text-accent hover:underline font-bold">Privacy Policy</a>.
                         </label>
                     </div>
 
@@ -200,7 +200,7 @@
                 <div class="mt-8 text-center">
                     <p class="text-sm text-gray-600 dark:text-slate-400 font-medium font-body">
                         Already have an account?
-                        <a href="/BudgetBuddy-/login" class="font-bold text-primary dark:text-accent hover:underline ml-1">
+                        <a href="/login" class="font-bold text-primary dark:text-accent hover:underline ml-1">
                             Sign in instead
                         </a>
                     </p>

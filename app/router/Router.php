@@ -5,7 +5,7 @@
  */
 
 class Router {
-    private $basePath = '/BudgetBuddy-';
+    private $basePath = '/';
 
     public function handleRequest() {
         $uri = $_SERVER['REQUEST_URI'];

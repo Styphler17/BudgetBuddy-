@@ -3,7 +3,7 @@
     <section class="bg-gray-50 dark:bg-slate-900/50 py-16 pt-32">
         <div class="container mx-auto max-w-4xl px-6 text-center">
             <nav class="mb-6 flex justify-center text-sm text-gray-500 dark:text-slate-400">
-                <a href="/BudgetBuddy-/" class="hover:text-primary dark:hover:text-accent">Home</a>
+                <a href="/" class="hover:text-primary dark:hover:text-accent">Home</a>
                 <span class="mx-2">&rarr;</span>
                 <span class="text-gray-900 dark:text-white font-medium">Security</span>
             </nav>
@@ -78,7 +78,7 @@
                 <p class="text-gray-400 mb-8 leading-relaxed">
                     We take security seriously. If you've discovered a vulnerability, please report it to our security team immediately.
                 </p>
-                <a href="/BudgetBuddy-/contact" class="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-accent text-gray-900 dark:text-primary font-bold rounded-xl hover:scale-105 transition-all shadow-xl dark:shadow-none">
+                <a href="/contact" class="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-accent text-gray-900 dark:text-primary font-bold rounded-xl hover:scale-105 transition-all shadow-xl dark:shadow-none">
                     Report Vulnerability
                 </a>
             </div>
