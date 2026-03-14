@@ -20,6 +20,22 @@ class Account {
     }
 
     /**
+     * Create a new account
+     */
+    public function create($data) {
+        $sql = "INSERT INTO accounts (user_id, name, type, balance, currency, created_at) 
+                VALUES (:user_id, :name, :type, :balance, :currency, NOW())";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            'user_id' => $data['user_id'],
+            'name' => $data['name'],
+            'type' => $data['type'],
+            'balance' => $data['balance'] ?? 0,
+            'currency' => $data['currency'] ?? 'USD'
+        ]);
+    }
+
+    /**
      * Update account details
      */
     public function update($id, $data) {
