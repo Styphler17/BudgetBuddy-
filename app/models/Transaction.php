@@ -112,8 +112,7 @@ class Transaction {
                 amount = :amount, 
                 description = :description, 
                 type = :type, 
-                date = :date,
-                updated_at = NOW() 
+                date = :date
                 WHERE id = :id";
         
         $stmt = $this->db->prepare($sql);

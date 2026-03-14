@@ -78,8 +78,7 @@ class RecurringTransaction {
                 description = :description, 
                 type = :type, 
                 frequency = :frequency, 
-                start_date = :start_date,
-                updated_at = NOW() 
+                start_date = :start_date
                 WHERE id = :id";
         
         $stmt = $this->db->prepare($sql);
