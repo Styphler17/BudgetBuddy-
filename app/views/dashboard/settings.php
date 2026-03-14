@@ -204,9 +204,9 @@
                     <p class="text-sm font-medium text-gray-900 dark:text-white">Export Data</p>
                     <p class="text-sm text-gray-500 dark:text-slate-300">Download all your financial data</p>
                 </div>
-                <button class="inline-flex items-center justify-center rounded-md border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                <a href="<?php echo BASE_URL; ?>/transactions/export" class="inline-flex items-center justify-center rounded-md border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                     Export
-                </button>
+                </a>
             </div>
 
             <div class="border-t border-gray-100 dark:border-white/5 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
