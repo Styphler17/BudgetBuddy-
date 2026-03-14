@@ -175,14 +175,14 @@
                     <label for="preferred_currency" class="text-sm font-medium text-gray-700 dark:text-slate-300">Preferred Currency</label>
                     <div class="flex gap-2">
                         <select id="preferred_currency" name="currency" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none appearance-none bg-white dark:bg-slate-800">
-                            <option value="USD">USD ($) - US Dollar</option>
-                            <option value="EUR">EUR (€) - Euro</option>
-                            <option value="GBP">GBP (£) - British Pound</option>
-                            <option value="JPY">JPY (¥) - Japanese Yen</option>
-                            <option value="CAD">CAD ($) - Canadian Dollar</option>
-                            <option value="AUD">AUD ($) - Australian Dollar</option>
-                            <option value="GHS">GHS (₵) - Ghanaian Cedi</option>
-                            <option value="NGN">NGN (₦) - Nigerian Naira</option>
+                            <option value="USD" <?php echo ($user['currency'] ?? 'USD') === 'USD' ? 'selected' : ''; ?>>USD ($) - US Dollar</option>
+                            <option value="EUR" <?php echo ($user['currency'] ?? '') === 'EUR' ? 'selected' : ''; ?>>EUR (€) - Euro</option>
+                            <option value="GBP" <?php echo ($user['currency'] ?? '') === 'GBP' ? 'selected' : ''; ?>>GBP (£) - British Pound</option>
+                            <option value="JPY" <?php echo ($user['currency'] ?? '') === 'JPY' ? 'selected' : ''; ?>>JPY (¥) - Japanese Yen</option>
+                            <option value="CAD" <?php echo ($user['currency'] ?? '') === 'CAD' ? 'selected' : ''; ?>>CAD ($) - Canadian Dollar</option>
+                            <option value="AUD" <?php echo ($user['currency'] ?? '') === 'AUD' ? 'selected' : ''; ?>>AUD ($) - Australian Dollar</option>
+                            <option value="GHS" <?php echo ($user['currency'] ?? '') === 'GHS' ? 'selected' : ''; ?>>GHS (₵) - Ghanaian Cedi</option>
+                            <option value="NGN" <?php echo ($user['currency'] ?? '') === 'NGN' ? 'selected' : ''; ?>>NGN (₦) - Nigerian Naira</option>
                         </select>
                         <button type="submit" class="inline-flex items-center justify-center rounded-md bg-primary dark:bg-accent px-4 text-sm font-medium text-white dark:text-primary hover:bg-primary/90 transition-colors">
                             Save

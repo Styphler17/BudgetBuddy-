@@ -429,6 +429,18 @@ class DashboardController extends BaseController {
                 $this->redirect('/settings');
             }
 
+            if ($action === 'update_currency') {
+                $data = ['currency' => $_POST['currency']];
+                $userModel->update($this->userId, $data);
+                
+                // Audit Log
+                try {
+                    (new AuditLog())->log($this->userId, 'Currency Update', 'User updated preferred currency to ' . $_POST['currency']);
+                } catch (Exception $e) {}
+                
+                $this->redirect('/settings');
+            }
+
             if ($action === 'delete_account') {
                 // Audit Log (Log before deletion)
                 try {
