@@ -204,11 +204,11 @@
                     <p class="text-sm font-medium text-gray-900 dark:text-white">Export Data</p>
                     <p class="text-sm text-gray-500 dark:text-slate-300">Download all your financial records</p>
                 </div>
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <a href="<?php echo BASE_URL; ?>/transactions/export" class="flex-1 sm:flex-none inline-flex items-center justify-center rounded-xl border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <a href="<?php echo BASE_URL; ?>/transactions/export" class="flex-1 sm:flex-none inline-flex h-11 items-center justify-center rounded-xl border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 px-6 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-all whitespace-nowrap shadow-sm">
                         CSV
                     </a>
-                    <a href="<?php echo BASE_URL; ?>/transactions/print" target="_blank" class="flex-1 sm:flex-none inline-flex items-center justify-center rounded-xl border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
+                    <a href="<?php echo BASE_URL; ?>/transactions/print" target="_blank" class="flex-1 sm:flex-none inline-flex h-11 items-center justify-center rounded-xl border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 px-6 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-all whitespace-nowrap shadow-sm">
                         PDF Report
                     </a>
                 </div>

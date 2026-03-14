@@ -7,16 +7,16 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
             <div class="flex gap-2">
-                <a href="<?php echo BASE_URL; ?>/transactions/export?<?php echo http_build_query($_GET); ?>" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-5 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm">
+                <a href="<?php echo BASE_URL; ?>/transactions/export?<?php echo http_build_query($_GET); ?>" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-6 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm whitespace-nowrap">
                     <i data-lucide="file-text" class="mr-2 h-4 w-4"></i>
                     CSV
                 </a>
-                <a href="<?php echo BASE_URL; ?>/transactions/print?<?php echo http_build_query($_GET); ?>" target="_blank" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-5 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm">
+                <a href="<?php echo BASE_URL; ?>/transactions/print?<?php echo http_build_query($_GET); ?>" target="_blank" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-6 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm whitespace-nowrap">
                     <i data-lucide="printer" class="mr-2 h-4 w-4"></i>
                     PDF
                 </a>
             </div>
-            <button onclick="openModal('add-transaction-modal')" class="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full sm:w-auto">
+            <button onclick="openModal('add-transaction-modal')" class="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-6 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full sm:w-auto">
                 <i data-lucide="plus" class="h-4 w-4 mr-2"></i>
                 Add Transaction
             </button>
