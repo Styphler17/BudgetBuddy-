@@ -62,7 +62,7 @@
 
                     <div class="space-y-1 py-2">
                         <p class="text-[10px] text-gray-400 dark:text-slate-500 uppercase tracking-widest font-black">Available Balance</p>
-                        <p class="text-3xl font-black text-gray-900 dark:text-white font-outfit tracking-tight leading-none"><?php echo CurrencyHelper::format($acc['balance'], $acc['currency'] ?? 'USD'); ?></p>
+                        <p class="text-3xl font-black text-gray-900 dark:text-white font-outfit tracking-tight leading-none"><?php echo CurrencyHelper::format($acc['balance'], $acc['currency'] ?? $currency); ?></p>
                     </div>
 
                     <div class="pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between">

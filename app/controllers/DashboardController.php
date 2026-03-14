@@ -12,6 +12,12 @@ class DashboardController extends BaseController {
             $this->redirect('/login');
         }
         $this->userId = $_SESSION['user_id'];
+        
+        // Sync currency to session for helpers
+        $userModel = new User();
+        $user = $userModel->findById($this->userId);
+        $_SESSION['user_currency'] = $user['currency'] ?? 'USD';
+
         $this->processRecurring();
     }
 
@@ -449,6 +455,9 @@ class DashboardController extends BaseController {
             if ($action === 'update_currency') {
                 $data = ['currency' => $_POST['currency']];
                 $userModel->update($this->userId, $data);
+                
+                // Immediate session sync
+                $_SESSION['user_currency'] = $_POST['currency'];
                 
                 // Audit Log
                 try {

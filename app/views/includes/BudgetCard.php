@@ -32,7 +32,7 @@ $progressColor = $progressColors[$variant] ?? $progressColors['default'];
 
 // Defensive defaults
 $title = $title ?? 'Metric';
-$amount = $amount ?? '$0.00';
+$amount = $amount ?? '0.00';
 ?>
 
 <div class="glowing-wrapper">

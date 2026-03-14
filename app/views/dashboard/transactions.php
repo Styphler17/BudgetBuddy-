@@ -116,7 +116,7 @@
                     
                     <div class="flex items-center gap-6">
                         <p class="text-lg font-black <?php echo $tx['type'] === 'income' ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'; ?> font-outfit">
-                            <?php echo $tx['type'] === 'income' ? '+' : '-'; ?><?php echo CurrencyHelper::format($tx['amount'], $currency); ?>
+                            <?php echo $tx['type'] === 'income' ? '+' : '-'; ?><?php echo CurrencyHelper::autoFormat($tx['amount']); ?>
                         </p>
                         <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
                             <button onclick='openEditTransactionModal(<?php echo json_encode($tx); ?>)' class="p-2 text-gray-400 dark:text-slate-500 hover:text-gray-900 dark:hover:text-white transition-colors bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-white/5"><i data-lucide="edit-3" class="h-4 w-4"></i></button>

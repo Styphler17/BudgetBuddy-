@@ -27,13 +27,12 @@
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         <?php 
-            require_once APP_PATH . '/views/includes/BudgetCard.php'; 
             $currency = $metrics['currency'] ?? 'USD';
             
             // Total Balance Card
             $data = [
                 'title' => 'Total Balance (' . $currency . ')',
-                'amount' => CurrencyHelper::format($metrics['balance'], $currency),
+                'amount' => CurrencyHelper::autoFormat($metrics['balance']),
                 'icon' => 'wallet',
                 'variant' => 'default'
             ];
@@ -43,7 +42,7 @@
             // Total Income Card
             $data = [
                 'title' => 'Monthly Income',
-                'amount' => CurrencyHelper::format($metrics['income'], $currency),
+                'amount' => CurrencyHelper::autoFormat($metrics['income']),
                 'icon' => 'trending-up',
                 'variant' => 'success'
             ];
@@ -53,7 +52,7 @@
             // Total Expenses Card
             $data = [
                 'title' => 'Monthly Expenses',
-                'amount' => CurrencyHelper::format($metrics['expense'], $currency),
+                'amount' => CurrencyHelper::autoFormat($metrics['expense']),
                 'icon' => 'trending-down',
                 'variant' => 'destructive',
                 'percentage' => $metrics['income'] > 0 ? round(($metrics['expense'] / $metrics['income']) * 100) : 0
@@ -64,7 +63,7 @@
             // Savings Card
             $data = [
                 'title' => 'Net Savings',
-                'amount' => CurrencyHelper::format($metrics['savings'], $currency),
+                'amount' => CurrencyHelper::autoFormat($metrics['savings']),
                 'icon' => 'target',
                 'variant' => 'accent'
             ];
@@ -110,7 +109,7 @@
                         </div>
                         <div class="text-right">
                             <p class="font-bold <?php echo $tx['type'] === 'income' ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'; ?>">
-                                <?php echo $tx['type'] === 'income' ? '+' : '-'; ?><?php echo CurrencyHelper::format($tx['amount'], $currency); ?>
+                                <?php echo $tx['type'] === 'income' ? '+' : '-'; ?><?php echo CurrencyHelper::autoFormat($tx['amount']); ?>
                             </p>
                         </div>
                     </div>
@@ -137,7 +136,7 @@
                     <div class="space-y-2">
                         <div class="flex justify-between items-end">
                             <p class="text-sm font-medium text-gray-700 dark:text-slate-300"><?php echo htmlspecialchars($budget['name']); ?></p>
-                            <p class="text-sm text-gray-500 dark:text-slate-300"><?php echo CurrencyHelper::format($budget['spent'], $currency); ?> / <?php echo CurrencyHelper::format($budget['limit'], $currency); ?></p>
+                            <p class="text-sm text-gray-500 dark:text-slate-300"><?php echo CurrencyHelper::autoFormat($budget['spent']); ?> / <?php echo CurrencyHelper::autoFormat($budget['limit']); ?></p>
                         </div>
                         <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                             <div class="h-full rounded-full transition-all <?php 
@@ -179,7 +178,7 @@
                         <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                             <div class="h-full bg-accent rounded-full transition-all" style="width: <?php echo min($goalPercentage, 100); ?>%"></div>
                         </div>
-                        <p class="text-[10px] text-gray-400 dark:text-slate-500 text-right"><?php echo CurrencyHelper::format($goal['current_amount'], $currency); ?> / <?php echo CurrencyHelper::format($goal['target_amount'], $currency); ?></p>
+                        <p class="text-[10px] text-gray-400 dark:text-slate-500 text-right"><?php echo CurrencyHelper::autoFormat($goal['current_amount']); ?> / <?php echo CurrencyHelper::autoFormat($goal['target_amount']); ?></p>
                     </div>
                     <?php endforeach; ?>
                 </div>
