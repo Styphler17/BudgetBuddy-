@@ -48,7 +48,7 @@ $current_page = $_SERVER['REQUEST_URI'];
 
     <!-- Footer -->
     <div class="p-4 border-t border-gray-200">
-        <a href="<?php echo BASE_URL; ?>/" class="flex items-center justify-center gap-2 p-3 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors text-xs font-bold mb-4">
+        <a href="<?php echo BASE_URL; ?>/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 p-3 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors text-xs font-bold mb-4">
             <i data-lucide="monitor" class="h-4 w-4"></i>
             View Live Site
         </a>
