@@ -76,7 +76,7 @@ class User {
         $fields = [];
         $params = [':id' => $id];
 
-        $allowedFields = ['name', 'email', 'password_hash', 'currency', 'is_active', 'email_verified', 'two_factor_secret', 'two_factor_enabled', 'recovery_codes'];
+        $allowedFields = ['name', 'email', 'password_hash', 'currency', 'is_active', 'email_verified', 'two_factor_secret', 'two_factor_enabled', 'recovery_codes', 'profile_pic'];
         foreach ($allowedFields as $f) {
             if (isset($data[$f])) {
                 $fields[] = "$f = :$f";

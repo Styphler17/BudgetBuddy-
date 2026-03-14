@@ -8,7 +8,31 @@
         <!-- Profile Info -->
         <div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
             <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-6">Admin Details</h2>
-            <form action="" method="POST" class="space-y-4">
+            <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
+                
+                <!-- Profile Picture Upload -->
+                <div class="flex items-center gap-6 mb-6">
+                    <div class="relative group">
+                        <div class="h-20 w-20 rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-slate-800">
+                            <?php if ($admin['profile_pic']): ?>
+                                <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $admin['profile_pic']; ?>" class="h-full w-full object-cover">
+                            <?php else: ?>
+                                <div class="h-full w-full flex items-center justify-center text-gray-400">
+                                    <i data-lucide="user" class="h-10 w-10"></i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <label for="admin_profile_pic_input" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-2xl">
+                            <i data-lucide="camera" class="h-6 w-6 text-white"></i>
+                        </label>
+                        <input type="file" id="admin_profile_pic_input" name="profile_pic" class="hidden" accept="image/*" onchange="this.form.submit()">
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-900 dark:text-white">Admin Avatar</h4>
+                        <p class="text-xs text-gray-500 dark:text-slate-400">Click to change profile picture</p>
+                    </div>
+                </div>
+
                 <div class="space-y-2">
                     <label for="admin_display_name" class="text-sm font-medium text-gray-700 dark:text-slate-300">Display Name</label>
                     <input id="admin_display_name" type="text" name="name" value="<?php echo htmlspecialchars($admin['name']); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none" required>

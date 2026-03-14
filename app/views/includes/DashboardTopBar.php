@@ -31,15 +31,19 @@
         <?php include APP_PATH . '/views/includes/ThemeSwitcher.php'; ?>
 
         <?php if (isset($_SESSION['user_id'])): ?>
-            <div class="flex items-center gap-3 pl-2 border-l border-gray-100 dark:border-white/10">
+            <a href="<?php echo BASE_URL; ?>/settings" class="flex items-center gap-3 pl-2 border-l border-gray-100 dark:border-white/10 group">
                 <div class="flex flex-col text-right hidden sm:flex">
-                    <span class="text-sm font-bold text-gray-900 dark:text-white leading-none mb-1"><?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?></span>
-                    <span class="text-[10px] font-black text-primary dark:text-accent uppercase tracking-widest">Active</span>
+                    <span class="text-sm font-bold text-gray-900 dark:text-white leading-none mb-1 group-hover:text-primary transition-colors"><?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?></span>
+                    <span class="text-[10px] font-black text-primary dark:text-accent uppercase tracking-widest">Settings</span>
                 </div>
-                <div class="h-9 w-9 rounded-xl bg-primary dark:bg-accent flex items-center justify-center text-white dark:text-primary font-black text-sm shadow-md cursor-pointer transition-transform hover:rotate-6">
-                    <?php echo isset($_SESSION['user_name']) ? strtoupper(substr($_SESSION['user_name'], 0, 1)) : 'U'; ?>
+                <div class="h-9 w-9 rounded-xl bg-primary dark:bg-accent flex items-center justify-center text-white dark:text-primary font-black text-sm shadow-md cursor-pointer transition-all hover:rotate-6 overflow-hidden">
+                    <?php if (isset($_SESSION['user_profile_pic']) && $_SESSION['user_profile_pic']): ?>
+                        <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $_SESSION['user_profile_pic']; ?>" class="h-full w-full object-cover">
+                    <?php else: ?>
+                        <?php echo isset($_SESSION['user_name']) ? strtoupper(substr($_SESSION['user_name'], 0, 1)) : 'U'; ?>
+                    <?php endif; ?>
                 </div>
-            </div>
+            </a>
         <?php endif; ?>
     </div>
 </header>

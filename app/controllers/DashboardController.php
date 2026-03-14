@@ -427,6 +427,29 @@ class DashboardController extends BaseController {
                     'name' => $_POST['name'],
                     'email' => $_POST['email']
                 ];
+
+                // Handle Profile Picture Upload
+                if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = 'public/uploads/profile_pics/';
+                    $fileTmpPath = $_FILES['profile_pic']['tmp_name'];
+                    $fileName = $_FILES['profile_pic']['name'];
+                    $fileSize = $_FILES['profile_pic']['size'];
+                    $fileType = $_FILES['profile_pic']['type'];
+                    $fileNameCmps = explode(".", $fileName);
+                    $fileExtension = strtolower(end($fileNameCmps));
+
+                    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+                    $allowedExtensions = array('jpg', 'gif', 'png', 'jpeg', 'webp');
+
+                    if (in_array($fileExtension, $allowedExtensions)) {
+                        $dest_path = $uploadDir . $newFileName;
+                        if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                            $data['profile_pic'] = $newFileName;
+                            $_SESSION['user_profile_pic'] = $newFileName;
+                        }
+                    }
+                }
+
                 $userModel->update($this->userId, $data);
                 $_SESSION['user_name'] = $data['name'];
                 

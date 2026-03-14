@@ -18,6 +18,7 @@ class AuthController extends BaseController {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_profile_pic'] = $user['profile_pic'] ?? null;
                 
                 // Audit Log
                 try {
@@ -155,6 +156,32 @@ class AuthController extends BaseController {
         ]);
     }
 
+    public function adminLogin() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = trim($_POST['email'] ?? '');
+            $password = $_POST['password'] ?? '';
+            
+            $adminModel = new Admin();
+            $admin = $adminModel->verify($email, $password);
+            
+            if ($admin) {
+                $_SESSION['admin_id'] = $admin['id'];
+                $_SESSION['admin_name'] = $admin['name'];
+                $_SESSION['admin_email'] = $admin['email'];
+                $_SESSION['admin_profile_pic'] = $admin['profile_pic'] ?? null;
+                $this->redirect('/admin');
+            } else {
+                $error = "Invalid admin credentials.";
+            }
+        }
+        
+        $this->render('auth/admin-login', [
+            'title' => 'Admin Sign In',
+            'layout' => 'auth',
+            'error' => $error ?? null
+        ]);
+    }
+
     public function forgotPassword() {
         $this->render('auth/forgot-password', [
             'title' => 'Reset Password',
@@ -167,6 +194,9 @@ class AuthController extends BaseController {
             try {
                 (new AuditLog())->log($_SESSION['user_id'], 'Logout', 'User logged out');
             } catch (Exception $e) {}
+        }
+        if (isset($_SESSION['admin_id'])) {
+            // Log admin logout if needed
         }
         session_destroy();
         $this->redirect('/');

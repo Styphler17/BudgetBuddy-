@@ -54,8 +54,12 @@ $current_page = $_SERVER['REQUEST_URI'];
         </a>
 
         <div class="flex items-center gap-3 p-2">
-            <div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
-                <?php echo isset($_SESSION['admin_name']) ? strtoupper(substr($_SESSION['admin_name'], 0, 1)) : 'A'; ?>
+            <div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary overflow-hidden">
+                <?php if (isset($_SESSION['admin_profile_pic']) && $_SESSION['admin_profile_pic']): ?>
+                    <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $_SESSION['admin_profile_pic']; ?>" class="h-full w-full object-cover">
+                <?php else: ?>
+                    <?php echo isset($_SESSION['admin_name']) ? strtoupper(substr($_SESSION['admin_name'], 0, 1)) : 'A'; ?>
+                <?php endif; ?>
             </div>
             <div class="flex-1 min-w-0">
                 <p class="text-xs font-bold text-gray-900 truncate"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Administrator'); ?></p>

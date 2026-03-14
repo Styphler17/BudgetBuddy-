@@ -19,6 +19,8 @@ try {
         
         // 3. Account Table Updates
         "ALTER TABLE accounts ADD COLUMN IF NOT EXISTS currency VARCHAR(3) DEFAULT 'USD'",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_pic VARCHAR(255) DEFAULT NULL",
+        "ALTER TABLE admins ADD COLUMN IF NOT EXISTS profile_pic VARCHAR(255) DEFAULT NULL",
         
         // 4. Create User Logs Table
         "CREATE TABLE IF NOT EXISTS user_logs (

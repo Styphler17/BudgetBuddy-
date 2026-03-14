@@ -45,8 +45,12 @@ $menu_items = [
 
     <div class="p-4 border-t border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-slate-900/50">
         <div class="flex items-center gap-3 p-2">
-            <div class="h-10 w-10 rounded-xl bg-primary dark:bg-accent flex items-center justify-center text-white dark:text-primary font-bold text-sm shadow-md">
-                <?php echo isset($_SESSION['user_name']) ? strtoupper(substr($_SESSION['user_name'], 0, 2)) : 'U'; ?>
+            <div class="h-10 w-10 rounded-xl bg-primary dark:bg-accent flex items-center justify-center text-white dark:text-primary font-bold text-sm shadow-md overflow-hidden">
+                <?php if (isset($_SESSION['user_profile_pic']) && $_SESSION['user_profile_pic']): ?>
+                    <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $_SESSION['user_profile_pic']; ?>" class="h-full w-full object-cover">
+                <?php else: ?>
+                    <?php echo isset($_SESSION['user_name']) ? strtoupper(substr($_SESSION['user_name'], 0, 2)) : 'U'; ?>
+                <?php endif; ?>
             </div>
             <div class="flex-1 min-w-0">
                 <p class="text-sm font-bold text-gray-900 dark:text-white truncate"><?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?></p>

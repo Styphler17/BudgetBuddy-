@@ -25,8 +25,32 @@
                     <?php endif; ?>
                 </div>
                 
-                <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
+                <form action="<?php echo BASE_URL; ?>/settings" method="POST" enctype="multipart/form-data" class="space-y-4">
                     <input type="hidden" name="action" value="update_profile">
+                    
+                    <!-- Profile Picture Upload -->
+                    <div class="flex items-center gap-6 mb-6">
+                        <div class="relative group">
+                            <div class="h-20 w-20 rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-slate-800">
+                                <?php if ($user['profile_pic']): ?>
+                                    <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $user['profile_pic']; ?>" class="h-full w-full object-cover">
+                                <?php else: ?>
+                                    <div class="h-full w-full flex items-center justify-center text-gray-400">
+                                        <i data-lucide="user" class="h-10 w-10"></i>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <label for="profile_pic_input" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-2xl">
+                                <i data-lucide="camera" class="h-6 w-6 text-white"></i>
+                            </label>
+                            <input type="file" id="profile_pic_input" name="profile_pic" class="hidden" accept="image/*" onchange="this.form.submit()">
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-white">Profile Picture</h4>
+                            <p class="text-xs text-gray-500 dark:text-slate-400">Click avatar to upload new image</p>
+                        </div>
+                    </div>
+
                     <div class="space-y-2">
                         <label for="profile_name" class="text-sm font-medium text-gray-700 dark:text-slate-300">Display Name</label>
                         <input id="profile_name" type="text" name="name" value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none">

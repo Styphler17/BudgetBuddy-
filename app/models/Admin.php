@@ -130,6 +130,10 @@ class Admin {
             $fields[] = "role = :role";
             $params[':role'] = $data['role'];
         }
+        if (isset($data['profile_pic'])) {
+            $fields[] = "profile_pic = :profile_pic";
+            $params[':profile_pic'] = $data['profile_pic'];
+        }
 
         if (empty($fields)) return false;
 
