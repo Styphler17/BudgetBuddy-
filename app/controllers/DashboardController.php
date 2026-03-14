@@ -305,24 +305,15 @@ class DashboardController extends BaseController {
         $transactions = $transactionModel->getByUserId($this->userId, 1000);
         $categories = $categoryModel->getByUserId($this->userId);
         
-        $income = $transactionModel->getTotals($this->userId, 'income', date('Y-m-01'), date('Y-m-d'));
-        $expense = $transactionModel->getTotals($this->userId, 'expense', date('Y-m-01'), date('Y-m-d'));
+        $income = $transactionModel->getTotals($this->userId, 'income', date('Y-m-01'), date('Y-m-d'), $preferredCurrency);
+        $expense = $transactionModel->getTotals($this->userId, 'expense', date('Y-m-01'), date('Y-m-d'), $preferredCurrency);
 
-        // Get daily stats for the last 30 days
+        // Get daily stats for the last 30 days (Multi-currency aware)
         $startDate = date('Y-m-d', strtotime('-30 days'));
-        $dailyStats = $transactionModel->getDailyStats($this->userId, $startDate, date('Y-m-d'));
+        $dailyStats = $transactionModel->getDailyStats($this->userId, $startDate, date('Y-m-d'), $preferredCurrency);
 
-        // Calculate spending per category
-        $categoryData = [];
-        foreach ($categories as $cat) {
-            $stmt = Database::getConnection()->prepare("SELECT SUM(amount) as total FROM transactions WHERE user_id = ? AND category_id = ? AND type = 'expense'");
-            $stmt->execute([$this->userId, $cat['id']]);
-            $total = $stmt->fetch()['total'] ?? 0;
-            $categoryData[] = [
-                'name' => $cat['name'],
-                'spent' => (float)$total
-            ];
-        }
+        // Calculate spending per category (Multi-currency aware)
+        $categoryData = $transactionModel->getCategorySpending($this->userId, $categories, $preferredCurrency);
 
         $this->render('dashboard/analytics', [
             'title' => 'Analytics',

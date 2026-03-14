@@ -166,20 +166,80 @@ class Transaction {
     }
 
     /**
-     * Get daily totals for income and expenses over a period
+     * Get daily totals for income and expenses over a period (Multi-currency aware)
      */
-    public function getDailyStats($userId, $startDate, $endDate) {
-        $stmt = $this->db->prepare("
-            SELECT date, 
-                   SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
-                   SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
-            FROM transactions 
-            WHERE user_id = ? AND is_transfer = 0 AND date BETWEEN ? AND ?
-            GROUP BY date
-            ORDER BY date ASC
-        ");
+    public function getDailyStats($userId, $startDate, $endDate, $preferredCurrency = 'USD') {
+        $sql = "SELECT t.date, t.amount, t.type, a.currency 
+                FROM transactions t
+                LEFT JOIN accounts a ON t.account_id = a.id
+                WHERE t.user_id = ? AND t.is_transfer = 0 
+                AND t.date BETWEEN ? AND ?";
+        
+        $stmt = $this->db->prepare($sql);
         $stmt->execute([$userId, $startDate, $endDate]);
-        return $stmt->fetchAll();
+        $rows = $stmt->fetchAll();
+
+        $currencyService = new CurrencyService();
+        $stats = [];
+
+        foreach ($rows as $row) {
+            $date = $row['date'];
+            $amount = (float)$row['amount'];
+            $type = $row['type'];
+            $txCurrency = $row['currency'] ?? 'USD';
+
+            if (!isset($stats[$date])) {
+                $stats[$date] = ['date' => $date, 'income' => 0, 'expense' => 0];
+            }
+
+            $convertedAmount = ($txCurrency !== $preferredCurrency) 
+                ? $currencyService->convert($amount, $txCurrency, $preferredCurrency)
+                : $amount;
+
+            if ($type === 'income') {
+                $stats[$date]['income'] += $convertedAmount;
+            } else {
+                $stats[$date]['expense'] += $convertedAmount;
+            }
+        }
+
+        return array_values($stats);
+    }
+
+    /**
+     * Get spending per category (Multi-currency aware)
+     */
+    public function getCategorySpending($userId, $categories, $preferredCurrency = 'USD') {
+        $currencyService = new CurrencyService();
+        $categoryData = [];
+
+        foreach ($categories as $cat) {
+            $sql = "SELECT t.amount, a.currency 
+                    FROM transactions t
+                    LEFT JOIN accounts a ON t.account_id = a.id
+                    WHERE t.user_id = ? AND t.category_id = ? AND t.type = 'expense'";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$userId, $cat['id']]);
+            $rows = $stmt->fetchAll();
+
+            $total = 0;
+            foreach ($rows as $row) {
+                $amount = (float)$row['amount'];
+                $txCurrency = $row['currency'] ?? 'USD';
+                
+                $total += ($txCurrency !== $preferredCurrency) 
+                    ? $currencyService->convert($amount, $txCurrency, $preferredCurrency)
+                    : $amount;
+            }
+
+            $categoryData[] = [
+                'name' => $cat['name'],
+                'spent' => (float)$total
+            ];
+        }
+
+        return $categoryData;
     }
 
     /**
