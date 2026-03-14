@@ -321,6 +321,7 @@ class DashboardController extends BaseController {
     public function settings() {
         $userModel = new User();
         $user = $userModel->findById($this->userId);
+        $activityLogs = (new AuditLog())->getByUserId($this->userId, 10);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
@@ -332,6 +333,10 @@ class DashboardController extends BaseController {
                 ];
                 $userModel->update($this->userId, $data);
                 $_SESSION['user_name'] = $data['name'];
+                
+                // Audit Log
+                (new AuditLog())->log($this->userId, 'Profile Update', 'User updated display name or email');
+                
                 $this->redirect('/settings');
             }
             
@@ -341,6 +346,9 @@ class DashboardController extends BaseController {
                 if ($password === $confirm && !empty($password)) {
                     $data = ['password_hash' => password_hash($password, PASSWORD_DEFAULT)];
                     $userModel->update($this->userId, $data);
+                    
+                    // Audit Log
+                    (new AuditLog())->log($this->userId, 'Password Change', 'User changed their password');
                 }
                 $this->redirect('/settings');
             }
@@ -354,17 +362,24 @@ class DashboardController extends BaseController {
                         'two_factor_enabled' => 1,
                         'two_factor_secret' => $secret
                     ];
+                    // Audit Log
+                    (new AuditLog())->log($this->userId, '2FA Enabled', 'User enabled Two-Factor Authentication');
                 } else {
                     $data = [
                         'two_factor_enabled' => 0,
                         'two_factor_secret' => null
                     ];
+                    // Audit Log
+                    (new AuditLog())->log($this->userId, '2FA Disabled', 'User disabled Two-Factor Authentication');
                 }
                 $userModel->update($this->userId, $data);
                 $this->redirect('/settings');
             }
 
             if ($action === 'delete_account') {
+                // Audit Log (Log before deletion)
+                (new AuditLog())->log($this->userId, 'Account Deletion', 'User deleted their account');
+                
                 $userModel->delete($this->userId);
                 session_destroy();
                 $this->redirect('/');
@@ -374,7 +389,8 @@ class DashboardController extends BaseController {
         $this->render('dashboard/settings', [
             'title' => 'Settings',
             'layout' => 'dashboard',
-            'user' => $user
+            'user' => $user,
+            'activityLogs' => $activityLogs
         ]);
     }
 

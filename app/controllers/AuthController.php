@@ -18,6 +18,10 @@ class AuthController extends BaseController {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_email'] = $user['email'];
+                
+                // Audit Log
+                (new AuditLog())->log($user['id'], 'Login', 'Successful login');
+                
                 $this->redirect('/dashboard');
             } elseif ($result && $result['status'] === 'require_2fa') {
                 $_SESSION['temp_user_id'] = $result['user']['id'];
@@ -55,6 +59,10 @@ class AuthController extends BaseController {
                     $_SESSION['user_name'] = $user['name'];
                     $_SESSION['user_email'] = $user['email'];
                     unset($_SESSION['temp_user_id']);
+                    
+                    // Audit Log
+                    (new AuditLog())->log($user['id'], '2FA Login', 'Successful 2FA verification');
+                    
                     $this->redirect('/dashboard');
                 } else {
                     $error = "Invalid 2FA code.";
@@ -91,6 +99,10 @@ class AuthController extends BaseController {
                     
                     @mail($data['email'], $subject, $message);
                     
+                    // Audit Log
+                    $user = $userModel->findByEmail($data['email']);
+                    if ($user) (new AuditLog())->log($user['id'], 'Registration', 'Account created, pending verification');
+                    
                     $this->render('auth/register-success', [
                         'title' => 'Registration Successful',
                         'layout' => 'auth',
@@ -121,6 +133,8 @@ class AuthController extends BaseController {
         $userModel = new User();
         if ($userModel->verifyEmail($token)) {
             $success = "Email verified successfully! You can now log in.";
+            // Audit Log (Need to find user by token before it's cleared, or just log success)
+            // Since token is cleared, we'll just skip detailed log here or fetch before update
         } else {
             $error = "Invalid or expired verification token.";
         }
@@ -141,6 +155,9 @@ class AuthController extends BaseController {
     }
     
     public function logout() {
+        if (isset($_SESSION['user_id'])) {
+            (new AuditLog())->log($_SESSION['user_id'], 'Logout', 'User logged out');
+        }
         session_destroy();
         $this->redirect('/');
     }

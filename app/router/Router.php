@@ -157,6 +157,21 @@ class Router {
                 else $controller->notifications();
                 break;
 
+            case 'api':
+                $controller = new ApiController();
+                $endpoint = $segments[1] ?? '';
+                switch ($endpoint) {
+                    case 'metrics': $controller->getMetrics(); break;
+                    case 'transactions': $controller->getTransactions(); break;
+                    case 'activity': $controller->getActivity(); break;
+                    default: 
+                        header('Content-Type: application/json');
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Endpoint not found']);
+                        exit;
+                }
+                break;
+
             case 'admin':
             case 'admin-dashboard':
                 $controller = new AdminDashboardController();

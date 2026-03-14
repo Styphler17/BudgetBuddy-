@@ -4,20 +4,27 @@ require_once 'config/database.php';
 try {
     $conn = Database::getConnection();
     
-    echo "<h2>Updating Database Schema</h2>";
+    echo "<h2>Finalizing Database Schema</h2>";
     
     $queries = [
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255) DEFAULT NULL",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS two_factor_secret VARCHAR(255) DEFAULT NULL",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS two_factor_enabled TINYINT(1) DEFAULT 0",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS recovery_codes TEXT DEFAULT NULL",
-        "ALTER TABLE goals ADD COLUMN IF NOT EXISTS last_milestone INT DEFAULT 0"
+        "ALTER TABLE goals ADD COLUMN IF NOT EXISTS last_milestone INT DEFAULT 0",
+        "CREATE TABLE IF NOT EXISTS user_logs (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            action VARCHAR(255) NOT NULL,
+            details TEXT,
+            ip_address VARCHAR(45),
+            user_agent TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )"
     ];
     
-    // Note: IF NOT EXISTS isn't standard for ADD COLUMN in some MySQL versions, 
-    // so we wrap each in a try-catch for better compatibility.
     foreach ($queries as $sql) {
-        // Strip IF NOT EXISTS if not supported, or just catch the error
         $cleanSql = str_replace(" IF NOT EXISTS", "", $sql);
         try {
             $conn->exec($cleanSql);
@@ -27,7 +34,7 @@ try {
         }
     }
     
-    echo "<hr><p style='color:blue; font-weight:bold;'>Schema update completed! You can now return to your <a href='settings'>Settings</a>.</p>";
+    echo "<hr><p style='color:blue; font-weight:bold;'>Schema update completed! You can now use all new features including Audit Logs and Milestones.</p>";
 } catch (Exception $e) {
     echo "<p style='color:red'>❌ Error: " . $e->getMessage() . "</p>";
 }

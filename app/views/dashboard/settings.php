@@ -223,6 +223,54 @@
             </div>
         </div>
     </div>
+
+    <!-- Recent Activity -->
+    <div class="glowing-wrapper">
+        <div class="glowing-effect-container"></div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-6 relative z-10">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-bold text-gray-900 dark:text-white">Recent Activity</h2>
+                <i data-lucide="history" class="h-5 w-5 text-gray-400"></i>
+            </div>
+            
+            <div class="flow-root">
+                <ul role="list" class="-mb-8">
+                    <?php if (empty($activityLogs)): ?>
+                        <p class="text-sm text-gray-500 dark:text-slate-400 py-4 text-center">No recent activity recorded.</p>
+                    <?php else: ?>
+                        <?php foreach ($activityLogs as $index => $log): ?>
+                        <li>
+                            <div class="relative pb-8">
+                                <?php if ($index !== count($activityLogs) - 1): ?>
+                                <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-slate-800" aria-hidden="true"></span>
+                                <?php endif; ?>
+                                <div class="relative flex space-x-3">
+                                    <div>
+                                        <span class="h-8 w-8 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center ring-8 ring-white dark:ring-slate-900">
+                                            <i data-lucide="<?php 
+                                                echo strpos($log['action'], 'Login') !== false ? 'log-in' : 
+                                                    (strpos($log['action'], 'Password') !== false ? 'key' : 'info'); 
+                                            ?>" class="h-4 w-4 text-gray-500 dark:text-slate-400"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                                        <div>
+                                            <p class="text-sm text-gray-900 dark:text-white"><?php echo htmlspecialchars($log['action']); ?> <span class="text-gray-500 dark:text-slate-400 font-normal"><?php echo htmlspecialchars($log['details']); ?></span></p>
+                                            <p class="text-[10px] text-gray-400 mt-0.5"><?php echo htmlspecialchars($log['ip_address']); ?> • <?php echo htmlspecialchars(substr($log['user_agent'], 0, 50)); ?>...</p>
+                                        </div>
+                                        <div class="whitespace-nowrap text-right text-xs text-gray-500 dark:text-slate-400">
+                                            <time datetime="<?php echo $log['created_at']; ?>"><?php echo date('M d, H:i', strtotime($log['created_at'])); ?></time>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
