@@ -104,7 +104,7 @@
             const formData = new FormData();
             formData.append('image', file);
 
-            fetch('/admin/blog/upload', {
+            fetch('<?php echo BASE_URL; ?>/admin/blog/upload', {
                 method: 'POST',
                 body: formData
             })

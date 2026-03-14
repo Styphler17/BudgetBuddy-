@@ -182,7 +182,7 @@ class AdminDashboardController extends BaseController {
             $targetPath = $uploadDir . $filename;
             
             if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-                $url = '/public/blog/' . $filename;
+                $url = BASE_URL . '/public/blog/' . $filename;
                 $this->json(['url' => $url]);
             } else {
                 $this->json(['error' => 'Failed to move uploaded file.'], 500);

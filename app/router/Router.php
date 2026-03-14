@@ -255,9 +255,9 @@ class Router {
                     }
                 }
 
-                // Handle 404 or Fallback
+                // Handle 404
                 $controller = new HomeController();
-                $controller->index();
+                $controller->notFound();
                 break;
         }
     }

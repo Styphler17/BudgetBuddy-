@@ -165,6 +165,7 @@ class DashboardController extends BaseController {
                 'date' => $_POST['date'] ?: date('Y-m-d')
             ];
             $transactionModel->create($data);
+            $_SESSION['success_message'] = 'Transaction recorded successfully!';
 
             // Savings Milestones Logic
             $goalModel = new Goal();
@@ -308,6 +309,7 @@ class DashboardController extends BaseController {
     public function transactionDelete($id) {
         $transactionModel = new Transaction();
         $transactionModel->delete($id);
+        $_SESSION['success_message'] = 'Transaction deleted.';
         $this->redirect('/transactions');
     }
 
@@ -324,6 +326,7 @@ class DashboardController extends BaseController {
                 'date' => $_POST['date'] ?: date('Y-m-d')
             ];
             $transactionModel->update($id, $data);
+            $_SESSION['success_message'] = 'Transaction updated.';
         }
         $this->redirect('/transactions');
     }
@@ -389,6 +392,7 @@ class DashboardController extends BaseController {
                 'currency' => $_POST['currency'] ?? 'USD'
             ];
             $accountModel->create($data);
+            $_SESSION['success_message'] = 'Account created successfully!';
         }
         $this->redirect('/accounts');
     }
@@ -396,6 +400,7 @@ class DashboardController extends BaseController {
     public function accountDelete($id) {
         $accountModel = new Account();
         $accountModel->delete($id);
+        $_SESSION['success_message'] = 'Account deleted.';
         $this->redirect('/accounts');
     }
 
@@ -410,6 +415,7 @@ class DashboardController extends BaseController {
                 'currency' => $_POST['currency'] ?? 'USD'
             ];
             $accountModel->update($id, $data);
+            $_SESSION['success_message'] = 'Account updated successfully!';
         }
         $this->redirect('/accounts');
     }
@@ -452,6 +458,7 @@ class DashboardController extends BaseController {
 
                 $userModel->update($this->userId, $data);
                 $_SESSION['user_name'] = $data['name'];
+                $_SESSION['success_message'] = 'Profile updated successfully!';
                 
                 // Audit Log
                 try {
@@ -467,6 +474,7 @@ class DashboardController extends BaseController {
                 if ($password === $confirm && !empty($password)) {
                     $data = ['password_hash' => password_hash($password, PASSWORD_DEFAULT)];
                     $userModel->update($this->userId, $data);
+                    $_SESSION['success_message'] = 'Password changed successfully!';
                     
                     // Audit Log
                     try {
@@ -485,6 +493,7 @@ class DashboardController extends BaseController {
                         'two_factor_enabled' => 1,
                         'two_factor_secret' => $secret
                     ];
+                    $_SESSION['success_message'] = '2FA enabled successfully!';
                     // Audit Log
                     try {
                         (new AuditLog())->log($this->userId, '2FA Enabled', 'User enabled Two-Factor Authentication');
@@ -494,6 +503,7 @@ class DashboardController extends BaseController {
                         'two_factor_enabled' => 0,
                         'two_factor_secret' => null
                     ];
+                    $_SESSION['success_message'] = '2FA disabled.';
                     // Audit Log
                     try {
                         (new AuditLog())->log($this->userId, '2FA Disabled', 'User disabled Two-Factor Authentication');
@@ -506,6 +516,7 @@ class DashboardController extends BaseController {
             if ($action === 'update_currency') {
                 $data = ['currency' => $_POST['currency']];
                 $userModel->update($this->userId, $data);
+                $_SESSION['success_message'] = 'Preferred currency updated!';
                 
                 // Immediate session sync
                 $_SESSION['user_currency'] = $_POST['currency'];
@@ -565,6 +576,7 @@ class DashboardController extends BaseController {
                 'deadline' => $_POST['deadline'] ?: null
             ];
             $goalModel->create($data);
+            $_SESSION['success_message'] = 'Savings goal created!';
         }
         $this->redirect('/goals');
     }
@@ -572,6 +584,7 @@ class DashboardController extends BaseController {
     public function goalDelete($id) {
         $goalModel = new Goal();
         $goalModel->delete($id);
+        $_SESSION['success_message'] = 'Goal deleted.';
         $this->redirect('/goals');
     }
 
@@ -586,6 +599,7 @@ class DashboardController extends BaseController {
                 'deadline' => $_POST['deadline'] ?: null
             ];
             $goalModel->update($id, $data);
+            $_SESSION['success_message'] = 'Goal updated.';
         }
         $this->redirect('/goals');
     }
@@ -612,6 +626,7 @@ class DashboardController extends BaseController {
                 'budget' => $_POST['budget'] ?: 0
             ];
             $categoryModel->create($data);
+            $_SESSION['success_message'] = 'Category created successfully!';
         }
         $this->redirect('/categories');
     }
@@ -619,6 +634,7 @@ class DashboardController extends BaseController {
     public function categoryDelete($id) {
         $categoryModel = new Category();
         $categoryModel->delete($id);
+        $_SESSION['success_message'] = 'Category deleted.';
         $this->redirect('/categories');
     }
 
@@ -633,6 +649,7 @@ class DashboardController extends BaseController {
                 'budget' => $_POST['budget'] ?: 0
             ];
             $categoryModel->update($id, $data);
+            $_SESSION['success_message'] = 'Category updated.';
         }
         $this->redirect('/categories');
     }
@@ -651,12 +668,14 @@ class DashboardController extends BaseController {
     public function notificationsMarkRead() {
         $notificationModel = new Notification();
         $notificationModel->markAllAsRead($this->userId);
+        $_SESSION['success_message'] = 'All notifications marked as read.';
         $this->redirect('/notifications');
     }
 
     public function notificationsClear() {
         $notificationModel = new Notification();
         $notificationModel->clearAll($this->userId);
+        $_SESSION['success_message'] = 'Notification history cleared.';
         $this->redirect('/notifications');
     }
 
@@ -697,6 +716,7 @@ class DashboardController extends BaseController {
                 'start_date' => $_POST['start_date'] ?: date('Y-m-d')
             ];
             $rtModel->create($data);
+            $_SESSION['success_message'] = 'Recurring transaction scheduled.';
         }
         $this->redirect('/recurring');
     }
@@ -704,6 +724,7 @@ class DashboardController extends BaseController {
     public function recurringDelete($id) {
         $rtModel = new RecurringTransaction();
         $rtModel->delete($id);
+        $_SESSION['success_message'] = 'Recurring transaction cancelled.';
         $this->redirect('/recurring');
     }
 
@@ -721,6 +742,7 @@ class DashboardController extends BaseController {
                 'start_date' => $_POST['start_date']
             ];
             $rtModel->update($id, $data);
+            $_SESSION['success_message'] = 'Recurring schedule updated.';
         }
         $this->redirect('/recurring');
     }

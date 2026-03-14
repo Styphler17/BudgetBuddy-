@@ -26,8 +26,12 @@
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                                    <?php echo strtoupper(substr($a['name'], 0, 1)); ?>
+                                <div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0 overflow-hidden">
+                                    <?php if (isset($a['profile_pic']) && $a['profile_pic']): ?>
+                                        <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $a['profile_pic']; ?>" class="h-full w-full object-cover">
+                                    <?php else: ?>
+                                        <?php echo strtoupper(substr($a['name'] ?? 'A', 0, 1)); ?>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="min-w-0">
                                     <p class="text-sm font-bold text-gray-900"><?php echo htmlspecialchars($a['name']); ?></p>

@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title . ' | SpendScribe' : 'SpendScribe – Simple Manual Budget & Spending Tracker'; ?></title>
+    <title><?php echo isset($title) ? $title . ' | SpendScribe' : 'SpendScribe – Best Budget App Without Bank Sync & Manual Tracker'; ?></title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>/public/favicon.png">
     
     <!-- Meta Tags -->
-    <meta name="description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta name="description" content="SpendScribe is the best manual budget app and expense tracker. Plan budgets and log spending manually without bank sync or spreadsheets. The perfect private YNAB alternative.">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://spendscribe.creativeutil.com/">
-    <meta property="og:title" content="SpendScribe – Simple Manual Budget & Spending Tracker">
-    <meta property="og:description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta property="og:title" content="SpendScribe – Best Budget App Without Bank Sync & Manual Tracker">
+    <meta property="og:description" content="SpendScribe is the best manual budget app and expense tracker. Plan budgets and log spending manually without bank sync or spreadsheets. The perfect private YNAB alternative.">
     <meta property="og:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://spendscribe.creativeutil.com/">
-    <meta property="twitter:title" content="SpendScribe – Simple Manual Budget & Spending Tracker">
-    <meta property="twitter:description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta property="twitter:title" content="SpendScribe – Best Budget App Without Bank Sync & Manual Tracker">
+    <meta property="twitter:description" content="SpendScribe is the best manual budget app and expense tracker. Plan budgets and log spending manually without bank sync or spreadsheets. The perfect private YNAB alternative.">
     <meta property="twitter:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
 
     <!-- JSON-LD Structured Data (SEO & E-E-A-T) -->

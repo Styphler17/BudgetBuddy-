@@ -98,10 +98,21 @@
         <?php echo $modal_content ?? ''; ?>
     </div>
 
+    <!-- Toast Component -->
+    <?php require_once APP_PATH . '/views/includes/ToastSave.php'; ?>
+
     <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
+
+        // Flash Message Handler
+        window.addEventListener('load', () => {
+            <?php if (isset($_SESSION['success_message'])): ?>
+                ToastSave.success(3000, { successText: '<?php echo addslashes($_SESSION['success_message']); ?>' });
+                <?php unset($_SESSION['success_message']); ?>
+            <?php endif; ?>
+        });
         
         // Global Glowing Effect Controller
         document.addEventListener('DOMContentLoaded', () => {

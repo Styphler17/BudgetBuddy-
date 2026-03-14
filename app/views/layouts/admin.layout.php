@@ -87,8 +87,12 @@
                         <span class="text-sm font-bold text-gray-900"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?></span>
                         <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Administrator</span>
                     </div>
-                    <div class="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm ring-2 ring-primary/10">
-                        <?php echo isset($_SESSION['admin_name']) ? strtoupper(substr($_SESSION['admin_name'], 0, 1)) : 'A'; ?>
+                    <div class="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm ring-2 ring-primary/10 overflow-hidden">
+                        <?php if (isset($_SESSION['admin_profile_pic']) && $_SESSION['admin_profile_pic']): ?>
+                            <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $_SESSION['admin_profile_pic']; ?>" class="h-full w-full object-cover">
+                        <?php else: ?>
+                            <?php echo isset($_SESSION['admin_name']) ? strtoupper(substr($_SESSION['admin_name'], 0, 1)) : 'A'; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </header>

@@ -21,16 +21,16 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="text-center lg:text-left animate-slide-up">
                     <span class="inline-flex items-center rounded-full border border-primary/10 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-8 shadow-sm glow-primary relative overflow-hidden">
-                        <span class="relative z-10">🎉 Simple Manual Budget & Spending Tracker</span>
+                        <span class="relative z-10">🎉 The Best Budget App Without Bank Sync</span>
                         <div class="absolute inset-0 animate-shimmer opacity-30"></div>
                     </span>
                     
                     <h1 class="text-5xl md:text-6xl lg:text-7xl font-display tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
-                        Plan Your Budget and Track Spending <span class="text-primary dark:text-accent italic font-medium">Manually</span>, Without Spreadsheets or Bank Sync
+                        Beautifully Simple Tracking, <span class="text-primary dark:text-accent italic font-medium">Without</span> the Bank Connection
                     </h1>
                     
                     <p class="text-xl text-gray-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-body">
-                        SpendScribe is a clean, distraction-free budget tracker for people who prefer writing things down but are tired of notebooks, scraps of paper, and messy phone notes.
+                        SpendScribe is a premium manual budget app for those who want total privacy and control. No Plaid, no bank links—just clean, distraction-free manual entry.
                     </p>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -328,11 +328,11 @@
         <div class="max-w-3xl mx-auto space-y-4">
             <?php
             $faqs_final = [
-                ["q" => "Is SpendScribe free?", "a" => "Yes. SpendScribe is free to use in its current version. If we ever add paid features in the future, the core manual budget tracking will remain free."],
-                ["q" => "Do I need to connect my bank account?", "a" => "No. SpendScribe is fully manual on purpose. You type in your own numbers so you stay aware of every expense and keep full control over your data."],
-                ["q" => "Can I use SpendScribe on my phone and laptop?", "a" => "Yes. SpendScribe is a web-based tool that works in modern browsers on desktop, tablet, and mobile."],
-                ["q" => "Is this a replacement for detailed accounting software?", "a" => "No. SpendScribe is designed for everyday budgeting and spending awareness, not for complex business accounting."],
-                ["q" => "Who created SpendScribe?", "a" => "SpendScribe is built by CreativeUtil, a small web studio that creates simple tools to make everyday tasks easier."]
+                ["q" => "Is SpendScribe free?", "a" => "Yes. SpendScribe is a free manual budget app. We believe financial clarity should be accessible to everyone without expensive monthly subscriptions."],
+                ["q" => "Do I need to connect my bank account?", "a" => "No. SpendScribe is a budget app without bank sync. We use 100% manual entry to ensure your data stays private and you stay conscious of every dollar you spend."],
+                ["q" => "How is SpendScribe different from YNAB or EveryDollar?", "a" => "SpendScribe is a private YNAB manual entry alternative. Unlike other apps, we don't force you into complex methodologies or badger you to link your bank accounts. You get a premium UI with zero forced bank connections."],
+                ["q" => "Can I export my data?", "a" => "Absolutely. Unlike competitors who paywall your data, SpendScribe allows you to export your transactions to CSV or professional PDF reports for free, anytime."],
+                ["q" => "Who created SpendScribe?", "a" => "SpendScribe is built by CreativeUtil, a small studio focused on building beautiful, privacy-first tools for humans."]
             ];
             foreach ($faqs_final as $i => $faq): ?>
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-white/5 overflow-hidden">

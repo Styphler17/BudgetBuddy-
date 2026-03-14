@@ -49,8 +49,19 @@ class HomeController extends BaseController {
     }
 
     public function notFound() {
+        http_response_code(404);
         $this->render('error/404', [
-            'title' => 'Page Not Found'
+            'title' => 'Page Not Found',
+            'layout' => 'main'
+        ]);
+    }
+
+    public function serverError($message = null) {
+        http_response_code(500);
+        $this->render('error/500', [
+            'title' => 'System Error',
+            'layout' => 'main',
+            'error_message' => $message
         ]);
     }
 }
