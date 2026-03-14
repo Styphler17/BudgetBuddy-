@@ -71,6 +71,28 @@ class DashboardController extends BaseController {
             }
         }
 
+        // Calculate spending per category for the budget progress section
+        $budgetProgress = [];
+        foreach ($categories as $category) {
+            if ($category['budget'] > 0) {
+                $stmt = Database::getConnection()->prepare("
+                    SELECT SUM(amount) as total 
+                    FROM transactions 
+                    WHERE user_id = ? AND category_id = ? AND type = 'expense' AND date BETWEEN ? AND ?
+                ");
+                $stmt->execute([$this->userId, $category['id'], $thisMonthStart, $today]);
+                $spent = $stmt->fetch()['total'] ?? 0;
+                
+                $budgetProgress[] = [
+                    'name' => $category['name'],
+                    'spent' => $spent,
+                    'limit' => $category['budget'],
+                    'percentage' => ($spent / $category['budget']) * 100,
+                    'color' => $category['color']
+                ];
+            }
+        }
+
         $this->render('dashboard/index', [
             'title' => 'Dashboard',
             'layout' => 'dashboard',
