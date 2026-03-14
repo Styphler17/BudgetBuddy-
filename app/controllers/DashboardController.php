@@ -472,6 +472,21 @@ class DashboardController extends BaseController {
         $this->redirect('/categories');
     }
 
+    public function categoryUpdate() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $categoryModel = new Category();
+            $id = $_POST['id'];
+            $data = [
+                'name' => $_POST['name'],
+                'emoji' => $_POST['emoji'] ?: '📊',
+                'color' => $_POST['color'] ?: '#3b82f6',
+                'budget' => $_POST['budget'] ?: 0
+            ];
+            $categoryModel->update($id, $data);
+        }
+        $this->redirect('/categories');
+    }
+
     public function notifications() {
         $notificationModel = new Notification();
         $notifications = $notificationModel->getByUserId($this->userId);

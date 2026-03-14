@@ -145,6 +145,7 @@ class Router {
                 $controller = new DashboardController();
                 $action = $segments[1] ?? 'list';
                 if ($action === 'create') $controller->categoryCreate();
+                elseif ($action === 'update') $controller->categoryUpdate();
                 elseif ($action === 'delete' && isset($segments[2])) $controller->categoryDelete($segments[2]);
                 else $controller->categories();
                 break;
