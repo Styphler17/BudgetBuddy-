@@ -18,6 +18,9 @@ class DashboardController extends BaseController {
         $user = $userModel->findById($this->userId);
         $_SESSION['user_currency'] = $user['currency'] ?? 'USD';
 
+        // Fetch notification count
+        $_SESSION['unread_notifications'] = (new Notification())->getUnreadCount($this->userId);
+
         $this->processRecurring();
     }
 

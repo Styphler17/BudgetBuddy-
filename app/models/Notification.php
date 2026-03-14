@@ -12,8 +12,16 @@ class Notification {
 
     public function getByUserId($userId, $limit = 50) {
         $stmt = $this->db->prepare("SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT ?");
-        $stmt->execute([$userId, $limit]);
+        $stmt->bindValue(1, $userId, PDO::PARAM_INT);
+        $stmt->bindValue(2, $limit, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll();
+    }
+
+    public function getUnreadCount($userId) {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0");
+        $stmt->execute([$userId]);
+        return (int)$stmt->fetchColumn();
     }
 
     public function markAllAsRead($userId) {
