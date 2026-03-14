@@ -142,7 +142,10 @@ class Router {
 
             case 'notifications':
                 $controller = new DashboardController();
-                $controller->notifications();
+                $action = $segments[1] ?? 'list';
+                if ($action === 'mark-read') $controller->notificationsMarkRead();
+                elseif ($action === 'clear') $controller->notificationsClear();
+                else $controller->notifications();
                 break;
 
             case 'admin':

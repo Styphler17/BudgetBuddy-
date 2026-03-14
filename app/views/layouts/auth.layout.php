@@ -98,6 +98,42 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
       lucide.createIcons();
+
+      // Global Glowing Effect Controller
+      document.addEventListener('DOMContentLoaded', () => {
+          const proximity = 150;
+          
+          const handlePointerMove = (e) => {
+              const wrappers = document.querySelectorAll('.glowing-wrapper');
+              wrappers.forEach(wrapper => {
+                  const container = wrapper.querySelector('.glowing-effect-container');
+                  if (!container) return;
+                  
+                  const rect = wrapper.getBoundingClientRect();
+                  const mouseX = e.clientX;
+                  const mouseY = e.clientY;
+
+                  const centerX = rect.left + rect.width / 2;
+                  const centerY = rect.top + rect.height / 2;
+
+                  const isActive = 
+                      mouseX > rect.left - proximity &&
+                      mouseX < rect.right + proximity &&
+                      mouseY > rect.top - proximity &&
+                      mouseY < rect.bottom + proximity;
+
+                  if (isActive) {
+                      container.style.setProperty('--active', '1');
+                      const angle = Math.atan2(mouseY - centerY, mouseX - centerX) * (180 / Math.PI) + 90;
+                      container.style.setProperty('--start', angle);
+                  } else {
+                      container.style.setProperty('--active', '0');
+                  }
+              });
+          };
+
+          window.addEventListener('pointermove', handlePointerMove);
+      });
     </script>
 </body>
 </html>

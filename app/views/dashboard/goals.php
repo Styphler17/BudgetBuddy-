@@ -11,32 +11,38 @@
     </div>
 
     <!-- Add Goal Form (Hidden by default) -->
-    <div id="add-goal-form" class="hidden bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 font-outfit">New Goal</h3>
-        <form action="<?php echo BASE_URL; ?>/goals/create" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="space-y-1">
-                <label for="goal_name" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Goal Name</label>
-                <input id="goal_name" type="text" name="name" placeholder="e.g. New Car" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-900 dark:text-white" required>
-            </div>
-            <div class="space-y-1">
-                <label for="goal_target" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Target Amount</label>
-                <input id="goal_target" type="number" name="target_amount" step="0.01" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-900 dark:text-white" required>
-            </div>
-            <div class="space-y-1">
-                <label for="goal_deadline" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Target Date</label>
-                <input id="goal_deadline" type="date" name="deadline" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-900 dark:text-white" required>
-            </div>
-            <div class="md:col-span-3 flex justify-end">
-                <button type="submit" class="px-6 h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Create Goal</button>
-            </div>
-        </form>
+    <div id="add-goal-form" class="hidden glowing-wrapper">
+        <div class="glowing-effect-container"></div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative z-10">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 font-outfit">New Goal</h3>
+            <form action="<?php echo BASE_URL; ?>/goals/create" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="space-y-1">
+                    <label for="goal_name" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Goal Name</label>
+                    <input id="goal_name" type="text" name="name" placeholder="e.g. New Car" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-900 dark:text-white" required>
+                </div>
+                <div class="space-y-1">
+                    <label for="goal_target" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Target Amount</label>
+                    <input id="goal_target" type="number" name="target_amount" step="0.01" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-900 dark:text-white" required>
+                </div>
+                <div class="space-y-1">
+                    <label for="goal_deadline" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Target Date</label>
+                    <input id="goal_deadline" type="date" name="deadline" class="w-full h-10 border border-gray-300 dark:border-white/10 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-900 dark:text-white" required>
+                </div>
+                <div class="md:col-span-3 flex justify-end">
+                    <button type="submit" class="px-6 h-10 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors">Create Goal</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <?php if (empty($goals)): ?>
-            <div class="col-span-full bg-white dark:bg-slate-900 p-12 rounded-xl border border-gray-200 dark:border-white/10 text-center text-gray-500 dark:text-slate-300">
-                <i data-lucide="target" class="h-12 w-12 mx-auto mb-4 opacity-20"></i>
-                <p>No savings goals set yet. Create one to start tracking!</p>
+            <div class="col-span-full glowing-wrapper">
+                <div class="glowing-effect-container"></div>
+                <div class="bg-white dark:bg-slate-900 p-12 rounded-xl border border-gray-200 dark:border-white/10 text-center text-gray-500 dark:text-slate-300 relative z-10">
+                    <i data-lucide="target" class="h-12 w-12 mx-auto mb-4 opacity-20"></i>
+                    <p>No savings goals set yet. Create one to start tracking!</p>
+                </div>
             </div>
         <?php else: ?>
             <?php foreach ($goals as $goal): 
@@ -44,30 +50,33 @@
                 $percent = min(100, round($percent));
                 $isCompleted = $percent >= 100;
             ?>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border <?php echo $isCompleted ? 'border-green-200 dark:border-green-900/50 bg-green-50/30 dark:bg-green-900/10' : 'border-gray-200 dark:border-white/10'; ?> shadow-sm space-y-4 group relative">
-                <div class="flex items-start justify-between">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="target" class="h-5 w-5 text-primary"></i>
-                        <h3 class="font-bold text-gray-900 dark:text-white truncate"><?php echo htmlspecialchars($goal['name']); ?></h3>
-                        <?php if ($isCompleted): ?>
-                            <i data-lucide="check-circle" class="h-4 w-4 text-green-600 dark:text-green-400"></i>
-                        <?php endif; ?>
+            <div class="glowing-wrapper">
+                <div class="glowing-effect-container"></div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border <?php echo $isCompleted ? 'border-green-200 dark:border-green-900/50 bg-green-50/30 dark:bg-green-900/10' : 'border-gray-200 dark:border-white/10'; ?> shadow-sm space-y-4 group relative z-10 h-full">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="target" class="h-5 w-5 text-primary"></i>
+                            <h3 class="font-bold text-gray-900 dark:text-white truncate"><?php echo htmlspecialchars($goal['name']); ?></h3>
+                            <?php if ($isCompleted): ?>
+                                <i data-lucide="check-circle" class="h-4 w-4 text-green-600 dark:text-green-400"></i>
+                            <?php endif; ?>
+                        </div>
+                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                            <button class="p-1 text-gray-400 dark:text-slate-500 hover:text-gray-900 dark:hover:text-white transition-colors"><i data-lucide="edit-3" class="h-4 w-4"></i></button>
+                            <a href="<?php echo BASE_URL; ?>/goals/delete/<?php echo $goal['id']; ?>" class="p-1 text-gray-400 dark:text-slate-500 hover:text-red-500 transition-colors" onclick="return confirm('Delete this goal?')"><i data-lucide="trash-2" class="h-4 w-4"></i></a>
+                        </div>
                     </div>
-                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                        <button class="p-1 text-gray-400 dark:text-slate-500 hover:text-gray-900 dark:hover:text-white transition-colors"><i data-lucide="edit-3" class="h-4 w-4"></i></button>
-                        <a href="<?php echo BASE_URL; ?>/goals/delete/<?php echo $goal['id']; ?>" class="p-1 text-gray-400 dark:text-slate-500 hover:text-red-500 transition-colors" onclick="return confirm('Delete this goal?')"><i data-lucide="trash-2" class="h-4 w-4"></i></a>
-                    </div>
-                </div>
 
-                <div class="space-y-2">
-                    <div class="flex justify-between text-sm">
-                        <span class="font-medium text-gray-700 dark:text-slate-300">$<?php echo number_format($goal['current_amount'], 0); ?> / $<?php echo number_format($goal['target_amount'], 0); ?></span>
-                        <span class="<?php echo $isCompleted ? 'text-green-600 dark:text-green-400' : 'text-primary dark:text-accent'; ?> font-bold"><?php echo $percent; ?>%</span>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="font-medium text-gray-700 dark:text-slate-300">$<?php echo number_format($goal['current_amount'], 0); ?> / $<?php echo number_format($goal['target_amount'], 0); ?></span>
+                            <span class="<?php echo $isCompleted ? 'text-green-600 dark:text-green-400' : 'text-primary dark:text-accent'; ?> font-bold"><?php echo $percent; ?>%</span>
+                        </div>
+                        <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full <?php echo $isCompleted ? 'bg-green-500' : 'bg-primary dark:bg-accent'; ?> transition-all duration-500" style="width: <?php echo $percent; ?>%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-slate-400 mt-2">Target: <?php echo $goal['deadline'] ? date('M d, Y', strtotime($goal['deadline'])) : 'No deadline'; ?></p>
                     </div>
-                    <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                        <div class="h-full <?php echo $isCompleted ? 'bg-green-500' : 'bg-primary dark:bg-accent'; ?> transition-all duration-500" style="width: <?php echo $percent; ?>%"></div>
-                    </div>
-                    <p class="text-xs text-gray-500 dark:text-slate-400 mt-2">Target: <?php echo $goal['deadline'] ? date('M d, Y', strtotime($goal['deadline'])) : 'No deadline'; ?></p>
                 </div>
             </div>
             <?php endforeach; ?>

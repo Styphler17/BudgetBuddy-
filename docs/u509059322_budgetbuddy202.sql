@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 11, 2026 at 05:52 PM
+-- Generation Time: Mar 14, 2026 at 12:10 AM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.1
 
@@ -190,6 +190,45 @@ INSERT INTO `goals` (`id`, `user_id`, `name`, `target_amount`, `current_amount`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `type` varchar(50) DEFAULT 'info',
+  `icon` varchar(50) DEFAULT 'bell',
+  `is_read` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `recurring_transactions`
+--
+
+CREATE TABLE `recurring_transactions` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `description` text,
+  `type` enum('income','expense') NOT NULL,
+  `frequency` enum('daily','weekly','monthly','yearly') NOT NULL,
+  `start_date` date NOT NULL,
+  `last_run_date` date DEFAULT NULL,
+  `next_run_date` date NOT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `system_settings`
 --
 
@@ -213,9 +252,12 @@ CREATE TABLE `transactions` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
+  `account_id` int(11) DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   `type` enum('income','expense') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_transfer` tinyint(1) DEFAULT '0',
+  `transfer_id` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -224,8 +266,8 @@ CREATE TABLE `transactions` (
 -- Dumping data for table `transactions`
 --
 
-INSERT INTO `transactions` (`id`, `user_id`, `category_id`, `amount`, `description`, `type`, `date`, `created_at`) VALUES
-(1, 1, 1, '200.00', 'saved', 'expense', '2026-03-10', '2026-03-10 01:57:17');
+INSERT INTO `transactions` (`id`, `user_id`, `category_id`, `account_id`, `amount`, `description`, `type`, `is_transfer`, `transfer_id`, `date`, `created_at`) VALUES
+(1, 1, 1, NULL, '200.00', 'saved', 'expense', 0, NULL, '2026-03-10', '2026-03-10 01:57:17');
 
 -- --------------------------------------------------------
 
@@ -339,6 +381,22 @@ ALTER TABLE `goals`
   ADD KEY `idx_goals_user` (`user_id`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `recurring_transactions`
+--
+ALTER TABLE `recurring_transactions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `account_id` (`account_id`),
+  ADD KEY `category_id` (`category_id`);
+
+--
 -- Indexes for table `system_settings`
 --
 ALTER TABLE `system_settings`
@@ -352,7 +410,8 @@ ALTER TABLE `system_settings`
 ALTER TABLE `transactions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_transactions_user_date` (`user_id`,`date`),
-  ADD KEY `idx_transactions_category` (`category_id`);
+  ADD KEY `idx_transactions_category` (`category_id`),
+  ADD KEY `fk_transactions_account` (`account_id`);
 
 --
 -- Indexes for table `users`
@@ -414,6 +473,18 @@ ALTER TABLE `categories`
 --
 ALTER TABLE `goals`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `recurring_transactions`
+--
+ALTER TABLE `recurring_transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -481,9 +552,24 @@ ALTER TABLE `goals`
   ADD CONSTRAINT `goals_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL;
 
 --
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `recurring_transactions`
+--
+ALTER TABLE `recurring_transactions`
+  ADD CONSTRAINT `recurring_transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `recurring_transactions_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `recurring_transactions_ibfk_3` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL;
+
+--
 -- Constraints for table `transactions`
 --
 ALTER TABLE `transactions`
+  ADD CONSTRAINT `fk_transactions_account` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL;
 

@@ -392,11 +392,26 @@ class DashboardController extends BaseController {
     }
 
     public function notifications() {
-        // Notifications might need a model too, or fetch from system...
+        $notificationModel = new Notification();
+        $notifications = $notificationModel->getByUserId($this->userId);
+
         $this->render('dashboard/notifications', [
             'title' => 'Notifications',
-            'layout' => 'dashboard'
+            'layout' => 'dashboard',
+            'notifications' => $notifications
         ]);
+    }
+
+    public function notificationsMarkRead() {
+        $notificationModel = new Notification();
+        $notificationModel->markAllAsRead($this->userId);
+        $this->redirect('/notifications');
+    }
+
+    public function notificationsClear() {
+        $notificationModel = new Notification();
+        $notificationModel->clearAll($this->userId);
+        $this->redirect('/notifications');
     }
 
     public function recurring() {
