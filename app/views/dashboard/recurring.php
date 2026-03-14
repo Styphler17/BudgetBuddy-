@@ -30,7 +30,7 @@
             <?php else: ?>
                 <?php foreach ($recurring as $item): ?>
                 <div class="flex items-center justify-between p-5 hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-all group">
-                    <div class="flex items-center gap-5">
+                    <div class="flex items-center gap-6">
                         <div class="h-12 w-12 rounded-2xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center border border-gray-200/50 dark:border-white/5">
                             <i data-lucide="refresh-cw" class="h-6 w-6 text-primary animate-spin-slow"></i>
                         </div>
