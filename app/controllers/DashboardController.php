@@ -313,6 +313,25 @@ class DashboardController extends BaseController {
                 $this->redirect('/settings');
             }
 
+            if ($action === 'update_2fa') {
+                $enable = isset($_POST['enable_2fa']);
+                if ($enable) {
+                    // Generate a random secret for 2FA if not already set
+                    $secret = bin2hex(random_bytes(16));
+                    $data = [
+                        'two_factor_enabled' => 1,
+                        'two_factor_secret' => $secret
+                    ];
+                } else {
+                    $data = [
+                        'two_factor_enabled' => 0,
+                        'two_factor_secret' => null
+                    ];
+                }
+                $userModel->update($this->userId, $data);
+                $this->redirect('/settings');
+            }
+
             if ($action === 'delete_account') {
                 $userModel->delete($this->userId);
                 session_destroy();

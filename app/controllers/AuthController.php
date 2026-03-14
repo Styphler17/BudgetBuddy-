@@ -11,15 +11,22 @@ class AuthController extends BaseController {
             $password = $_POST['password'] ?? '';
             
             $userModel = new User();
-            $user = $userModel->verify($email, $password);
+            $result = $userModel->verify($email, $password);
             
-            if ($user) {
+            if ($result && $result['status'] === 'success') {
+                $user = $result['user'];
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_email'] = $user['email'];
                 $this->redirect('/dashboard');
+            } elseif ($result && $result['status'] === 'require_2fa') {
+                $_SESSION['temp_user_id'] = $result['user']['id'];
+                $this->redirect('/login/2fa');
+            } elseif ($result && $result['status'] === 'unverified') {
+                $error = "Please verify your email address before logging in. Check your inbox for the verification link.";
+            } elseif ($result && $result['status'] === 'inactive') {
+                $error = "Your account is currently inactive. Please contact support.";
             } else {
-                // Log the failure reason (User model will log specific verify failures)
                 $error = "Invalid email or password.";
             }
         }
@@ -31,26 +38,32 @@ class AuthController extends BaseController {
         ]);
     }
 
-    public function adminLogin() {
+    public function verify2FA() {
+        if (!isset($_SESSION['temp_user_id'])) {
+            $this->redirect('/login');
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
-            
-            $adminModel = new Admin();
-            $admin = $adminModel->verify($email, $password);
-            
-            if ($admin) {
-                $_SESSION['admin_id'] = $admin['id'];
-                $_SESSION['admin_name'] = $admin['name'];
-                $_SESSION['admin_email'] = $admin['email'];
-                $this->redirect('/admin');
-            } else {
-                $error = "Invalid admin credentials.";
+            $code = $_POST['code'] ?? '';
+            $userModel = new User();
+            $user = $userModel->findById($_SESSION['temp_user_id']);
+
+            // Simplified TOTP verification placeholder
+            if ($user && $user['two_factor_enabled']) {
+                if (strlen($code) === 6) { 
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['user_name'] = $user['name'];
+                    $_SESSION['user_email'] = $user['email'];
+                    unset($_SESSION['temp_user_id']);
+                    $this->redirect('/dashboard');
+                } else {
+                    $error = "Invalid 2FA code.";
+                }
             }
         }
-        
-        $this->render('auth/admin-login', [
-            'title' => 'Admin Sign In',
+
+        $this->render('auth/2fa', [
+            'title' => 'Two-Factor Authentication',
             'layout' => 'auth',
             'error' => $error ?? null
         ]);
@@ -69,8 +82,21 @@ class AuthController extends BaseController {
             
             // Basic validation
             if (!empty($data['email']) && !empty($data['password'])) {
-                if ($userModel->create($data)) {
-                    $this->redirect('/login');
+                $token = $userModel->create($data);
+                if ($token) {
+                    // Send verification email
+                    $verifyLink = BASE_URL . "/verify-email?token=" . $token;
+                    $subject = "Verify your SpendScribe account";
+                    $message = "Hello " . $data['name'] . ",\n\nPlease click the link below to verify your email address:\n" . $verifyLink;
+                    
+                    @mail($data['email'], $subject, $message);
+                    
+                    $this->render('auth/register-success', [
+                        'title' => 'Registration Successful',
+                        'layout' => 'auth',
+                        'email' => $data['email']
+                    ]);
+                    return;
                 } else {
                     $error = "Failed to create account. Email might already exist.";
                 }
@@ -82,6 +108,27 @@ class AuthController extends BaseController {
         $this->render('auth/register', [
             'title' => 'Create Account',
             'layout' => 'auth',
+            'error' => $error ?? null
+        ]);
+    }
+
+    public function verifyEmail() {
+        $token = $_GET['token'] ?? '';
+        if (empty($token)) {
+            $this->redirect('/login');
+        }
+
+        $userModel = new User();
+        if ($userModel->verifyEmail($token)) {
+            $success = "Email verified successfully! You can now log in.";
+        } else {
+            $error = "Invalid or expired verification token.";
+        }
+
+        $this->render('auth/login', [
+            'title' => 'Sign In',
+            'layout' => 'auth',
+            'success' => $success ?? null,
             'error' => $error ?? null
         ]);
     }

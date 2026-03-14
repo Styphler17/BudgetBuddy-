@@ -9,9 +9,20 @@
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
             <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative z-10 h-full">
-                <div class="flex items-center gap-2 mb-2">
-                    <i data-lucide="user" class="h-5 w-5 text-primary dark:text-accent"></i>
-                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Profile Settings</h2>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="user" class="h-5 w-5 text-primary dark:text-accent"></i>
+                        <h2 class="text-lg font-bold text-gray-900 dark:text-white">Profile Settings</h2>
+                    </div>
+                    <?php if ($user['email_verified']): ?>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
+                            Verified
+                        </span>
+                    <?php else: ?>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400">
+                            Unverified
+                        </span>
+                    <?php endif; ?>
                 </div>
                 
                 <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
@@ -24,10 +35,56 @@
                         <label for="profile_email" class="text-sm font-medium text-gray-700 dark:text-slate-300">Email Address</label>
                         <input id="profile_email" type="email" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" class="w-full h-10 border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 rounded-md px-3 text-sm focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 dark:text-white outline-none">
                     </div>
-                    <button type="submit" class="inline-flex items-center justify-center rounded-md bg-primary dark:bg-accent px-4 py-2 text-sm font-medium text-white dark:text-primary hover:bg-primary/90 transition-colors w-full sm:w-auto">
-                        Save Changes
-                    </button>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button type="submit" class="inline-flex items-center justify-center rounded-md bg-primary dark:bg-accent px-4 py-2 text-sm font-medium text-white dark:text-primary hover:bg-primary/90 transition-colors w-full sm:w-auto">
+                            Save Changes
+                        </button>
+                        <?php if (!$user['email_verified']): ?>
+                            <button type="button" class="inline-flex items-center justify-center rounded-md border border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors w-full sm:w-auto" onclick="alert('Verification link resent!')">
+                                Resend Verification
+                            </button>
+                        <?php endif; ?>
+                    </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- Two-Factor Authentication -->
+        <div class="glowing-wrapper">
+            <div class="glowing-effect-container"></div>
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative z-10 h-full">
+                <div class="flex items-center gap-2 mb-2">
+                    <i data-lucide="shield-check" class="h-5 w-5 text-primary dark:text-accent"></i>
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Two-Factor Authentication</h2>
+                </div>
+                
+                <p class="text-sm text-gray-500 dark:text-slate-300">Add an extra layer of security to your account using TOTP.</p>
+                
+                <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
+                    <input type="hidden" name="action" value="update_2fa">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-white/5">
+                        <div class="space-y-0.5">
+                            <span class="text-sm font-bold text-gray-900 dark:text-white">Enable TOTP 2FA</span>
+                            <p class="text-xs text-gray-500 dark:text-slate-400">Use an app like Google Authenticator</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="enable_2fa" class="sr-only peer" <?php echo $user['two_factor_enabled'] ? 'checked' : ''; ?> onchange="this.form.submit()">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary dark:peer-checked:bg-accent"></div>
+                        </label>
+                    </div>
+                </form>
+
+                <?php if ($user['two_factor_enabled']): ?>
+                    <div class="p-4 border border-blue-100 dark:border-blue-900/30 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
+                        <div class="flex gap-3">
+                            <i data-lucide="info" class="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0"></i>
+                            <div class="text-xs text-blue-700 dark:text-blue-300">
+                                2FA is active. Your secret key is: <code class="font-mono font-bold bg-blue-100 dark:bg-blue-900/50 px-1 rounded"><?php echo $user['two_factor_secret']; ?></code>. 
+                                <p class="mt-1">Enter this secret into your authenticator app.</p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 

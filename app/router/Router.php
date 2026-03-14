@@ -35,17 +35,26 @@ class Router {
 
             case 'login':
                 $controller = new AuthController();
-                $controller->login();
-                break;
-
-            case 'admin-login':
-                $controller = new AuthController();
-                $controller->adminLogin();
+                if (isset($segments[1]) && $segments[1] === '2fa') {
+                    $controller->verify2FA();
+                } else {
+                    $controller->login();
+                }
                 break;
 
             case 'register':
                 $controller = new AuthController();
                 $controller->register();
+                break;
+
+            case 'verify-email':
+                $controller = new AuthController();
+                $controller->verifyEmail();
+                break;
+
+            case 'admin-login':
+                $controller = new AuthController();
+                $controller->adminLogin();
                 break;
 
             case 'forgot-password':

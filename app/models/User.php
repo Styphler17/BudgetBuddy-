@@ -60,23 +60,60 @@ class User {
     }
 
     /**
-     * Create a new user
+     * Create a new user with verification token
      */
     public function create($data) {
-        $sql = "INSERT INTO users (name, email, password_hash, currency, is_active, email_verified, created_at, updated_at) 
-                VALUES (?, ?, ?, ?, 1, 0, NOW(), NOW())";
+        $token = bin2hex(random_bytes(32));
+        $sql = "INSERT INTO users (name, email, password_hash, currency, is_active, email_verified, verification_token, created_at, updated_at) 
+                VALUES (?, ?, ?, ?, 1, 0, ?, NOW(), NOW())";
         
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([
+        $result = $stmt->execute([
             $data['name'],
             $data['email'],
             password_hash($data['password'], PASSWORD_DEFAULT),
-            $data['currency'] ?? 'USD'
+            $data['currency'] ?? 'USD',
+            $token
         ]);
+
+        if ($result) {
+            return $token;
+        }
+        return false;
+    }
+
+    /**
+     * Verify email by token
+     */
+    public function verifyEmail($token) {
+        $stmt = $this->db->prepare("UPDATE users SET email_verified = 1, verification_token = NULL WHERE verification_token = ?");
+        return $stmt->execute([$token]);
+    }
+
+    /**
+     * Update user details (updated to include 2FA fields)
+     */
+    public function update($id, $data) {
+        $fields = [];
+        $params = [':id' => $id];
+
+        $allowedFields = ['name', 'email', 'password_hash', 'currency', 'is_active', 'email_verified', 'two_factor_secret', 'two_factor_enabled', 'recovery_codes'];
+        foreach ($allowedFields as $f) {
+            if (isset($data[$f])) {
+                $fields[] = "$f = :$f";
+                $params[":$f"] = $data[$f];
+            }
+        }
+
+        if (empty($fields)) return false;
+
+        $sql = "UPDATE users SET " . implode(', ', $fields) . ", updated_at = NOW() WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
     }
     
     /**
-     * Verify user password and status
+     * Verify user password and status (updated to check verification and 2FA)
      */
     public function verify($email, $password) {
         $user = $this->findByEmail($email);
@@ -87,21 +124,25 @@ class User {
             return false;
         }
 
-        if (empty($user['password_hash'])) {
-            file_put_contents($log_file, date('[Y-m-d H:i:s]') . " FAIL: Empty hash for $email\n", FILE_APPEND);
-            return false;
-        }
-
         // Check password
         if (password_verify($password, $user['password_hash'])) {
             if (isset($user['is_active']) && $user['is_active'] == 0) {
                 file_put_contents($log_file, date('[Y-m-d H:i:s]') . " FAIL: Inactive account ($email)\n", FILE_APPEND);
-                return false;
+                return ['status' => 'inactive'];
             }
+
+            if ($user['email_verified'] == 0) {
+                file_put_contents($log_file, date('[Y-m-d H:i:s]') . " FAIL: Email not verified ($email)\n", FILE_APPEND);
+                return ['status' => 'unverified', 'user' => $user];
+            }
+
+            if ($user['two_factor_enabled'] == 1) {
+                file_put_contents($log_file, date('[Y-m-d H:i:s]') . " REQUIRE_2FA: $email\n", FILE_APPEND);
+                return ['status' => 'require_2fa', 'user' => $user];
+            }
+
             file_put_contents($log_file, date('[Y-m-d H:i:s]') . " SUCCESS: Login for $email\n", FILE_APPEND);
-            return $user;
-        } else {
-            file_put_contents($log_file, date('[Y-m-d H:i:s]') . " FAIL: password_verify failed for $email\n", FILE_APPEND);
+            return ['status' => 'success', 'user' => $user];
         }
         
         return false;
