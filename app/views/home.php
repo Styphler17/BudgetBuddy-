@@ -203,9 +203,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 <?php
                 $sample_posts = [
-                    ['title' => 'Ditching Spreadsheets for Good', 'slug' => 'blog', 'tag' => 'Habits', 'img' => 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&auto=format&fit=crop&q=60'],
-                    ['title' => 'Why Writing it Down Works', 'slug' => 'blog', 'tag' => 'Psychology', 'img' => 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop&q=60'],
-                    ['title' => 'Simple Budgeting for Couples', 'slug' => 'blog', 'tag' => 'Lifestyle', 'img' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60']
+                    ['title' => 'Best YNAB Alternative (No Bank Sync)', 'slug' => 'blog/ynab-alternative-no-bank-sync', 'tag' => 'Alternatives', 'img' => 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&auto=format&fit=crop&q=60'],
+                    ['title' => 'Conscious Spending: Manual vs. Automated', 'slug' => 'blog', 'tag' => 'Psychology', 'img' => 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop&q=60'],
+                    ['title' => 'The Best Offline Budgeting App for Privacy', 'slug' => 'blog', 'tag' => 'Privacy', 'img' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60']
                 ];
                 foreach ($sample_posts as $post): ?>
                     <div class="glowing-wrapper">
