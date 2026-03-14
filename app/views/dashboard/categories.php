@@ -47,7 +47,7 @@
 
                     <div class="space-y-3">
                         <div class="flex justify-between text-sm">
-                            <span class="font-medium text-gray-700 dark:text-slate-300">$<?php echo number_format($spent, 2); ?> / $<?php echo number_format($cat['budget'], 2); ?></span>
+                            <span class="font-medium text-gray-700 dark:text-slate-300"><?php echo CurrencyHelper::autoFormat($spent); ?> / <?php echo CurrencyHelper::autoFormat($cat['budget']); ?></span>
                             <span class="<?php echo $isOverBudget ? 'text-red-600 dark:text-red-400' : 'text-primary dark:text-accent'; ?> font-bold"><?php echo $percentage; ?>%</span>
                         </div>
                         <div class="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
@@ -55,7 +55,7 @@
                         </div>
                         <div class="flex items-center justify-between text-xs mt-2">
                             <span class="<?php echo $remaining >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'; ?> font-medium">
-                                <?php echo $remaining >= 0 ? '$'.number_format($remaining, 2).' remaining' : '$'.number_format(abs($remaining), 2).' over'; ?>
+                                <?php echo $remaining >= 0 ? CurrencyHelper::autoFormat($remaining).' remaining' : CurrencyHelper::autoFormat(abs($remaining)).' over'; ?>
                             </span>
                             <span class="text-gray-400 dark:text-slate-500"><?php echo date('M d, Y', strtotime($cat['created_at'])); ?></span>
                         </div>
