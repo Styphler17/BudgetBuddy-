@@ -104,6 +104,7 @@ class Router {
                 elseif ($action === 'update') $controller->transactionUpdate();
                 elseif ($action === 'delete' && isset($segments[2])) $controller->transactionDelete($segments[2]);
                 elseif ($action === 'export') $controller->transactionExport();
+                elseif ($action === 'print') $controller->transactionPrint();
                 else $controller->transactions();
                 break;
 

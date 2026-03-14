@@ -4,10 +4,18 @@
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white font-outfit">Analytics</h1>
             <p class="text-gray-500 dark:text-slate-300 text-sm sm:text-base">Financial insights and trends for your account</p>
         </div>
-        <a href="<?php echo BASE_URL; ?>/transactions/export" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-5 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm w-full sm:w-auto">
-            <i data-lucide="download" class="h-4 w-4 mr-2"></i>
-            Export All Data
-        </a>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex gap-2">
+                <a href="<?php echo BASE_URL; ?>/transactions/export" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-5 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm">
+                    <i data-lucide="file-text" class="mr-2 h-4 w-4"></i>
+                    CSV
+                </a>
+                <a href="<?php echo BASE_URL; ?>/transactions/print" target="_blank" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-5 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm">
+                    <i data-lucide="printer" class="mr-2 h-4 w-4"></i>
+                    PDF
+                </a>
+            </div>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

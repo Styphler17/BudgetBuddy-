@@ -202,6 +202,14 @@ class DashboardController extends BaseController {
     }
 
     public function transactionExport() {
+        // Audit Log
+        try {
+            (new AuditLog())->log($this->userId, 'Export', 'User exported transactions to CSV');
+        } catch (Exception $e) {}
+
+        // Clear any previous output to ensure headers can be sent
+        if (ob_get_length()) ob_end_clean();
+
         $filters = [
             'search' => $_GET['search'] ?? null,
             'category_id' => $_GET['category_id'] ?? null,
@@ -232,6 +240,32 @@ class DashboardController extends BaseController {
         }
         fclose($output);
         exit;
+    }
+
+    public function transactionPrint() {
+        $filters = [
+            'search' => $_GET['search'] ?? null,
+            'category_id' => $_GET['category_id'] ?? null,
+            'account_id' => $_GET['account_id'] ?? null,
+            'type' => $_GET['type'] ?? null,
+            'start_date' => $_GET['start_date'] ?? null,
+            'end_date' => $_GET['end_date'] ?? null,
+        ];
+        
+        $transactionModel = new Transaction();
+        $transactions = $transactionModel->getByUserId($this->userId, 1000, $filters);
+        
+        $userModel = new User();
+        $user = $userModel->findById($this->userId);
+
+        $this->render('dashboard/print', [
+            'title' => 'Financial Report',
+            'layout' => null, // No sidebar/topbar for printing
+            'transactions' => $transactions,
+            'user' => $user,
+            'filters' => $filters,
+            'currency' => $user['currency'] ?? 'USD'
+        ]);
     }
 
     public function transferCreate() {
