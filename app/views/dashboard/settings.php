@@ -70,9 +70,9 @@
                                 <p class="text-xs text-gray-500 dark:text-slate-400">Use an app like Google Authenticator</p>
                             </div>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="enable_2fa" class="opacity-0 absolute h-0 w-0 peer" <?php echo ($user['two_factor_enabled'] ?? 0) ? 'checked' : ''; ?> onchange="this.form.submit()">
-                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary dark:peer-checked:bg-accent"></div>
+                        <label class="relative inline-flex h-6 w-11 items-center rounded-full cursor-pointer transition-all <?php echo ($user['two_factor_enabled'] ?? 0) ? 'bg-primary dark:bg-accent' : 'bg-gray-200 dark:bg-slate-700'; ?>">
+                            <input type="checkbox" name="enable_2fa" class="opacity-0 absolute h-0 w-0" <?php echo ($user['two_factor_enabled'] ?? 0) ? 'checked' : ''; ?> onchange="this.form.submit()">
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform <?php echo ($user['two_factor_enabled'] ?? 0) ? 'translate-x-6' : 'translate-x-1'; ?>"></span>
                         </label>
                     </div>
                 </form>
