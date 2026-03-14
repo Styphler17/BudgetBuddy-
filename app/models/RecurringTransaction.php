@@ -68,6 +68,34 @@ class RecurringTransaction {
     }
 
     /**
+     * Update recurring transaction
+     */
+    public function update($id, $data) {
+        $sql = "UPDATE recurring_transactions SET 
+                account_id = :account_id, 
+                category_id = :category_id, 
+                amount = :amount, 
+                description = :description, 
+                type = :type, 
+                frequency = :frequency, 
+                start_date = :start_date,
+                updated_at = NOW() 
+                WHERE id = :id";
+        
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            'id' => $id,
+            'account_id' => $data['account_id'],
+            'category_id' => $data['category_id'] ?? null,
+            'amount' => $data['amount'],
+            'description' => $data['description'] ?? '',
+            'type' => $data['type'],
+            'frequency' => $data['frequency'],
+            'start_date' => $data['start_date']
+        ]);
+    }
+
+    /**
      * Delete recurring transaction
      */
     public function delete($id) {

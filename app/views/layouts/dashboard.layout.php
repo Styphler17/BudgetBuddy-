@@ -85,11 +85,10 @@
         </main>
     </div>
 
-    <!-- Back to Top -->
-    <?php require_once APP_PATH . '/views/includes/BackToTop.php'; ?>
-
-    <!-- Save Changes Toast -->
-    <?php require_once APP_PATH . '/views/includes/ToastSave.php'; ?>
+    <!-- Global Modal Stack -->
+    <div id="global-modal-stack" class="fixed inset-0 z-[9999] pointer-events-none">
+        <?php echo $modal_content ?? ''; ?>
+    </div>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -143,6 +142,23 @@
         }
 
         // Desktop Collapsible Logic could go here
+
+        // Modal Helpers
+        window.openModal = function(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        window.closeModal = function(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        };
     </script>
 </body>
 </html>

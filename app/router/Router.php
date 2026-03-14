@@ -101,6 +101,7 @@ class Router {
                 $controller = new DashboardController();
                 $action = $segments[1] ?? 'list';
                 if ($action === 'create') $controller->transactionCreate();
+                elseif ($action === 'update') $controller->transactionUpdate();
                 elseif ($action === 'delete' && isset($segments[2])) $controller->transactionDelete($segments[2]);
                 elseif ($action === 'export') $controller->transactionExport();
                 else $controller->transactions();
@@ -110,6 +111,7 @@ class Router {
                 $controller = new DashboardController();
                 $action = $segments[1] ?? 'list';
                 if ($action === 'create') $controller->recurringCreate();
+                elseif ($action === 'update') $controller->recurringUpdate();
                 elseif ($action === 'delete' && isset($segments[2])) $controller->recurringDelete($segments[2]);
                 else $controller->recurring();
                 break;
@@ -123,6 +125,7 @@ class Router {
                 $controller = new DashboardController();
                 $action = $segments[1] ?? 'list';
                 if ($action === 'create') $controller->accountCreate();
+                elseif ($action === 'update') $controller->accountUpdate();
                 elseif ($action === 'delete' && isset($segments[2])) $controller->accountDelete($segments[2]);
                 elseif ($action === 'transfer') $controller->transferCreate();
                 else $controller->accounts();
@@ -137,6 +140,7 @@ class Router {
                 $controller = new DashboardController();
                 $action = $segments[1] ?? 'list';
                 if ($action === 'create') $controller->goalCreate();
+                elseif ($action === 'update') $controller->goalUpdate();
                 elseif ($action === 'delete' && isset($segments[2])) $controller->goalDelete($segments[2]);
                 else $controller->goals();
                 break;

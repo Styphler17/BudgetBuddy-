@@ -88,6 +88,55 @@ class Transaction {
     }
 
     /**
+     * Update an existing transaction (reverts old balance impact and applies new)
+     */
+    public function update($id, $data) {
+        $stmt = $this->db->prepare("SELECT * FROM transactions WHERE id = ?");
+        $stmt->execute([$id]);
+        $oldTx = $stmt->fetch();
+
+        if (!$oldTx) return false;
+
+        $accountModel = new Account();
+
+        // 1. Revert old balance impact
+        if ($oldTx['account_id']) {
+            $revertAmount = ($oldTx['type'] === 'income') ? -(float)$oldTx['amount'] : (float)$oldTx['amount'];
+            $accountModel->adjustBalance($oldTx['account_id'], $revertAmount);
+        }
+
+        // 2. Update transaction record
+        $sql = "UPDATE transactions SET 
+                category_id = :category_id, 
+                account_id = :account_id, 
+                amount = :amount, 
+                description = :description, 
+                type = :type, 
+                date = :date,
+                updated_at = NOW() 
+                WHERE id = :id";
+        
+        $stmt = $this->db->prepare($sql);
+        $result = $stmt->execute([
+            'id' => $id,
+            'category_id' => $data['category_id'] ?? null,
+            'account_id' => $data['account_id'] ?? null,
+            'amount' => $data['amount'],
+            'description' => $data['description'] ?? '',
+            'type' => $data['type'],
+            'date' => $data['date'] ?? date('Y-m-d')
+        ]);
+
+        // 3. Apply new balance impact
+        if ($result && !empty($data['account_id'])) {
+            $newAdjAmount = ($data['type'] === 'income') ? (float)$data['amount'] : -(float)$data['amount'];
+            $accountModel->adjustBalance($data['account_id'], $newAdjAmount);
+        }
+
+        return $result;
+    }
+
+    /**
      * Delete transaction (also reverts account balance)
      */
     public function delete($id) {

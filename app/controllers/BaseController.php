@@ -24,14 +24,21 @@ class BaseController {
         
         // Start output buffering for the view content
         ob_start();
-        require_once $viewPath;
+        require $viewPath;
         $content = ob_get_clean();
+
+        // Capture any modal content if defined in the view
+        $modal_content = '';
+        if (isset($GLOBALS['view_modal_content'])) {
+            $modal_content = $GLOBALS['view_modal_content'];
+            unset($GLOBALS['view_modal_content']);
+        }
         
         // Include layout if specified
         if ($layout) {
             $layoutPath = APP_PATH . '/views/layouts/' . $layout . '.layout.php';
             if (file_exists($layoutPath)) {
-                require_once $layoutPath;
+                require $layoutPath;
             } else {
                 echo $content;
             }
