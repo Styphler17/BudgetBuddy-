@@ -1,0 +1,26 @@
+# Prevent Directory Listing
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Ensure BASE_URL logic in index.php handles the subfolder if present
+    # This rule redirects all non-file/directory requests to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Security: Deny access to sensitive folders
+<FilesMatch "^(app|config|backend|node_modules|docs|\.git|\.env)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

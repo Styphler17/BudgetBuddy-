@@ -4,7 +4,7 @@
  */
 
 // Define Environment Mode
-define('APP_ENV', 'development'); // TEMPORARILY set to development to see the error
+define('APP_ENV', 'production');
 
 // Error reporting configuration
 if (APP_ENV === 'development') {
@@ -28,10 +28,10 @@ define('APP_PATH', ROOT_PATH . '/app');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 
 // Base URL detection
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['SERVER_PORT'] == 443 ? 'https://' : 'http://';
+$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'];
-$script_name = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-$base_url = rtrim($protocol . $host . $script_name, '/');
+// If the script is in a folder but accessed via a root subdomain, ensure BASE_URL is just the host
+$base_url = $protocol . $host;
 define('BASE_URL', $base_url);
 
 // Autoloader - Controllers, Models, and Router

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" fill="none">
+  <g opacity="0.65" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="24" y="36" width="68" height="44" rx="12" opacity="0.45"/>
+    <path opacity="0.45" d="M36 58h44"/>
+    <path opacity="0.45" d="M46 72h24"/>
+    <rect x="140" y="32" width="60" height="60" rx="18" opacity="0.4"/>
+    <path opacity="0.4" d="M170 46v32"/>
+    <path opacity="0.4" d="M154 62h32"/>
+    <circle opacity="0.3" cx="292" cy="68" r="32"/>
+    <path opacity="0.3" d="M276 72c8 6.5 16 10 24 10s16-3.5 24-10"/>
+    <path opacity="0.4" d="M292 48c8 0 8 12 0 12s-8 12 0 12"/>
+    <rect opacity="0.35" x="64" y="150" width="60" height="72" rx="20"/>
+    <path opacity="0.35" d="M96 164v16"/>
+    <path opacity="0.35" d="M80 212h32"/>
+    <path opacity="0.45" d="M64 198h60"/>
+    <rect opacity="0.35" x="210" y="152" width="88" height="64" rx="18"/>
+    <path opacity="0.35" d="M226 172h56"/>
+    <path opacity="0.35" d="M226 188h56"/>
+    <path opacity="0.35" d="M226 204h36"/>
+    <path opacity="0.4" d="M328 148h48"/>
+    <path opacity="0.4" d="M328 164h32"/>
+    <path opacity="0.4" d="M328 180h40"/>
+    <path opacity="0.4" d="M328 196h28"/>
+    <circle opacity="0.28" cx="116" cy="284" r="28"/>
+    <path opacity="0.28" d="M104 286c5.5 4.5 11 7 16 7s10.5-2.5 16-7"/>
+    <path opacity="0.32" d="M116 268c9 0 9 14 0 14s-9 14 0 14"/>
+    <path opacity="0.32" d="M216 276h62"/>
+    <path opacity="0.32" d="M216 292h46"/>
+    <rect opacity="0.3" x="310" y="260" width="56" height="72" rx="18"/>
+    <path opacity="0.3" d="M322 308c10 6 20 6 32 0"/>
+    <circle opacity="0.3" cx="338" cy="284" r="8"/>
+    <rect opacity="0.4" x="28" y="276" width="44" height="44" rx="12"/>
+    <path opacity="0.4" d="M40 292h20"/>
+    <path opacity="0.4" d="M40 308h20"/>
+    <path opacity="0.3" d="M220 36c0 16-28 16-28 32s28 16 28 32"/>
+    <path opacity="0.3" d="M348 324c0 16-28 16-28 32s28 16 28 32"/>
+    <path opacity="0.3" d="M188 328h68"/>
+    <path opacity="0.3" d="M208 344h40"/>
+    <circle opacity="0.25" cx="60" cy="352" r="30"/>
+    <path opacity="0.25" d="M42 348c6.5 8 12.5 12 18 12s11.5-4 18-12"/>
+  </g>
+</svg>

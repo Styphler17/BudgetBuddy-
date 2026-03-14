@@ -125,7 +125,7 @@
                 <div class="lg:order-1 glowing-wrapper">
                     <div class="glowing-effect-container"></div>
                     <div class="relative rounded-[1.5rem] overflow-hidden shadow-2xl border border-gray-100 dark:border-white/5 z-10 bg-white dark:bg-slate-900">
-                        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&auto=format&fit=crop&q=60" alt="Simplified Spreadsheet" class="w-full h-auto">
+                        <img src="<?php echo BASE_URL; ?>/public/img/home-feature-2.png" alt="Simplified Spreadsheet" class="w-full h-auto">
                     </div>
                 </div>
             </div>
