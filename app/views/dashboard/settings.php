@@ -68,18 +68,18 @@
                             <p class="text-xs text-gray-500 dark:text-slate-400">Use an app like Google Authenticator</p>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="enable_2fa" class="sr-only peer" <?php echo $user['two_factor_enabled'] ? 'checked' : ''; ?> onchange="this.form.submit()">
+                            <input type="checkbox" name="enable_2fa" class="sr-only peer" <?php echo ($user['two_factor_enabled'] ?? 0) ? 'checked' : ''; ?> onchange="this.form.submit()">
                             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary dark:peer-checked:bg-accent"></div>
                         </label>
                     </div>
                 </form>
 
-                <?php if ($user['two_factor_enabled']): ?>
+                <?php if ($user['two_factor_enabled'] ?? 0): ?>
                     <div class="p-4 border border-blue-100 dark:border-blue-900/30 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
                         <div class="flex gap-3">
                             <i data-lucide="info" class="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0"></i>
                             <div class="text-xs text-blue-700 dark:text-blue-300">
-                                2FA is active. Your secret key is: <code class="font-mono font-bold bg-blue-100 dark:bg-blue-900/50 px-1 rounded"><?php echo $user['two_factor_secret']; ?></code>. 
+                                2FA is active. Your secret key is: <code class="font-mono font-bold bg-blue-100 dark:bg-blue-900/50 px-1 rounded"><?php echo $user['two_factor_secret'] ?? 'N/A'; ?></code>. 
                                 <p class="mt-1">Enter this secret into your authenticator app.</p>
                             </div>
                         </div>
