@@ -21,6 +21,14 @@ try {
             user_agent TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )",
+        "CREATE TABLE IF NOT EXISTS exchange_rates (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            from_currency VARCHAR(3) NOT NULL,
+            to_currency VARCHAR(3) NOT NULL,
+            rate DECIMAL(15, 6) NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY (from_currency, to_currency)
         )"
     ];
     

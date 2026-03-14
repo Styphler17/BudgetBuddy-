@@ -46,6 +46,10 @@ class DashboardController extends BaseController {
         $today = date('Y-m-d');
         $thisMonthStart = date('Y-m-01');
         
+        $userModel = new User();
+        $user = $userModel->findById($this->userId);
+        $preferredCurrency = $user['currency'] ?? 'USD';
+        
         $income = $transactionModel->getTotals($this->userId, 'income', $thisMonthStart, $today);
         $expense = $transactionModel->getTotals($this->userId, 'expense', $thisMonthStart, $today);
         $accounts = $accountModel->getByUserId($this->userId);
@@ -53,31 +57,19 @@ class DashboardController extends BaseController {
         $categories = $categoryModel->getByUserId($this->userId);
         $goals = (new Goal())->getByUserId($this->userId);
 
-        // Calculate spending per category for the budget progress section
-        $budgetProgress = [];
-        foreach ($categories as $category) {
-            if ($category['budget'] > 0) {
-                $stmt = Database::getConnection()->prepare("
-                    SELECT SUM(amount) as total 
-                    FROM transactions 
-                    WHERE user_id = ? AND category_id = ? AND type = 'expense' AND date BETWEEN ? AND ?
-                ");
-                $stmt->execute([$this->userId, $category['id'], $thisMonthStart, $today]);
-                $spent = $stmt->fetch()['total'] ?? 0;
-                
-                $budgetProgress[] = [
-                    'name' => $category['name'],
-                    'spent' => $spent,
-                    'limit' => $category['budget'],
-                    'percentage' => ($spent / $category['budget']) * 100,
-                    'color' => $category['color']
-                ];
+        // Multi-currency Total Balance Calculation
+        $currencyService = new CurrencyService();
+        $totalBalance = 0;
+        foreach ($accounts as $account) {
+            $balance = (float)$account['balance'];
+            $accountCurrency = $account['currency'] ?? 'USD';
+            
+            if ($accountCurrency !== $preferredCurrency) {
+                $totalBalance += $currencyService->convert($balance, $accountCurrency, $preferredCurrency);
+            } else {
+                $totalBalance += $balance;
             }
         }
-        
-        $totalBalance = array_reduce($accounts, function($carry, $item) {
-            return $carry + $item['balance'];
-        }, 0);
 
         $this->render('dashboard/index', [
             'title' => 'Dashboard',

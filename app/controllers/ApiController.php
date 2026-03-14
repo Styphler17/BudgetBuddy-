@@ -31,19 +31,28 @@ class ApiController extends BaseController {
     public function getMetrics() {
         $transactionModel = new Transaction();
         $accountModel = new Account();
+        $userModel = new User();
         
         $today = date('Y-m-d');
         $thisMonthStart = date('Y-m-01');
+        
+        $user = $userModel->findById($this->userId);
+        $preferredCurrency = $user['currency'] ?? 'USD';
         
         $income = $transactionModel->getTotals($this->userId, 'income', $thisMonthStart, $today);
         $expense = $transactionModel->getTotals($this->userId, 'expense', $thisMonthStart, $today);
         $accounts = $accountModel->getByUserId($this->userId);
         
-        $totalBalance = array_reduce($accounts, function($carry, $item) {
-            return $carry + $item['balance'];
-        }, 0);
+        $currencyService = new CurrencyService();
+        $totalBalance = 0;
+        foreach ($accounts as $account) {
+            $balance = (float)$account['balance'];
+            $accountCurrency = $account['currency'] ?? 'USD';
+            $totalBalance += $currencyService->convert($balance, $accountCurrency, $preferredCurrency);
+        }
 
         $this->jsonResponse([
+            'currency' => $preferredCurrency,
             'income' => (float)$income,
             'expense' => (float)$expense,
             'balance' => (float)$totalBalance,
