@@ -20,7 +20,7 @@
     <!-- Filter Bar -->
     <div class="glowing-wrapper">
         <div class="glowing-effect-container"></div>
-        <div class="bg-white dark:bg-slate-900/50 p-5 rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm relative z-10">
+        <div class="bg-white dark:bg-slate-900/50 p-5 rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm relative">
             <form method="GET" action="<?php echo BASE_URL; ?>/transactions" class="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div class="space-y-1.5">
                     <label class="text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Search</label>
@@ -73,7 +73,7 @@
     <!-- Transactions List -->
     <div class="glowing-wrapper">
         <div class="glowing-effect-container"></div>
-        <div class="glass-card overflow-hidden relative z-10">
+        <div class="glass-card overflow-hidden relative">
             <div class="p-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white font-outfit">History</h3>
             </div>
@@ -89,7 +89,7 @@
             <?php else: ?>
                 <?php foreach ($transactions as $tx): ?>
                 <div class="flex items-center justify-between p-5 hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-all group">
-                    <div class="flex items-center gap-5">
+                    <div class="flex items-center gap-6">
                         <div class="h-12 w-12 rounded-2xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-2xl border border-gray-200/50 dark:border-white/5">
                             <?php if ($tx['category_emoji']): ?>
                                 <span><?php echo $tx['category_emoji']; ?></span>
@@ -135,12 +135,12 @@
 ob_start(); 
 ?>
 <!-- Add Transaction Modal -->
-<div id="add-transaction-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="add-transaction-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('add-transaction-modal')"></div>
         <div class="relative w-full max-w-xl glowing-wrapper animate-in fade-in zoom-in duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="text-2xl font-black text-gray-900 dark:text-white font-outfit">New Transaction</h3>
                     <button onclick="closeModal('add-transaction-modal')" class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
@@ -194,12 +194,12 @@ ob_start();
 </div>
 
 <!-- Edit Transaction Modal -->
-<div id="edit-transaction-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="edit-transaction-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('edit-transaction-modal')"></div>
         <div class="relative w-full max-w-xl glowing-wrapper animate-in fade-in zoom-in duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="text-2xl font-black text-gray-900 dark:text-white font-outfit">Edit Transaction</h3>
                     <button onclick="closeModal('edit-transaction-modal')" class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
@@ -254,12 +254,12 @@ ob_start();
 </div>
 
 <!-- Transaction Delete Modal -->
-<div id="delete-transaction-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="delete-transaction-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('delete-transaction-modal')"></div>
         <div class="relative w-full max-w-sm glowing-wrapper animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10 text-center">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative text-center">
                 <div class="h-20 w-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6 text-red-600 dark:text-red-400">
                     <i data-lucide="trash-2" class="h-10 w-10"></i>
                 </div>

@@ -380,7 +380,9 @@ class DashboardController extends BaseController {
                 $_SESSION['user_name'] = $data['name'];
                 
                 // Audit Log
-                (new AuditLog())->log($this->userId, 'Profile Update', 'User updated display name or email');
+                try {
+                    (new AuditLog())->log($this->userId, 'Profile Update', 'User updated display name or email');
+                } catch (Exception $e) {}
                 
                 $this->redirect('/settings');
             }
@@ -393,7 +395,9 @@ class DashboardController extends BaseController {
                     $userModel->update($this->userId, $data);
                     
                     // Audit Log
-                    (new AuditLog())->log($this->userId, 'Password Change', 'User changed their password');
+                    try {
+                        (new AuditLog())->log($this->userId, 'Password Change', 'User changed their password');
+                    } catch (Exception $e) {}
                 }
                 $this->redirect('/settings');
             }
@@ -408,14 +412,18 @@ class DashboardController extends BaseController {
                         'two_factor_secret' => $secret
                     ];
                     // Audit Log
-                    (new AuditLog())->log($this->userId, '2FA Enabled', 'User enabled Two-Factor Authentication');
+                    try {
+                        (new AuditLog())->log($this->userId, '2FA Enabled', 'User enabled Two-Factor Authentication');
+                    } catch (Exception $e) {}
                 } else {
                     $data = [
                         'two_factor_enabled' => 0,
                         'two_factor_secret' => null
                     ];
                     // Audit Log
-                    (new AuditLog())->log($this->userId, '2FA Disabled', 'User disabled Two-Factor Authentication');
+                    try {
+                        (new AuditLog())->log($this->userId, '2FA Disabled', 'User disabled Two-Factor Authentication');
+                    } catch (Exception $e) {}
                 }
                 $userModel->update($this->userId, $data);
                 $this->redirect('/settings');
@@ -423,7 +431,9 @@ class DashboardController extends BaseController {
 
             if ($action === 'delete_account') {
                 // Audit Log (Log before deletion)
-                (new AuditLog())->log($this->userId, 'Account Deletion', 'User deleted their account');
+                try {
+                    (new AuditLog())->log($this->userId, 'Account Deletion', 'User deleted their account');
+                } catch (Exception $e) {}
                 
                 $userModel->delete($this->userId);
                 session_destroy();

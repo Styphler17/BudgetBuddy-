@@ -14,7 +14,7 @@
     <!-- Recurring Rules List -->
     <div class="glowing-wrapper">
         <div class="glowing-effect-container"></div>
-        <div class="glass-card overflow-hidden relative z-10">
+        <div class="glass-card overflow-hidden relative">
             <div class="p-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white font-outfit">Active Automations</h3>
             </div>
@@ -68,12 +68,12 @@
 ob_start(); 
 ?>
 <!-- Add Recurring Modal -->
-<div id="add-recurring-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="add-recurring-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('add-recurring-modal')"></div>
         <div class="relative w-full max-w-xl glowing-wrapper animate-in fade-in zoom-in duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="text-2xl font-black text-gray-900 dark:text-white font-outfit">New Automation</h3>
                     <button onclick="closeModal('add-recurring-modal')" class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
@@ -136,12 +136,12 @@ ob_start();
 </div>
 
 <!-- Edit Recurring Modal -->
-<div id="edit-recurring-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="edit-recurring-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('edit-recurring-modal')"></div>
         <div class="relative w-full max-w-xl glowing-wrapper animate-in fade-in zoom-in duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="text-2xl font-black text-gray-900 dark:text-white font-outfit">Edit Automation</h3>
                     <button onclick="closeModal('edit-recurring-modal')" class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
@@ -205,12 +205,12 @@ ob_start();
 </div>
 
 <!-- Recurring Delete Modal -->
-<div id="delete-recurring-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="delete-recurring-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('delete-recurring-modal')"></div>
         <div class="relative w-full max-w-sm glowing-wrapper animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10 text-center">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative text-center">
                 <div class="h-20 w-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6 text-red-600 dark:text-red-400">
                     <i data-lucide="clock-off" class="h-10 w-10"></i>
                 </div>

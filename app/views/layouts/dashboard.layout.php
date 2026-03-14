@@ -40,6 +40,14 @@
             background-color: #020617;
             color: #f1f5f9;
         }
+
+        .z-modal-stack {
+            z-index: 9999 !important;
+        }
+        
+        .modal-container {
+            pointer-events: auto !important;
+        }
     </style>
     <script>
         function togglePassword(inputId, iconId) {
@@ -86,7 +94,7 @@
     </div>
 
     <!-- Global Modal Stack -->
-    <div id="global-modal-stack" class="fixed inset-0 z-[9999] pointer-events-none">
+    <div id="global-modal-stack" class="fixed inset-0 z-modal-stack pointer-events-none">
         <?php echo $modal_content ?? ''; ?>
     </div>
 

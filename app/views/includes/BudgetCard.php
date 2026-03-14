@@ -37,7 +37,7 @@ $amount = $amount ?? '$0.00';
 
 <div class="glowing-wrapper">
     <div class="glowing-effect-container"></div>
-    <div class="glass-card p-6 border-l-4 hover-lift active:scale-[0.98] transition-all duration-300 <?php echo $currentStyle; ?> relative z-10 h-full">
+    <div class="glass-card p-6 border-l-4 hover-lift active:scale-[0.98] transition-all duration-300 <?php echo $currentStyle; ?> relative h-full">
         <div class="flex items-start justify-between mb-4">
             <p class="text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-widest">
                 <?php echo htmlspecialchars((string)$title); ?>

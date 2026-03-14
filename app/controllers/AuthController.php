@@ -20,7 +20,11 @@ class AuthController extends BaseController {
                 $_SESSION['user_email'] = $user['email'];
                 
                 // Audit Log
-                (new AuditLog())->log($user['id'], 'Login', 'Successful login');
+                try {
+                    (new AuditLog())->log($user['id'], 'Login', 'Successful login');
+                } catch (Exception $e) {
+                    // Ignore logging errors
+                }
                 
                 $this->redirect('/dashboard');
             } elseif ($result && $result['status'] === 'require_2fa') {
@@ -61,7 +65,9 @@ class AuthController extends BaseController {
                     unset($_SESSION['temp_user_id']);
                     
                     // Audit Log
-                    (new AuditLog())->log($user['id'], '2FA Login', 'Successful 2FA verification');
+                    try {
+                        (new AuditLog())->log($user['id'], '2FA Login', 'Successful 2FA verification');
+                    } catch (Exception $e) {}
                     
                     $this->redirect('/dashboard');
                 } else {
@@ -100,8 +106,10 @@ class AuthController extends BaseController {
                     @mail($data['email'], $subject, $message);
                     
                     // Audit Log
-                    $user = $userModel->findByEmail($data['email']);
-                    if ($user) (new AuditLog())->log($user['id'], 'Registration', 'Account created, pending verification');
+                    try {
+                        $user = $userModel->findByEmail($data['email']);
+                        if ($user) (new AuditLog())->log($user['id'], 'Registration', 'Account created, pending verification');
+                    } catch (Exception $e) {}
                     
                     $this->render('auth/register-success', [
                         'title' => 'Registration Successful',
@@ -156,7 +164,9 @@ class AuthController extends BaseController {
     
     public function logout() {
         if (isset($_SESSION['user_id'])) {
-            (new AuditLog())->log($_SESSION['user_id'], 'Logout', 'User logged out');
+            try {
+                (new AuditLog())->log($_SESSION['user_id'], 'Logout', 'User logged out');
+            } catch (Exception $e) {}
         }
         session_destroy();
         $this->redirect('/');

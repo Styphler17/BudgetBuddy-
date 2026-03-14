@@ -20,7 +20,7 @@
     <!-- Notification List -->
     <div class="glowing-wrapper">
         <div class="glowing-effect-container"></div>
-        <div class="glass-card overflow-hidden relative z-10">
+        <div class="glass-card overflow-hidden relative">
             <div class="divide-y divide-gray-100/50 dark:divide-white/5">
             <?php if (empty($notifications)): ?>
                 <div class="p-12 text-center text-gray-500 dark:text-slate-300">

@@ -8,7 +8,7 @@
         <!-- Spending by Category -->
         <div class="lg:col-span-1 glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative h-full">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 font-outfit">Spending by Category</h3>
                 <div class="h-[300px] w-full flex items-center justify-center relative">
                     <canvas id="spendingPieChart"></canvas>
@@ -19,7 +19,7 @@
         <!-- Trends -->
         <div class="md:col-span-2 glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative h-full">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 font-outfit">Income vs Expenses Trends</h3>
                 <div class="h-[300px] w-full">
                     <canvas id="trendsBarChart"></canvas>
@@ -30,7 +30,7 @@
         <!-- Budget Overview -->
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative h-full">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 font-outfit">Budget Overview</h3>
                 <?php 
                     $net = $income - $expense; 
@@ -70,7 +70,7 @@
         <!-- Cumulative Trend -->
         <div class="md:col-span-2 glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm relative h-full">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 font-outfit">Expense Trend</h3>
                 <div class="h-[300px] w-full">
                     <canvas id="expenseLineChart"></canvas>

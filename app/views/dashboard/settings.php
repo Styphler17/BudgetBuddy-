@@ -8,7 +8,7 @@
         <!-- Profile Settings -->
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative h-full">
                 <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center gap-2">
                         <i data-lucide="user" class="h-5 w-5 text-primary dark:text-accent"></i>
@@ -52,7 +52,7 @@
         <!-- Two-Factor Authentication -->
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative h-full">
                 <div class="flex items-center gap-2 mb-2">
                     <i data-lucide="shield-check" class="h-5 w-5 text-primary dark:text-accent"></i>
                     <h2 class="text-lg font-bold text-gray-900 dark:text-white">Two-Factor Authentication</h2>
@@ -94,7 +94,7 @@
         <!-- Notification Preferences -->
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative h-full">
                 <div class="flex items-center gap-2 mb-2">
                     <i data-lucide="bell" class="h-5 w-5 text-secondary dark:text-accent"></i>
                     <h2 class="text-lg font-bold text-gray-900 dark:text-white">Notification Preferences</h2>
@@ -126,7 +126,7 @@
         <!-- Security -->
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative h-full">
                 <div class="flex items-center gap-2 mb-2">
                     <i data-lucide="shield" class="h-5 w-5 text-blue-500"></i>
                     <h2 class="text-lg font-bold text-gray-900 dark:text-white">Security</h2>
@@ -162,7 +162,7 @@
         <!-- Currency Preferences -->
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative z-10 h-full">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4 relative h-full">
                 <div class="flex items-center gap-2 mb-2">
                     <i data-lucide="coins" class="h-5 w-5 text-yellow-500"></i>
                     <h2 class="text-lg font-bold text-gray-900 dark:text-white">Currency Preferences</h2>
@@ -196,7 +196,7 @@
     <!-- Data Management -->
     <div class="glowing-wrapper">
         <div class="glowing-effect-container"></div>
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-6 relative z-10">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-6 relative">
             <h2 class="text-lg font-bold text-gray-900 dark:text-white">Data Management</h2>
             
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -227,7 +227,7 @@
     <!-- Recent Activity -->
     <div class="glowing-wrapper">
         <div class="glowing-effect-container"></div>
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-6 relative z-10">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-6 relative">
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">Recent Activity</h2>
                 <i data-lucide="history" class="h-5 w-5 text-gray-400"></i>

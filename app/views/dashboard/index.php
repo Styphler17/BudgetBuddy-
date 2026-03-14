@@ -77,7 +77,7 @@
         <!-- Recent Transactions -->
         <div class="lg:col-span-2 glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="glass-card p-6 relative z-10 h-full">
+            <div class="glass-card p-6 relative h-full">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">Recent Transactions</h3>
                     <a href="<?php echo BASE_URL; ?>/transactions" class="text-sm font-medium text-primary dark:text-accent hover:underline">View All</a>
@@ -121,7 +121,7 @@
         <!-- Budget Progress -->
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="glass-card p-6 relative z-10 h-full">
+            <div class="glass-card p-6 relative h-full">
                 <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit mb-6">Budget Progress</h3>
                 
                 <div class="space-y-6">
@@ -154,7 +154,7 @@
         <!-- Savings Goals -->
         <div class="glowing-wrapper">
             <div class="glowing-effect-container"></div>
-            <div class="glass-card p-6 relative z-10 h-full">
+            <div class="glass-card p-6 relative h-full">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">Savings Goals</h3>
                     <a href="<?php echo BASE_URL; ?>/goals" class="text-sm font-medium text-primary dark:text-accent hover:underline">Manage</a>

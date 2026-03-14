@@ -14,7 +14,7 @@
         <?php if (empty($goals)): ?>
             <div class="col-span-full glowing-wrapper">
                 <div class="glowing-effect-container"></div>
-                <div class="bg-white dark:bg-slate-900 p-16 rounded-[2rem] border border-gray-200 dark:border-white/10 text-center text-gray-500 dark:text-slate-300 relative z-10">
+                <div class="bg-white dark:bg-slate-900 p-16 rounded-[2rem] border border-gray-200 dark:border-white/10 text-center text-gray-500 dark:text-slate-300 relative">
                     <div class="h-20 w-20 bg-gray-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
                         <i data-lucide="target" class="h-10 w-10 opacity-20"></i>
                     </div>
@@ -30,7 +30,7 @@
             ?>
             <div class="glowing-wrapper">
                 <div class="glowing-effect-container"></div>
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border <?php echo $isCompleted ? 'border-green-200 dark:border-green-900/50 bg-green-50/30 dark:bg-green-900/10' : 'border-gray-200 dark:border-white/10'; ?> shadow-sm space-y-4 group relative z-10 h-full transition-all">
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border <?php echo $isCompleted ? 'border-green-200 dark:border-green-900/50 bg-green-50/30 dark:bg-green-900/10' : 'border-gray-200 dark:border-white/10'; ?> shadow-sm space-y-4 group relative h-full transition-all">
                     <div class="flex items-start justify-between">
                         <div class="flex items-center gap-3">
                             <div class="h-12 w-12 rounded-2xl bg-gray-50 dark:bg-slate-800 flex items-center justify-center border border-gray-100 dark:border-white/5">
@@ -78,12 +78,12 @@
 ob_start(); 
 ?>
 <!-- Add Goal Modal -->
-<div id="add-goal-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="add-goal-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('add-goal-modal')"></div>
         <div class="relative w-full max-w-md glowing-wrapper animate-in fade-in zoom-in duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="text-2xl font-black text-gray-900 dark:text-white font-outfit">New Goal</h3>
                     <button onclick="closeModal('add-goal-modal')" class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
@@ -113,12 +113,12 @@ ob_start();
 </div>
 
 <!-- Edit Goal Modal -->
-<div id="edit-goal-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="edit-goal-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('edit-goal-modal')"></div>
         <div class="relative w-full max-w-md glowing-wrapper animate-in fade-in zoom-in duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="text-2xl font-black text-gray-900 dark:text-white font-outfit">Edit Goal</h3>
                     <button onclick="closeModal('edit-goal-modal')" class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
@@ -153,12 +153,12 @@ ob_start();
 </div>
 
 <!-- Goal Delete Modal -->
-<div id="delete-goal-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+<div id="delete-goal-modal" class="fixed inset-0 modal-container hidden overflow-y-auto">
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('delete-goal-modal')"></div>
         <div class="relative w-full max-w-sm glowing-wrapper animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10 text-center">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative text-center">
                 <div class="h-20 w-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6 text-red-600 dark:text-red-400">
                     <i data-lucide="alert-triangle" class="h-10 w-10"></i>
                 </div>
