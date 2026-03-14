@@ -64,9 +64,7 @@
                     <input type="hidden" name="action" value="update_2fa">
                     <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-white/5">
                         <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary dark:text-accent">
-                                <i data-lucide="smartphone" class="h-5 w-5"></i>
-                            </div>
+                            <i data-lucide="shield-check" class="h-5 w-5 text-primary dark:text-accent"></i>
                             <div class="space-y-0.5">
                                 <span class="text-sm font-bold text-gray-900 dark:text-white">Enable TOTP 2FA</span>
                                 <p class="text-xs text-gray-500 dark:text-slate-400">Use an app like Google Authenticator</p>
