@@ -102,9 +102,48 @@ class AuthController extends BaseController {
                     // Send verification email
                     $verifyLink = BASE_URL . "/verify-email?token=" . $token;
                     $subject = "Verify your SpendScribe account";
-                    $message = "Hello " . $data['name'] . ",\n\nPlease click the link below to verify your email address:\n" . $verifyLink;
                     
-                    @mail($data['email'], $subject, $message);
+                    // Professional HTML Email Template
+                    $message = "
+                    <html>
+                    <head>
+                        <style>
+                            .email-container { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #1e293b; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+                            .header { background-color: #10237f; padding: 30px; text-align: center; }
+                            .logo { color: #ffffff; font-size: 24px; font-weight: bold; text-decoration: none; }
+                            .content { padding: 40px; background-color: #ffffff; }
+                            .button { display: inline-block; padding: 14px 30px; background-color: #10237f; color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px; }
+                            .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; background-color: #f8fafc; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class='email-container'>
+                            <div class='header'>
+                                <a href='" . BASE_URL . "' class='logo'>SpendScribe</a>
+                            </div>
+                            <div class='content'>
+                                <h2>Welcome to SpendScribe, " . htmlspecialchars($data['name']) . "!</h2>
+                                <p>Thank you for joining SpendScribe. To start tracking your finances with total privacy and control, please verify your email address by clicking the button below.</p>
+                                <div style='text-align: center;'>
+                                    <a href='" . $verifyLink . "' class='button'>Verify My Email Address</a>
+                                </div>
+                                <p style='margin-top: 30px; font-size: 14px; color: #64748b;'>If the button doesn't work, copy and paste this link into your browser:</p>
+                                <p style='font-size: 12px; color: #10237f; word-break: break-all;'>" . $verifyLink . "</p>
+                            </div>
+                            <div class='footer'>
+                                <p>&copy; " . date('Y') . " SpendScribe. Built by CreativeUtil.</p>
+                                <p>You received this email because you signed up for SpendScribe.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                    ";
+
+                    $headers = "MIME-Version: 1.0" . "\r\n";
+                    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+                    $headers .= "From: SpendScribe <noreply@creativeutil.com>" . "\r\n";
+                    
+                    @mail($data['email'], $subject, $message, $headers);
                     
                     // Audit Log
                     try {
