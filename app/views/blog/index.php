@@ -1,7 +1,16 @@
 <div class="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
     <!-- Header/Hero Section -->
-    <section class="bg-gray-50 dark:bg-slate-900/50 py-20 pt-32">
-        <div class="container mx-auto max-w-5xl px-6 text-center">
+    <section class="relative overflow-hidden bg-gray-50 dark:bg-slate-900/50 py-24 pt-40">
+        <!-- Video Background -->
+        <div class="absolute inset-0 z-0">
+            <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-30 dark:opacity-10 transition-opacity duration-1000">
+                <source src="<?php echo BASE_URL; ?>/public/videos/blog-hero-bg.webm" type="video/webm">
+            </video>
+            <!-- Overlay for readability -->
+            <div class="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-white/90 dark:from-slate-950/60 dark:via-transparent dark:to-slate-950/90"></div>
+        </div>
+
+        <div class="container mx-auto max-w-5xl px-6 text-center relative z-10">
             <nav class="mb-8 flex justify-center text-sm text-gray-500 dark:text-slate-400 font-medium">
                 <a href="<?php echo BASE_URL; ?>/" class="hover:text-primary dark:hover:text-accent transition-colors">Home</a>
                 <span class="mx-3 text-gray-300 dark:text-slate-700">/</span>

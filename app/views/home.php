@@ -12,79 +12,63 @@
 
 <div class="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-[#EEF2FF] to-[#F8FAFF] dark:from-slate-900 dark:to-slate-950 pt-32 pb-24 lg:pt-48 lg:pb-40 px-4">
-        <!-- Soft Mesh Orbs -->
-        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 dark:bg-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
-        <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/5 dark:bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+    <section class="relative overflow-hidden bg-white dark:bg-slate-950 pt-32 pb-24 lg:pt-48 lg:pb-40 px-4">
+        <!-- Video Background with Side Fade Mask -->
+        <div class="absolute inset-0 z-0">
+            <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-40 dark:opacity-20 transition-opacity duration-1000">
+                <source src="<?php echo BASE_URL; ?>/public/videos/home-hero-bg.webm" type="video/webm">
+            </video>
+            <!-- Enhanced Overlays for Readability -->
+            <div class="absolute inset-0 bg-white/40 dark:bg-slate-950/60 backdrop-blur-[2px]"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white dark:from-slate-950/20 dark:to-slate-950"></div>
+        </div>
 
-        <div class="container mx-auto max-w-7xl relative z-10 text-left">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="text-center lg:text-left animate-slide-up">
-                    <span class="inline-flex items-center rounded-full border border-primary/10 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-8 shadow-sm glow-primary relative overflow-hidden">
-                        <span class="relative z-10">🎉 The Best Budget App Without Bank Sync</span>
-                        <div class="absolute inset-0 animate-shimmer opacity-30"></div>
-                    </span>
-                    
-                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-display tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
-                        Beautifully Simple Tracking, <span class="text-primary dark:text-accent italic font-medium">Without</span> the Bank Connection
-                    </h1>
-                    
-                    <p class="text-xl text-gray-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-body">
-                        SpendScribe is a premium manual budget app for those who want total privacy and control. No Plaid, no bank links—just clean, distraction-free manual entry.
-                    </p>
+        <div class="container mx-auto max-w-7xl relative z-10 text-center">
+            <div class="max-w-4xl mx-auto animate-slide-up">
+                <span class="inline-flex items-center rounded-full border border-primary/10 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-8 shadow-sm glow-primary relative overflow-hidden">
+                    <span class="relative z-10">🎉 The Best Budget App Without Bank Sync</span>
+                    <div class="absolute inset-0 animate-shimmer opacity-30"></div>
+                </span>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-display tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1] drop-shadow-sm">
+                    Beautifully Simple Tracking, <br class="hidden md:block"> <span class="text-primary dark:text-accent italic font-medium">Without</span> the Bank Connection
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-700 dark:text-slate-200 mb-12 max-w-3xl mx-auto leading-relaxed font-body font-medium drop-shadow-sm">
+                    SpendScribe is a premium manual budget app for those who want total privacy and control. No Plaid, no bank links—just clean, distraction-free manual entry.
+                </p>
 
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <?php if (isset($_SESSION['user_id'])): ?>
-                            <?php 
-                                $text = 'Go to Dashboard';
-                                $type = 'a';
-                                $href = BASE_URL . '/dashboard';
-                                $variant = 'primary';
-                                $size = 'lg';
-                                $icon = 'arrow-right';
-                                include APP_PATH . '/views/includes/Button.php';
-                            ?>
-                        <?php else: ?>
-                            <?php 
-                                $text = 'Start Tracking Manually';
-                                $type = 'a';
-                                $href = BASE_URL . '/register';
-                                $variant = 'primary';
-                                $size = 'lg';
-                                $icon = 'arrow-right';
-                                include APP_PATH . '/views/includes/Button.php';
-                            ?>
-                            <?php 
-                                $text = 'See How It Works';
-                                $type = 'a';
-                                $href = '#features';
-                                $variant = 'outline';
-                                $size = 'lg';
-                                $class = 'dark:bg-transparent dark:text-accent dark:border-accent/30';
-                                include APP_PATH . '/views/includes/Button.php';
-                            ?>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <!-- Product Mockup -->
-                <div class="relative lg:block animate-fade-in delay-200">
-                    <div class="relative rounded-3xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden group">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" alt="Dashboard Preview" class="w-full h-auto transform transition-transform duration-1000 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
-                    <!-- Floating elements -->
-                    <div class="absolute -top-8 -right-8 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-xl border border-gray-100 dark:border-white/5 animate-float">
-                        <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center text-green-600 dark:text-green-400">
-                                <i data-lucide="trending-up" class="h-6 w-6"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Savings</p>
-                                <p class="text-sm font-bold text-gray-900 dark:text-white">+24% Increase</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <?php 
+                            $text = 'Go to Dashboard';
+                            $type = 'a';
+                            $href = BASE_URL . '/dashboard';
+                            $variant = 'primary';
+                            $size = 'lg';
+                            $icon = 'arrow-right';
+                            include APP_PATH . '/views/includes/Button.php';
+                        ?>
+                    <?php else: ?>
+                        <?php 
+                            $text = 'Start Tracking Manually';
+                            $type = 'a';
+                            $href = BASE_URL . '/register';
+                            $variant = 'primary';
+                            $size = 'lg';
+                            $icon = 'arrow-right';
+                            include APP_PATH . '/views/includes/Button.php';
+                        ?>
+                        <?php 
+                            $text = 'See How It Works';
+                            $type = 'a';
+                            $href = '#features';
+                            $variant = 'outline';
+                            $size = 'lg';
+                            $class = 'dark:bg-transparent dark:text-accent dark:border-accent/30';
+                            include APP_PATH . '/views/includes/Button.php';
+                        ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -119,7 +103,7 @@
             <div class="glowing-wrapper">
                 <div class="glowing-effect-container"></div>
                 <div class="relative rounded-[1.5rem] overflow-hidden shadow-2xl border border-gray-100 dark:border-white/5 z-10 bg-white dark:bg-slate-900">
-                    <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=800&auto=format&fit=crop&q=60" alt="Organized Budgeting" class="w-full h-auto">
+                    <img src="<?php echo BASE_URL; ?>/public/img/home-feature-1.png" alt="Organized Budgeting" class="w-full h-auto">
                 </div>
             </div>
         </div>
