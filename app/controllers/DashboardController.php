@@ -262,6 +262,23 @@ class DashboardController extends BaseController {
         $this->redirect('/transactions');
     }
 
+    public function transactionUpdate() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $transactionModel = new Transaction();
+            $id = $_POST['id'];
+            $data = [
+                'account_id' => $_POST['account_id'] ?: null,
+                'category_id' => $_POST['category_id'] ?: null,
+                'amount' => $_POST['amount'],
+                'description' => $_POST['description'],
+                'type' => $_POST['type'],
+                'date' => $_POST['date'] ?: date('Y-m-d')
+            ];
+            $transactionModel->update($id, $data);
+        }
+        $this->redirect('/transactions');
+    }
+
     public function analytics() {
         $transactionModel = new Transaction();
         $categoryModel = new Category();
@@ -329,6 +346,20 @@ class DashboardController extends BaseController {
     public function accountDelete($id) {
         $accountModel = new Account();
         $accountModel->delete($id);
+        $this->redirect('/accounts');
+    }
+
+    public function accountUpdate() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $accountModel = new Account();
+            $id = $_POST['id'];
+            $data = [
+                'name' => $_POST['name'],
+                'type' => $_POST['type'],
+                'balance' => $_POST['balance']
+            ];
+            $accountModel->update($id, $data);
+        }
         $this->redirect('/accounts');
     }
 
@@ -437,6 +468,21 @@ class DashboardController extends BaseController {
     public function goalDelete($id) {
         $goalModel = new Goal();
         $goalModel->delete($id);
+        $this->redirect('/goals');
+    }
+
+    public function goalUpdate() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $goalModel = new Goal();
+            $id = $_POST['id'];
+            $data = [
+                'name' => $_POST['name'],
+                'target_amount' => $_POST['target_amount'],
+                'current_amount' => $_POST['current_amount'],
+                'deadline' => $_POST['deadline'] ?: null
+            ];
+            $goalModel->update($id, $data);
+        }
         $this->redirect('/goals');
     }
 
@@ -549,6 +595,24 @@ class DashboardController extends BaseController {
     public function recurringDelete($id) {
         $rtModel = new RecurringTransaction();
         $rtModel->delete($id);
+        $this->redirect('/recurring');
+    }
+
+    public function recurringUpdate() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $rtModel = new RecurringTransaction();
+            $id = $_POST['id'];
+            $data = [
+                'account_id' => $_POST['account_id'],
+                'category_id' => $_POST['category_id'] ?: null,
+                'amount' => $_POST['amount'],
+                'description' => $_POST['description'],
+                'type' => $_POST['type'],
+                'frequency' => $_POST['frequency'],
+                'start_date' => $_POST['start_date']
+            ];
+            $rtModel->update($id, $data);
+        }
         $this->redirect('/recurring');
     }
 }
