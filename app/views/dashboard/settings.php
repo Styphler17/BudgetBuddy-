@@ -63,9 +63,14 @@
                 <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
                     <input type="hidden" name="action" value="update_2fa">
                     <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-white/5">
-                        <div class="space-y-0.5">
-                            <span class="text-sm font-bold text-gray-900 dark:text-white">Enable TOTP 2FA</span>
-                            <p class="text-xs text-gray-500 dark:text-slate-400">Use an app like Google Authenticator</p>
+                        <div class="flex items-center gap-3">
+                            <div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary dark:text-accent">
+                                <i data-lucide="smartphone" class="h-5 w-5"></i>
+                            </div>
+                            <div class="space-y-0.5">
+                                <span class="text-sm font-bold text-gray-900 dark:text-white">Enable TOTP 2FA</span>
+                                <p class="text-xs text-gray-500 dark:text-slate-400">Use an app like Google Authenticator</p>
+                            </div>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" name="enable_2fa" class="sr-only peer" <?php echo ($user['two_factor_enabled'] ?? 0) ? 'checked' : ''; ?> onchange="this.form.submit()">
