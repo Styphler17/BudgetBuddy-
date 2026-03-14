@@ -4,7 +4,7 @@
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white font-outfit">Category Management</h1>
             <p class="text-gray-500 dark:text-slate-300 text-sm sm:text-base">Manage your budget categories and spending limits</p>
         </div>
-        <button onclick="openModal('add-cat-modal')" class="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full sm:w-auto">
+        <button onclick="openModal('add-cat-modal')" class="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-6 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full sm:w-auto">
             <i data-lucide="plus" class="h-4 w-4 mr-2"></i>
             Add Category
         </button>

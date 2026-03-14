@@ -5,11 +5,11 @@
             <p class="text-gray-500 dark:text-slate-300 text-sm sm:text-base">Manage your bank accounts, credit cards, and investments</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
-            <button onclick="openModal('transfer-modal')" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-5 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm w-full sm:w-auto">
+            <button onclick="openModal('transfer-modal')" class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-6 text-sm font-bold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm w-full sm:w-auto">
                 <i data-lucide="repeat" class="h-4 w-4 mr-2"></i>
                 Transfer
             </button>
-            <button onclick="openModal('add-account-modal')" class="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full sm:w-auto">
+            <button onclick="openModal('add-account-modal')" class="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-6 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full sm:w-auto">
                 <i data-lucide="plus" class="h-4 w-4 mr-2"></i>
                 Add Account
             </button>
