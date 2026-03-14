@@ -41,17 +41,17 @@
                     <div>
                         <span class="text-sm text-gray-500 dark:text-slate-400 font-medium">Net Balance</span>
                         <div class="text-3xl font-bold <?php echo $net >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'; ?>">
-                            $<?php echo number_format($net, 2); ?>
+                            <?php echo CurrencyHelper::format($net, $currency); ?>
                         </div>
                     </div>
                     <div class="pt-4 border-t border-gray-100 dark:border-white/5 space-y-3">
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600 dark:text-slate-400">Total Income</span>
-                            <span class="font-bold text-green-600 dark:text-green-400">$<?php echo number_format($income, 2); ?></span>
+                            <span class="font-bold text-green-600 dark:text-green-400"><?php echo CurrencyHelper::format($income, $currency); ?></span>
                         </div>
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600 dark:text-slate-400">Total Expenses</span>
-                            <span class="font-bold text-red-600 dark:text-red-400">$<?php echo number_format($expense, 2); ?></span>
+                            <span class="font-bold text-red-600 dark:text-red-400"><?php echo CurrencyHelper::format($expense, $currency); ?></span>
                         </div>
                     </div>
                     <div class="pt-4 border-t border-gray-100 dark:border-white/5 space-y-2">

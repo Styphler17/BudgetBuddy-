@@ -184,16 +184,33 @@ class Transaction {
     }
 
     /**
-     * Get total spent/earned in a specific period (excludes transfers)
+     * Get totals for a period (Multi-currency aware)
      */
-    public function getTotals($userId, $type, $startDate, $endDate) {
-        $stmt = $this->db->prepare("
-            SELECT SUM(amount) as total 
-            FROM transactions 
-            WHERE user_id = ? AND type = ? AND is_transfer = 0 AND date BETWEEN ? AND ?
-        ");
+    public function getTotals($userId, $type, $startDate, $endDate, $preferredCurrency = 'USD') {
+        $sql = "SELECT t.amount, a.currency 
+                FROM transactions t
+                LEFT JOIN accounts a ON t.account_id = a.id
+                WHERE t.user_id = ? AND t.type = ? AND t.is_transfer = 0 
+                AND t.date BETWEEN ? AND ?";
+
+        $stmt = $this->db->prepare($sql);
         $stmt->execute([$userId, $type, $startDate, $endDate]);
-        $row = $stmt->fetch();
-        return $row['total'] ?? 0;
+        $rows = $stmt->fetchAll();
+
+        $currencyService = new CurrencyService();
+        $total = 0;
+
+        foreach ($rows as $row) {
+            $amount = (float)$row['amount'];
+            $txCurrency = $row['currency'] ?? 'USD';
+
+            if ($txCurrency !== $preferredCurrency) {
+                $total += $currencyService->convert($amount, $txCurrency, $preferredCurrency);
+            } else {
+                $total += $amount;
+            }
+        }
+
+        return $total;
     }
 }

@@ -39,8 +39,8 @@ class ApiController extends BaseController {
         $user = $userModel->findById($this->userId);
         $preferredCurrency = $user['currency'] ?? 'USD';
         
-        $income = $transactionModel->getTotals($this->userId, 'income', $thisMonthStart, $today);
-        $expense = $transactionModel->getTotals($this->userId, 'expense', $thisMonthStart, $today);
+        $income = $transactionModel->getTotals($this->userId, 'income', $thisMonthStart, $today, $preferredCurrency);
+        $expense = $transactionModel->getTotals($this->userId, 'expense', $thisMonthStart, $today, $preferredCurrency);
         $accounts = $accountModel->getByUserId($this->userId);
         
         $currencyService = new CurrencyService();

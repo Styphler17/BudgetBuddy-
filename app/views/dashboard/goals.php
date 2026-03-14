@@ -53,7 +53,7 @@
 
                     <div class="space-y-2">
                         <div class="flex justify-between text-sm">
-                            <span class="font-bold text-gray-700 dark:text-slate-300">$<?php echo number_format($goal['current_amount'], 0); ?> <span class="text-xs font-normal text-gray-400">/ $<?php echo number_format($goal['target_amount'], 0); ?></span></span>
+                            <span class="font-bold text-gray-700 dark:text-slate-300"><?php echo CurrencyHelper::format($goal['current_amount'], $currency); ?> <span class="text-xs font-normal text-gray-400">/ <?php echo CurrencyHelper::format($goal['target_amount'], $currency); ?></span></span>
                             <span class="<?php echo $isCompleted ? 'text-green-600 dark:text-green-400' : 'text-primary dark:text-accent'; ?> font-black"><?php echo $percent; ?>%</span>
                         </div>
                         <div class="h-3 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden border border-gray-200/50 dark:border-white/5">

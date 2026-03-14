@@ -62,7 +62,7 @@
 
                     <div class="space-y-1 py-2">
                         <p class="text-[10px] text-gray-400 dark:text-slate-500 uppercase tracking-widest font-black">Available Balance</p>
-                        <p class="text-3xl font-black text-gray-900 dark:text-white font-outfit tracking-tight leading-none">$<?php echo number_format($acc['balance'], 2); ?></p>
+                        <p class="text-3xl font-black text-gray-900 dark:text-white font-outfit tracking-tight leading-none"><?php echo CurrencyHelper::format($acc['balance'], $acc['currency'] ?? 'USD'); ?></p>
                     </div>
 
                     <div class="pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between">
@@ -162,10 +162,22 @@ ob_start();
                         </select>
                     </div>
                     <div class="space-y-2">
+                        <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Account Currency</label>
+                        <select name="currency" class="w-full h-12 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary/20">
+                            <option value="USD">USD ($) - US Dollar</option>
+                            <option value="EUR">EUR (€) - Euro</option>
+                            <option value="GBP">GBP (£) - British Pound</option>
+                            <option value="JPY">JPY (¥) - Japanese Yen</option>
+                            <option value="CAD">CAD ($) - Canadian Dollar</option>
+                            <option value="AUD">AUD ($) - Australian Dollar</option>
+                            <option value="GHS">GHS (₵) - Ghanaian Cedi</option>
+                            <option value="NGN">NGN (₦) - Nigerian Naira</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
                         <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Initial Balance</label>
                         <input type="number" name="balance" step="0.01" value="0.00" class="w-full h-12 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary/20" required>
-                    </div>
-                    <button type="submit" class="w-full h-14 bg-primary text-white font-black uppercase tracking-widest text-sm rounded-2xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 mt-4">
+                    </div>                    <button type="submit" class="w-full h-14 bg-primary text-white font-black uppercase tracking-widest text-sm rounded-2xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 mt-4">
                         Create Account
                     </button>
                 </form>
@@ -204,10 +216,22 @@ ob_start();
                         </select>
                     </div>
                     <div class="space-y-2">
+                        <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Account Currency</label>
+                        <select name="currency" id="edit_acc_currency" class="w-full h-12 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary/20">
+                            <option value="USD">USD ($) - US Dollar</option>
+                            <option value="EUR">EUR (€) - Euro</option>
+                            <option value="GBP">GBP (£) - British Pound</option>
+                            <option value="JPY">JPY (¥) - Japanese Yen</option>
+                            <option value="CAD">CAD ($) - Canadian Dollar</option>
+                            <option value="AUD">AUD ($) - Australian Dollar</option>
+                            <option value="GHS">GHS (₵) - Ghanaian Cedi</option>
+                            <option value="NGN">NGN (₦) - Nigerian Naira</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
                         <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Current Balance</label>
                         <input type="number" name="balance" id="edit_acc_balance" step="0.01" class="w-full h-12 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary/20" required>
-                    </div>
-                    <button type="submit" class="w-full h-14 bg-primary text-white font-black uppercase tracking-widest text-sm rounded-2xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 mt-4">
+                    </div>                    <button type="submit" class="w-full h-14 bg-primary text-white font-black uppercase tracking-widest text-sm rounded-2xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 mt-4">
                         Save Changes
                     </button>
                 </form>
@@ -252,6 +276,7 @@ $GLOBALS['view_modal_content'] = ob_get_clean();
         document.getElementById('edit_acc_name').value = acc.name;
         document.getElementById('edit_acc_type').value = acc.type;
         document.getElementById('edit_acc_balance').value = acc.balance;
+        document.getElementById('edit_acc_currency').value = acc.currency || 'USD';
         openModal('edit-account-modal');
     }
 

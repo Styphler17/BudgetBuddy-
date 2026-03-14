@@ -50,8 +50,8 @@ class DashboardController extends BaseController {
         $user = $userModel->findById($this->userId);
         $preferredCurrency = $user['currency'] ?? 'USD';
         
-        $income = $transactionModel->getTotals($this->userId, 'income', $thisMonthStart, $today);
-        $expense = $transactionModel->getTotals($this->userId, 'expense', $thisMonthStart, $today);
+        $income = $transactionModel->getTotals($this->userId, 'income', $thisMonthStart, $today, $preferredCurrency);
+        $expense = $transactionModel->getTotals($this->userId, 'expense', $thisMonthStart, $today, $preferredCurrency);
         $accounts = $accountModel->getByUserId($this->userId);
         $recentTransactions = $transactionModel->getByUserId($this->userId, 5);
         $categories = $categoryModel->getByUserId($this->userId);
@@ -100,7 +100,8 @@ class DashboardController extends BaseController {
                 'income' => $income,
                 'expense' => $expense,
                 'balance' => $totalBalance,
-                'savings' => $income - $expense
+                'savings' => $income - $expense,
+                'currency' => $preferredCurrency
             ],
             'recentTransactions' => $recentTransactions,
             'accounts' => $accounts,
@@ -123,6 +124,10 @@ class DashboardController extends BaseController {
             'end_date' => $_GET['end_date'] ?? null,
         ];
 
+        $userModel = new User();
+        $user = $userModel->findById($this->userId);
+        $preferredCurrency = $user['currency'] ?? 'USD';
+
         $transactions = $transactionModel->getByUserId($this->userId, 100, $filters);
         $categories = $categoryModel->getByUserId($this->userId);
         $accounts = $accountModel->getByUserId($this->userId);
@@ -133,7 +138,8 @@ class DashboardController extends BaseController {
             'transactions' => $transactions,
             'categories' => $categories,
             'accounts' => $accounts,
-            'filters' => $filters
+            'filters' => $filters,
+            'currency' => $preferredCurrency
         ]);
     }
 
@@ -280,6 +286,10 @@ class DashboardController extends BaseController {
     }
 
     public function analytics() {
+        $userModel = new User();
+        $user = $userModel->findById($this->userId);
+        $preferredCurrency = $user['currency'] ?? 'USD';
+
         $transactionModel = new Transaction();
         $categoryModel = new Category();
         
@@ -313,18 +323,24 @@ class DashboardController extends BaseController {
             'categoryData' => $categoryData,
             'dailyStats' => $dailyStats,
             'income' => $income,
-            'expense' => $expense
+            'expense' => $expense,
+            'currency' => $preferredCurrency
         ]);
     }
 
     public function accounts() {
+        $userModel = new User();
+        $user = $userModel->findById($this->userId);
+        $preferredCurrency = $user['currency'] ?? 'USD';
+
         $accountModel = new Account();
         $accounts = $accountModel->getByUserId($this->userId);
         
         $this->render('dashboard/accounts', [
             'title' => 'Accounts',
             'layout' => 'dashboard',
-            'accounts' => $accounts
+            'accounts' => $accounts,
+            'currency' => $preferredCurrency
         ]);
     }
 
@@ -336,7 +352,7 @@ class DashboardController extends BaseController {
                 'name' => $_POST['name'],
                 'type' => $_POST['type'],
                 'balance' => $_POST['balance'] ?: 0,
-                'currency' => 'USD'
+                'currency' => $_POST['currency'] ?? 'USD'
             ];
             $accountModel->create($data);
         }
@@ -356,7 +372,8 @@ class DashboardController extends BaseController {
             $data = [
                 'name' => $_POST['name'],
                 'type' => $_POST['type'],
-                'balance' => $_POST['balance']
+                'balance' => $_POST['balance'],
+                'currency' => $_POST['currency'] ?? 'USD'
             ];
             $accountModel->update($id, $data);
         }
@@ -462,13 +479,18 @@ class DashboardController extends BaseController {
     }
 
     public function goals() {
+        $userModel = new User();
+        $user = $userModel->findById($this->userId);
+        $preferredCurrency = $user['currency'] ?? 'USD';
+
         $goalModel = new Goal();
         $goals = $goalModel->getByUserId($this->userId);
         
         $this->render('dashboard/goals', [
             'title' => 'Goals',
             'layout' => 'dashboard',
-            'goals' => $goals
+            'goals' => $goals,
+            'currency' => $preferredCurrency
         ]);
     }
 
@@ -579,6 +601,10 @@ class DashboardController extends BaseController {
     }
 
     public function recurring() {
+        $userModel = new User();
+        $user = $userModel->findById($this->userId);
+        $preferredCurrency = $user['currency'] ?? 'USD';
+
         $rtModel = new RecurringTransaction();
         $categoryModel = new Category();
         $accountModel = new Account();
@@ -592,7 +618,8 @@ class DashboardController extends BaseController {
             'layout' => 'dashboard',
             'recurring' => $recurring,
             'categories' => $categories,
-            'accounts' => $accounts
+            'accounts' => $accounts,
+            'currency' => $preferredCurrency
         ]);
     }
 

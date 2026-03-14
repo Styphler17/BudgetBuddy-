@@ -40,7 +40,8 @@ spl_autoload_register(function ($class) {
         APP_PATH . '/controllers/',
         APP_PATH . '/models/',
         APP_PATH . '/router/',
-        APP_PATH . '/services/'
+        APP_PATH . '/services/',
+        APP_PATH . '/helpers/'
     ];
     
     foreach ($paths as $path) {
