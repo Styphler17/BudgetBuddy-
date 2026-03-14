@@ -21,12 +21,8 @@
     <div class="max-w-5xl mx-auto print-container space-y-8">
         <!-- Header -->
         <div class="flex justify-between items-start border-b-2 border-primary pb-6">
-            <div class="flex items-center gap-4">
-                <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-12 w-auto">
-                <div>
-                    <h1 class="text-3xl font-black text-primary font-outfit tracking-tight uppercase">SpendScribe</h1>
-                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Financial Report</p>
-                </div>
+            <div class="flex items-center">
+                <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-16 w-auto">
             </div>
             <div class="text-right">
                 <p class="font-bold text-gray-900"><?php echo htmlspecialchars($user['name']); ?></p>
