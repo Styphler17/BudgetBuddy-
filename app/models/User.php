@@ -29,27 +29,6 @@ class User {
     }
 
     /**
-     * Update user details
-     */
-    public function update($id, $data) {
-        $fields = [];
-        $params = [':id' => $id];
-
-        foreach (['name', 'email', 'password_hash', 'currency', 'is_active', 'email_verified'] as $f) {
-            if (isset($data[$f])) {
-                $fields[] = "$f = :$f";
-                $params[":$f"] = $data[$f];
-            }
-        }
-
-        if (empty($fields)) return false;
-
-        $sql = "UPDATE users SET " . implode(', ', $fields) . ", updated_at = NOW() WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute($params);
-    }
-
-    /**
      * Get all users
      */
     public function getAll($limit = 100) {
