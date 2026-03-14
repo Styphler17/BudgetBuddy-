@@ -21,7 +21,7 @@
             </div>
         <?php else: ?>
             <?php foreach ($categories as $cat): 
-                $spent = 0; // This should ideally be calculated or passed from controller
+                $spent = 0; 
                 $percentage = ($cat['budget'] > 0) ? ($spent / $cat['budget']) * 100 : 0;
                 $percentage = min(100, round($percentage));
                 $remaining = $cat['budget'] - $spent;
@@ -67,118 +67,121 @@
     </div>
 </div>
 
-<!-- Add Category Modal -->
-<div id="add-cat-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeModal('add-cat-modal')"></div>
-        
-        <div class="relative w-full max-w-md glowing-wrapper animate-in fade-in zoom-in duration-300">
-            <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">New Category</h3>
-                    <button onclick="closeModal('add-cat-modal')" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
-                        <i data-lucide="x" class="h-5 w-5"></i>
-                    </button>
-                </div>
+<!-- All Modals (Moved to bottom to prevent stacking issues) -->
+<div id="modal-container">
+    <!-- Add Category Modal -->
+    <div id="add-cat-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+        <div class="flex min-h-screen items-center justify-center p-4">
+            <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeModal('add-cat-modal')"></div>
+            
+            <div class="relative w-full max-w-md glowing-wrapper animate-in fade-in zoom-in duration-300">
+                <div class="glowing-effect-container"></div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">New Category</h3>
+                        <button onclick="closeModal('add-cat-modal')" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
+                            <i data-lucide="x" class="h-5 w-5"></i>
+                        </button>
+                    </div>
 
-                <form action="<?php echo BASE_URL; ?>/categories/create" method="POST" class="space-y-4">
-                    <div class="space-y-1">
-                        <label for="category_name" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Category Name</label>
-                        <input id="category_name" type="text" name="name" placeholder="e.g. Groceries" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required>
-                    </div>
-                    <div class="space-y-1">
-                        <label for="category_budget" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Monthly Budget Limit</label>
-                        <input id="category_budget" type="number" name="budget" step="0.01" value="0.00" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required>
-                    </div>
-                    <div class="space-y-1">
-                        <label for="category_emoji" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Emoji Icon</label>
-                        <div class="relative">
-                            <input id="category_emoji" type="text" name="emoji" placeholder="🛒" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required maxlength="4">
-                            <div class="absolute right-3 top-2.5 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-white/5 pointer-events-none">
-                                <span class="text-[10px] font-bold text-gray-400 dark:text-slate-400">Hint:</span>
-                                <kbd class="text-[10px] font-bold text-gray-500 dark:text-slate-300">Win + .</kbd>
-                            </div>
+                    <form action="<?php echo BASE_URL; ?>/categories/create" method="POST" class="space-y-4">
+                        <div class="space-y-1">
+                            <label for="category_name" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Category Name</label>
+                            <input id="category_name" type="text" name="name" placeholder="e.g. Groceries" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required>
                         </div>
-                        <p class="text-[10px] text-gray-400 mt-1 italic">On Desktop: Press <span class="font-bold">Win + .</span> (Windows) or <span class="font-bold">Cmd + Ctrl + Space</span> (Mac) to insert emoji.</p>
-                    </div>
-                    
-                    <button type="submit" class="w-full h-12 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all transform active:scale-[0.98] shadow-lg shadow-primary/20 mt-4">
-                        Create Category
-                    </button>
-                </form>
+                        <div class="space-y-1">
+                            <label for="category_budget" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Monthly Budget Limit</label>
+                            <input id="category_budget" type="number" name="budget" step="0.01" value="0.00" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required>
+                        </div>
+                        <div class="space-y-1">
+                            <label for="category_emoji" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Emoji Icon</label>
+                            <div class="relative">
+                                <input id="category_emoji" type="text" name="emoji" placeholder="🛒" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required maxlength="4">
+                                <div class="absolute right-3 top-2.5 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-white/5 pointer-events-none">
+                                    <span class="text-[10px] font-bold text-gray-400 dark:text-slate-400">Hint:</span>
+                                    <kbd class="text-[10px] font-bold text-gray-500 dark:text-slate-300">Win + .</kbd>
+                                </div>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-1 italic">On Desktop: Press <span class="font-bold">Win + .</span> (Windows) or <span class="font-bold">Cmd + Ctrl + Space</span> (Mac) to insert emoji.</p>
+                        </div>
+                        
+                        <button type="submit" class="w-full h-12 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all transform active:scale-[0.98] shadow-lg shadow-primary/20 mt-4">
+                            Create Category
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Edit Category Modal -->
-<div id="edit-cat-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeModal('edit-cat-modal')"></div>
-        
-        <div class="relative w-full max-w-md glowing-wrapper animate-in fade-in zoom-in duration-300">
-            <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">Edit Category</h3>
-                    <button onclick="closeModal('edit-cat-modal')" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
-                        <i data-lucide="x" class="h-5 w-5"></i>
-                    </button>
-                </div>
+    <!-- Edit Category Modal -->
+    <div id="edit-cat-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+        <div class="flex min-h-screen items-center justify-center p-4">
+            <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeModal('edit-cat-modal')"></div>
+            
+            <div class="relative w-full max-w-md glowing-wrapper animate-in fade-in zoom-in duration-300">
+                <div class="glowing-effect-container"></div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white font-outfit">Edit Category</h3>
+                        <button onclick="closeModal('edit-cat-modal')" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
+                            <i data-lucide="x" class="h-5 w-5"></i>
+                        </button>
+                    </div>
 
-                <form action="<?php echo BASE_URL; ?>/categories/update" method="POST" class="space-y-4">
-                    <input type="hidden" name="id" id="edit_cat_id">
-                    <div class="space-y-1">
-                        <label for="edit_cat_name" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Category Name</label>
-                        <input id="edit_cat_name" type="text" name="name" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required>
-                    </div>
-                    <div class="space-y-1">
-                        <label for="edit_cat_budget" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Monthly Budget Limit</label>
-                        <input id="edit_cat_budget" type="number" name="budget" step="0.01" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required>
-                    </div>
-                    <div class="space-y-1">
-                        <label for="edit_cat_emoji" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Emoji Icon</label>
-                        <div class="relative">
-                            <input id="edit_cat_emoji" type="text" name="emoji" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required maxlength="4">
-                            <div class="absolute right-3 top-2.5 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-white/5 pointer-events-none">
-                                <kbd class="text-[10px] font-bold text-gray-500 dark:text-slate-300">Win + .</kbd>
+                    <form action="<?php echo BASE_URL; ?>/categories/update" method="POST" class="space-y-4">
+                        <input type="hidden" name="id" id="edit_cat_id">
+                        <div class="space-y-1">
+                            <label for="edit_cat_name" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Category Name</label>
+                            <input id="edit_cat_name" type="text" name="name" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required>
+                        </div>
+                        <div class="space-y-1">
+                            <label for="edit_cat_budget" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Monthly Budget Limit</label>
+                            <input id="edit_cat_budget" type="number" name="budget" step="0.01" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required>
+                        </div>
+                        <div class="space-y-1">
+                            <label for="edit_cat_emoji" class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">Emoji Icon</label>
+                            <div class="relative">
+                                <input id="edit_cat_emoji" type="text" name="emoji" class="w-full h-11 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white dark:bg-slate-800 dark:text-white transition-all" required maxlength="4">
+                                <div class="absolute right-3 top-2.5 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-white/5 pointer-events-none">
+                                    <kbd class="text-[10px] font-bold text-gray-500 dark:text-slate-300">Win + .</kbd>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <button type="submit" class="w-full h-12 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all transform active:scale-[0.98] shadow-lg shadow-primary/20 mt-4">
-                        Save Changes
-                    </button>
-                </form>
+                        
+                        <button type="submit" class="w-full h-12 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all transform active:scale-[0.98] shadow-lg shadow-primary/20 mt-4">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Redesigned Delete Modal -->
-<div id="delete-confirm-modal" class="fixed inset-0 z-[60] hidden overflow-y-auto">
-    <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal('delete-confirm-modal')"></div>
-        
-        <div class="relative w-full max-w-sm glowing-wrapper animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <div class="glowing-effect-container"></div>
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10 text-center">
-                <div class="h-20 w-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6 text-red-600 dark:text-red-400">
-                    <i data-lucide="alert-triangle" class="h-10 w-10"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white font-outfit mb-2">Delete Category?</h3>
-                <p class="text-gray-500 dark:text-slate-400 mb-8 leading-relaxed">
-                    Are you sure you want to delete <span id="delete_cat_name" class="font-bold text-gray-900 dark:text-white"></span>? This action cannot be undone.
-                </p>
+    <!-- Redesigned Delete Modal -->
+    <div id="delete-confirm-modal" class="fixed inset-0 z-[110] hidden overflow-y-auto">
+        <div class="flex min-h-screen items-center justify-center p-4">
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal('delete-confirm-modal')"></div>
+            
+            <div class="relative w-full max-w-sm glowing-wrapper animate-in fade-in slide-in-from-bottom-4 duration-300">
+                <div class="glowing-effect-container"></div>
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-gray-200 dark:border-white/10 shadow-2xl relative z-10 text-center">
+                    <div class="h-20 w-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6 text-red-600 dark:text-red-400">
+                        <i data-lucide="alert-triangle" class="h-10 w-10"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white font-outfit mb-2">Delete Category?</h3>
+                    <p class="text-gray-500 dark:text-slate-400 mb-8 leading-relaxed">
+                        Are you sure you want to delete <span id="delete_cat_name" class="font-bold text-gray-900 dark:text-white"></span>? This action cannot be undone.
+                    </p>
 
-                <div class="flex flex-col gap-3">
-                    <a id="confirm_delete_btn" href="#" class="w-full h-12 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all flex items-center justify-center shadow-lg shadow-red-600/20">
-                        Yes, Delete Category
-                    </a>
-                    <button onclick="closeModal('delete-confirm-modal')" class="w-full h-12 bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300 font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-slate-700 transition-all">
-                        Cancel
-                    </button>
+                    <div class="flex flex-col gap-3">
+                        <a id="confirm_delete_btn" href="#" class="w-full h-12 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all flex items-center justify-center shadow-lg shadow-red-600/20">
+                            Yes, Delete Category
+                        </a>
+                        <button onclick="closeModal('delete-confirm-modal')" class="w-full h-12 bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300 font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-slate-700 transition-all">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -187,13 +190,19 @@
 
 <script>
     function openModal(id) {
-        document.getElementById(id).classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
     }
 
     function closeModal(id) {
-        document.getElementById(id).classList.add('hidden');
-        document.body.style.overflow = 'auto';
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
     }
 
     function openEditModal(cat) {
