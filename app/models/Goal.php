@@ -66,6 +66,14 @@ class Goal {
     }
 
     /**
+     * Update milestone tracker
+     */
+    public function updateMilestone($id, $milestone) {
+        $stmt = $this->db->prepare("UPDATE goals SET last_milestone = ? WHERE id = ?");
+        return $stmt->execute([$milestone, $id]);
+    }
+
+    /**
      * Delete goal
      */
     public function delete($id) {

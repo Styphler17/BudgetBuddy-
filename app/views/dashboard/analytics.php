@@ -104,6 +104,15 @@
         }
         ?>
 
+        // Category mapping for drill-down
+        const categoryMap = <?php 
+            $mapping = [];
+            foreach ($categories as $cat) {
+                $mapping[$cat['name']] = $cat['id'];
+            }
+            echo json_encode($mapping); 
+        ?>;
+
         new Chart(document.getElementById('spendingPieChart'), {
             type: 'doughnut',
             data: {
@@ -113,7 +122,26 @@
                     backgroundColor: colors
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { position: 'bottom' } 
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const label = <?php echo json_encode($catLabels); ?>[index];
+                        const categoryId = categoryMap[label];
+                        if (categoryId) {
+                            window.location.href = `<?php echo BASE_URL; ?>/transactions?category_id=${categoryId}`;
+                        }
+                    }
+                },
+                onHover: (event, elements) => {
+                    event.native.target.style.cursor = elements[0] ? 'pointer' : 'default';
+                }
+            }
         });
 
         // Trends Data (Last 30 days)

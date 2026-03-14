@@ -76,6 +76,17 @@
     <!-- Tailwind CSS (Static Build) -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/style.css">
     
+    <!-- PWA -->
+    <link rel="manifest" href="<?php echo BASE_URL; ?>/public/manifest.json">
+    <meta name="theme-color" content="#10237f">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('<?php echo BASE_URL; ?>/public/sw.js');
+            });
+        }
+    </script>
+    
     <style>
         body {
             background-color: #ffffff;

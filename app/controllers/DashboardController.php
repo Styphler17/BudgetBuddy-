@@ -136,6 +136,38 @@ class DashboardController extends BaseController {
                 'date' => $_POST['date'] ?: date('Y-m-d')
             ];
             $transactionModel->create($data);
+
+            // Savings Milestones Logic
+            $goalModel = new Goal();
+            $notificationModel = new Notification();
+            $goals = $goalModel->getByUserId($this->userId);
+
+            foreach ($goals as $goal) {
+                if ($goal['target_amount'] <= 0) continue;
+                
+                $percent = ($goal['current_amount'] / $goal['target_amount']) * 100;
+                $lastMilestone = $goal['last_milestone'] ?? 0;
+
+                if ($percent >= 100 && $lastMilestone < 100) {
+                    $notificationModel->create([
+                        'user_id' => $this->userId,
+                        'title' => 'Goal Achieved! 🏆',
+                        'message' => "Congratulations! You've reached 100% of your goal: " . $goal['name'],
+                        'type' => 'success',
+                        'icon' => 'trophy'
+                    ]);
+                    $goalModel->updateMilestone($goal['id'], 100);
+                } elseif ($percent >= 50 && $lastMilestone < 50) {
+                    $notificationModel->create([
+                        'user_id' => $this->userId,
+                        'title' => 'Halfway There! ✨',
+                        'message' => "Great job! You've reached 50% of your goal: " . $goal['name'],
+                        'type' => 'info',
+                        'icon' => 'star'
+                    ]);
+                    $goalModel->updateMilestone($goal['id'], 50);
+                }
+            }
         }
         $this->redirect('/transactions');
     }
