@@ -438,7 +438,6 @@ class DashboardController extends BaseController {
 
                 // Handle Profile Picture Upload
                 if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
-                    $uploadDir = 'public/uploads/profile_pics/';
                     $fileTmpPath = $_FILES['profile_pic']['tmp_name'];
                     $fileName = $_FILES['profile_pic']['name'];
                     $fileSize = $_FILES['profile_pic']['size'];
@@ -446,14 +445,17 @@ class DashboardController extends BaseController {
                     $fileNameCmps = explode(".", $fileName);
                     $fileExtension = strtolower(end($fileNameCmps));
 
-                    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
                     $allowedExtensions = array('jpg', 'gif', 'png', 'jpeg', 'webp');
 
                     if (in_array($fileExtension, $allowedExtensions)) {
-                        $dest_path = $uploadDir . $newFileName;
-                        if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                            $data['profile_pic'] = $newFileName;
-                            $_SESSION['user_profile_pic'] = $newFileName;
+                        // Max size 2MB for Base64 storage
+                        if ($fileSize <= 2 * 1024 * 1024) {
+                            $imageData = file_get_contents($fileTmpPath);
+                            $base64Image = 'data:' . $fileType . ';base64,' . base64_encode($imageData);
+                            $data['profile_pic'] = $base64Image;
+                            $_SESSION['user_profile_pic'] = $base64Image;
+                        } else {
+                            $_SESSION['error_message'] = 'Image is too large. Max 2MB allowed.';
                         }
                     }
                 }
