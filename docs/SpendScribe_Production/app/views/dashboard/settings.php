@@ -107,7 +107,15 @@
                     $chl = "otpauth://totp/" . $label . "?secret=" . $user['two_factor_secret'] . "&issuer=" . urlencode(SITE_NAME);
                     $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($chl);
                 ?>
-                    <div class="p-4 border border-blue-100 dark:border-blue-900/30 bg-blue-50 dark:bg-blue-900/10 rounded-lg space-y-4">
+                    <div class="p-4 border border-blue-100 dark:border-blue-900/30 bg-blue-50 dark:bg-blue-900/10 rounded-lg space-y-4 relative overflow-hidden group/privacy">
+                        <!-- Privacy Overlay -->
+                        <div id="2fa-privacy-overlay" class="absolute inset-0 z-20 backdrop-blur-md bg-white/30 dark:bg-slate-900/30 flex flex-col items-center justify-center transition-all duration-500">
+                            <i data-lucide="eye-off" class="h-8 w-8 text-blue-600 dark:text-blue-400 mb-2"></i>
+                            <button type="button" onclick="reveal2FA()" class="px-4 py-2 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-blue-700 transition-all shadow-lg">
+                                Reveal 2FA Setup
+                            </button>
+                        </div>
+
                         <div class="flex flex-col items-center text-center space-y-4">
                             <div class="bg-white p-3 rounded-xl shadow-sm border border-blue-100 dark:border-none">
                                 <img src="<?php echo $qrCodeUrl; ?>" alt="2FA QR Code" class="w-40 h-40 block mx-auto" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-red-500 p-4\'>Failed to load QR code.<br>Please use manual entry below.</div>'">
@@ -115,10 +123,24 @@
                             <div class="text-xs text-blue-700 dark:text-blue-300">
                                 <p class="font-bold mb-2 text-sm">Scan this QR code with your app</p>
                                 <p class="mb-2 opacity-80 text-[10px] uppercase tracking-widest font-black">Or Manual Entry</p>
-                                <code class="block font-mono font-bold bg-white/50 dark:bg-blue-900/50 px-3 py-2 rounded-lg text-sm tracking-[0.2em] border border-blue-200/50 dark:border-blue-400/20"><?php echo $user['two_factor_secret'] ?? 'N/A'; ?></code>
+                                <div class="flex items-center gap-2">
+                                    <code class="flex-1 font-mono font-bold bg-white/50 dark:bg-blue-900/50 px-3 py-2 rounded-lg text-sm tracking-[0.2em] border border-blue-200/50 dark:border-blue-400/20"><?php echo $user['two_factor_secret'] ?? 'N/A'; ?></code>
+                                    <button type="button" onclick="hide2FA()" class="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-200 transition-all">
+                                        <i data-lucide="eye-off" class="h-4 w-4"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <script>
+                        function reveal2FA() {
+                            document.getElementById('2fa-privacy-overlay').classList.add('opacity-0', 'pointer-events-none');
+                        }
+                        function hide2FA() {
+                            document.getElementById('2fa-privacy-overlay').classList.remove('opacity-0', 'pointer-events-none');
+                        }
+                    </script>
                 <?php endif; ?>
             </div>
         </div>

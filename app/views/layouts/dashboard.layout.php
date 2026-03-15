@@ -151,12 +151,23 @@
         });
 
         // Mobile Sidebar Toggle
-        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const mobileToggle = document.getElementById('mobile-sidebar-toggle');
         const sidebar = document.getElementById('dashboard-sidebar');
         
-        if (sidebarToggle && sidebar) {
-            sidebarToggle.addEventListener('click', () => {
+        if (mobileToggle && sidebar) {
+            mobileToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
                 sidebar.classList.toggle('-translate-x-full');
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 1024 && 
+                    !sidebar.contains(e.target) && 
+                    !mobileToggle.contains(e.target) && 
+                    !sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.add('-translate-x-full');
+                }
             });
         }
 
