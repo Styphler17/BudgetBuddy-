@@ -54,7 +54,7 @@ $menu_items = [
             </div>
             <div class="flex-1 min-w-0">
                 <p class="text-sm font-bold text-gray-900 dark:text-white truncate"><?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?></p>
-                <p class="text-[10px] text-gray-500 dark:text-slate-300 font-bold uppercase truncate">Authorized Node</p>
+                <p class="text-[10px] text-gray-500 dark:text-slate-300 font-bold uppercase truncate">Active Account</p>
             </div>
             <a href="<?php echo BASE_URL; ?>/logout" class="p-2 text-gray-400 hover:text-rose-500 transition-colors rounded-lg hover:bg-rose-50 dark:hover:bg-rose-500/10" title="Log out">
                 <i data-lucide="log-out" class="h-4 w-4"></i>
