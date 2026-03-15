@@ -47,24 +47,3 @@
         <?php endif; ?>
     </div>
 </header>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
-
-    mobileSidebarToggle?.addEventListener('click', () => {
-        const sidebar = document.getElementById('dashboard-sidebar');
-        if (sidebar) {
-            sidebar.classList.toggle('-translate-x-full');
-        }
-    });
-});
-</script>
-
-<script>
-    // Simple sidebar toggle for mobile
-    document.getElementById('mobile-sidebar-toggle')?.addEventListener('click', () => {
-        const sidebar = document.getElementById('dashboard-sidebar');
-        sidebar.classList.toggle('-translate-x-full');
-    });
-</script>

@@ -36,7 +36,7 @@ $menu_items = [
         <?php endforeach; ?>
         
         <div class="mt-8 pt-6 border-t border-gray-100 dark:border-white/5">
-            <a href="<?php echo BASE_URL; ?>/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all w-full font-medium">
+            <a href="<?php echo BASE_URL; ?>/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all w-full font-medium">
                 <i data-lucide="globe" class="h-5 w-5"></i>
                 <span class="text-sm">Back to Website</span>
             </a>
