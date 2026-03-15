@@ -110,7 +110,7 @@
                     <div class="p-4 border border-blue-100 dark:border-blue-900/30 bg-blue-50 dark:bg-blue-900/10 rounded-lg space-y-4">
                         <div class="flex flex-col items-center text-center space-y-4">
                             <div class="bg-white p-3 rounded-xl shadow-sm border border-blue-100 dark:border-none">
-                                <img src="<?php echo $qrCodeUrl; ?>" alt="2FA QR Code" class="w-40 h-40 block mx-auto" onerror="this.parentElement.innerHTML='<div class=\"text-xs text-red-500 p-4\">Failed to load QR code.<br>Please use manual entry below.</div>'">
+                                <img src="<?php echo $qrCodeUrl; ?>" alt="2FA QR Code" class="w-40 h-40 block mx-auto" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-red-500 p-4\'>Failed to load QR code.<br>Please use manual entry below.</div>'">
                             </div>
                             <div class="text-xs text-blue-700 dark:text-blue-300">
                                 <p class="font-bold mb-2 text-sm">Scan this QR code with your app</p>
