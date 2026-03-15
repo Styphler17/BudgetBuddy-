@@ -34,7 +34,7 @@
                 </h3>
                 <div class="text-lg text-gray-600 dark:text-slate-400 space-y-4 leading-relaxed">
                     <p>
-                        At SpendScribe, we believe your financial data belongs to you. We are committed to
+                        At <?php echo SITE_NAME; ?>, we believe your financial data belongs to you. We are committed to
                         protecting your privacy and ensuring the security of your personal information.
                         This privacy policy explains how we collect, use, and protect your data.
                     </p>
@@ -76,7 +76,7 @@
                         [
                             "title" => "How We Use Your Information",
                             "content" => [
-                                "To provide and maintain your SpendScribe account",
+                                "To provide and maintain your <?php echo SITE_NAME; ?> account",
                                 "To process and display your financial data",
                                 "To send important updates and notifications",
                                 "To improve our services and develop new features",

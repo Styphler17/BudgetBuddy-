@@ -6,7 +6,7 @@
                 How can we help you?
             </h1>
             <p class="text-xl text-gray-600 dark:text-slate-300 mb-8 font-medium">
-                Find answers, get support, and learn everything you need to know about SpendScribe.
+                Find answers, get support, and learn everything you need to know about <?php echo SITE_NAME; ?>.
             </p>
             <div class="max-w-md mx-auto relative group">
                 <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-slate-500 w-5 h-5 group-focus-within:text-primary dark:group-focus-within:text-accent transition-colors"></i>
@@ -35,7 +35,7 @@
                 [
                     "icon" => "book",
                     "title" => "Getting Started",
-                    "description" => "Learn the basics of SpendScribe",
+                    "description" => "Learn the basics of <?php echo SITE_NAME; ?>",
                     "articles" => ["Creating your account", "Adding your first transaction", "Setting up budgets"]
                 ],
                 [
@@ -157,7 +157,7 @@
                         </div>
                         <h3 class="font-bold text-xl text-gray-900 dark:text-white mb-2 font-outfit">Email Support</h3>
                         <p class="text-gray-600 dark:text-slate-400 mb-8 text-sm font-medium">Get help from our support team via email.</p>
-                        <a href="mailto:support@SpendScribe.com" class="inline-flex items-center justify-center px-8 py-3 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-bold text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
+                        <a href="mailto:support@<?php echo SITE_NAME; ?>.com" class="inline-flex items-center justify-center px-8 py-3 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-bold text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
                             Send Email
                             <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
                         </a>

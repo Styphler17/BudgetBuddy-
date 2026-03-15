@@ -7,7 +7,7 @@
 
             <div class="flex flex-col items-center gap-6 lg:items-start relative z-10">
                 <div class="max-w-xl space-y-6">
-                    <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-12 w-auto object-contain animate-fade-in">
+                    <img src="<?php echo BASE_URL; ?>/public/<?php echo SITE_NAME; ?>.png" alt="<?php echo SITE_NAME; ?> Logo" class="h-12 w-auto object-contain animate-fade-in">
                     <h1 class="text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-white font-outfit">
                         Start building better money habits with <span class="text-primary dark:text-accent italic">tailored</span> insights.
                     </h1>
@@ -58,7 +58,7 @@
                     </div>
                     <h2 class="text-3xl font-bold text-gray-900 dark:text-white font-outfit tracking-tight">Create Account</h2>
                     <p class="text-gray-500 dark:text-slate-300 font-medium">
-                        Join SpendScribe to start managing your finances
+                        Join <?php echo SITE_NAME; ?> to start managing your finances
                     </p>
                 </div>
 

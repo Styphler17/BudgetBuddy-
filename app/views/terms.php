@@ -15,7 +15,7 @@
                 Terms of Service
             </h1>
             <p class="text-xl text-gray-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Please read these terms carefully before using SpendScribe. By accessing or using our service, 
+                Please read these terms carefully before using <?php echo SITE_NAME; ?>. By accessing or using our service, 
                 you agree to be bound by these terms.
             </p>
             <span class="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-widest">
@@ -34,7 +34,7 @@
                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 font-outfit">1. Acceptance of Terms</h3>
                     <div class="text-lg text-gray-600 dark:text-slate-400 space-y-4 leading-relaxed">
                         <p>
-                            By creating an account or using the SpendScribe platform, you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
+                            By creating an account or using the <?php echo SITE_NAME; ?> platform, you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
                         </p>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 font-outfit">2. User Accounts</h3>
                     <div class="text-lg text-gray-600 dark:text-slate-400 space-y-4 leading-relaxed">
                         <p>
-                            You are responsible for maintaining the confidentiality of your account credentials. You agree to notify us immediately of any unauthorized use of your account. SpendScribe cannot and will not be liable for any loss or damage arising from your failure to protect your account.
+                            You are responsible for maintaining the confidentiality of your account credentials. You agree to notify us immediately of any unauthorized use of your account. <?php echo SITE_NAME; ?> cannot and will not be liable for any loss or damage arising from your failure to protect your account.
                         </p>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 font-outfit">4. Limitation of Liability</h3>
                     <div class="text-lg text-gray-600 dark:text-slate-400 space-y-4 leading-relaxed">
                         <p>
-                            SpendScribe provides tools for financial tracking, but we do not provide professional financial advice. You are solely responsible for your financial decisions. SpendScribe shall not be liable for any direct or indirect damages resulting from your use of the service.
+                            <?php echo SITE_NAME; ?> provides tools for financial tracking, but we do not provide professional financial advice. You are solely responsible for your financial decisions. <?php echo SITE_NAME; ?> shall not be liable for any direct or indirect damages resulting from your use of the service.
                         </p>
                     </div>
                 </div>

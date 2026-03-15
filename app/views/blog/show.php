@@ -95,11 +95,23 @@
                                 <?php echo $post['content']; // Render raw HTML from TinyMCE ?>
                             </div>
                         <?php endif; ?>
+                    </div>
                     <?php endif; ?>
-                </div>
 
-                <!-- Tags -->
-                <footer class="mt-16 pt-8 border-t border-gray-100 dark:border-white/5">
+                    <!-- Google AdSense - In-Article/Multiplex Ad -->
+                    <div class="my-12 pt-8 border-t border-gray-100 dark:border-white/5">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-format="autorelaxed"
+                         data-ad-client="ca-pub-6388735455910610"
+                         data-ad-slot="7562938709"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                    </div>
+
+                    <!-- Tags -->
+                    <footer class="mt-16 pt-8 border-t border-gray-100 dark:border-white/5">
                     <div class="flex flex-wrap gap-2">
                         <?php if (!empty($post['tags'])): ?>
                             <?php foreach ($post['tags'] as $tag): ?>

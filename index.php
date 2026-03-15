@@ -26,12 +26,14 @@ if (session_status() === PHP_SESSION_NONE) {
 define('ROOT_PATH', __DIR__);
 define('APP_PATH', ROOT_PATH . '/app');
 define('CONFIG_PATH', ROOT_PATH . '/config');
+define('SITE_NAME', 'SpendScribe');
 
 // Base URL detection
 $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'];
-// If the script is in a folder but accessed via a root subdomain, ensure BASE_URL is just the host
-$base_url = $protocol . $host;
+$script_name = $_SERVER['SCRIPT_NAME'];
+$base_dir = rtrim(dirname($script_name), '/\\');
+$base_url = $protocol . $host . $base_dir;
 define('BASE_URL', $base_url);
 
 // Autoloader - Controllers, Models, and Router

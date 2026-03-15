@@ -27,7 +27,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
         <nav class="flex items-center justify-between">
             <!-- Logo Section -->
             <a href="<?php echo BASE_URL; ?>/" class="flex items-center group">
-                <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-12 w-auto object-contain transition-all duration-300">
+                <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="<?php echo SITE_NAME; ?> Logo" class="h-12 w-auto object-contain transition-all duration-300">
             </a>
 
             <!-- Desktop Navigation -->
@@ -115,7 +115,7 @@ $is_active = function($path) use ($current_uri, $base_url) {
     <div class="flex flex-col h-full">
         <div class="flex items-center justify-between p-6 border-b dark:border-white/10">
             <div class="flex items-center">
-                <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-10 w-auto object-contain">
+                <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="<?php echo SITE_NAME; ?> Logo" class="h-10 w-auto object-contain">
             </div>
             <button type="button" id="close-menu-button" class="p-2 rounded-xl text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
                 <i data-lucide="x" class="w-6 h-6"></i>

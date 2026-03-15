@@ -199,7 +199,9 @@ class DashboardController extends BaseController {
                 }
             }
         }
-        $this->redirect('/transactions');
+        
+        $redirectTo = $_POST['redirect_to'] ?? '/transactions';
+        $this->redirect($redirectTo);
     }
 
     public function transactionExport() {

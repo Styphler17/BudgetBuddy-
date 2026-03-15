@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title . ' | SpendScribe App' : 'SpendScribe Dashboard'; ?></title>
+    <title><?php echo isset($title) ? $title . ' | ' . SITE_NAME . ' App' : SITE_NAME . ' Dashboard'; ?></title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>/public/favicon.png">
     

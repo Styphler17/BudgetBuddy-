@@ -35,7 +35,7 @@
                 </h1>
                 
                 <p class="text-xl md:text-2xl text-gray-700 dark:text-slate-200 mb-12 max-w-3xl mx-auto leading-relaxed font-body font-medium drop-shadow-sm">
-                    SpendScribe is a premium manual budget app for those who want total privacy and control. No Plaid, no bank links—just clean, distraction-free manual entry.
+                    <?php echo SITE_NAME; ?> is a premium manual budget app for those who want total privacy and control. No Plaid, no bank links—just clean, distraction-free manual entry.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -120,7 +120,7 @@
                         <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 bg-primary dark:bg-accent rounded-full"></span> Log each expense manually so you stay conscious of every purchase.</li>
                         <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 bg-primary dark:bg-accent rounded-full"></span> Track savings goals without building complex formulas or templates.</li>
                     </ul>
-                    <p class="text-primary dark:text-accent font-bold italic pt-4">SpendScribe gives you the structure of a spreadsheet with the simplicity of a notebook.</p>
+                    <p class="text-primary dark:text-accent font-bold italic pt-4"><?php echo SITE_NAME; ?> gives you the structure of a spreadsheet with the simplicity of a notebook.</p>
                 </div>
                 <div class="lg:order-1 glowing-wrapper">
                     <div class="glowing-effect-container"></div>
@@ -135,7 +135,7 @@
     <!-- Section 3: Key Features -->
     <section class="container mx-auto px-4 py-32 reveal">
         <div class="text-center mb-20 max-w-3xl mx-auto">
-            <h2 class="text-4xl font-h1 text-gray-900 dark:text-white mb-4">What You Can Do With SpendScribe</h2>
+            <h2 class="text-4xl font-h1 text-gray-900 dark:text-white mb-4">What You Can Do With <?php echo SITE_NAME; ?></h2>
             <p class="text-lg text-gray-600 dark:text-slate-300 font-medium">Distraction-free tools for precise manual tracking.</p>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -214,21 +214,33 @@
         </div>
     </section>
 
+    <!-- Google AdSense - Home Section -->
+    <div class="container mx-auto px-6 py-8">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="autorelaxed"
+             data-ad-client="ca-pub-6388735455910610"
+             data-ad-slot="7562938709"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
     <!-- Section 4: Privacy and Control -->
     <section class="bg-primary dark:bg-slate-900 py-32 relative overflow-hidden text-white reveal">
         <div class="absolute inset-0 bg-accent/5 pointer-events-none"></div>
         <div class="container mx-auto px-4 relative z-10 text-center max-w-4xl">
             <h2 class="text-4xl font-h1 mb-8 leading-tight">No Bank Connections. Just You and Your Numbers.</h2>
             <p class="text-xl text-primary-foreground/80 dark:text-slate-300 leading-relaxed font-medium mb-8">
-                SpendScribe is built for people who want control and privacy. You don’t need to connect bank accounts or share financial data with third parties. You decide what to track, when to log it, and how your budget looks.
+                <?php echo SITE_NAME; ?> is built for people who want control and privacy. You don’t need to connect bank accounts or share financial data with third parties. You decide what to track, when to log it, and how your budget looks.
             </p>
             <p class="text-sm font-bold uppercase tracking-widest text-accent">
-                Your data stays tied to your SpendScribe account under CreativeUtil’s infrastructure, with no selling of financial data.
+                Your data stays tied to your <?php echo SITE_NAME; ?> account under CreativeUtil’s infrastructure, with no selling of financial data.
             </p>
         </div>
     </section>
 
-    <!-- Section 5: Who SpendScribe is for -->
+    <!-- Section 5: Who <?php echo SITE_NAME; ?> is for -->
     <section class="container mx-auto px-4 py-32 reveal">
         <div class="text-center mb-20 max-w-3xl mx-auto">
             <h2 class="text-4xl font-h1 text-gray-900 dark:text-white mb-4">Built for People Who Prefer to Budget by Hand</h2>
@@ -271,7 +283,7 @@
     <section class="bg-gray-50 dark:bg-slate-900/50 py-32 reveal">
         <div class="container mx-auto px-4">
             <div class="text-center mb-20">
-                <h2 class="text-4xl font-h1 text-gray-900 dark:text-white mb-4 leading-tight">How SpendScribe Works</h2>
+                <h2 class="text-4xl font-h1 text-gray-900 dark:text-white mb-4 leading-tight">How <?php echo SITE_NAME; ?> Works</h2>
             </div>
             <div class="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto mb-16">
                 <div class="text-center space-y-4">
@@ -312,11 +324,11 @@
         <div class="max-w-3xl mx-auto space-y-4">
             <?php
             $faqs_final = [
-                ["q" => "Is SpendScribe free?", "a" => "Yes. SpendScribe is a free manual budget app. We believe financial clarity should be accessible to everyone without expensive monthly subscriptions."],
-                ["q" => "Do I need to connect my bank account?", "a" => "No. SpendScribe is a budget app without bank sync. We use 100% manual entry to ensure your data stays private and you stay conscious of every dollar you spend."],
-                ["q" => "How is SpendScribe different from YNAB or EveryDollar?", "a" => "SpendScribe is a private YNAB manual entry alternative. Unlike other apps, we don't force you into complex methodologies or badger you to link your bank accounts. You get a premium UI with zero forced bank connections."],
-                ["q" => "Can I export my data?", "a" => "Absolutely. Unlike competitors who paywall your data, SpendScribe allows you to export your transactions to CSV or professional PDF reports for free, anytime."],
-                ["q" => "Who created SpendScribe?", "a" => "SpendScribe is built by CreativeUtil, a small studio focused on building beautiful, privacy-first tools for humans."]
+                ["q" => "Is <?php echo SITE_NAME; ?> free?", "a" => "Yes. <?php echo SITE_NAME; ?> is a free manual budget app. We believe financial clarity should be accessible to everyone without expensive monthly subscriptions."],
+                ["q" => "Do I need to connect my bank account?", "a" => "No. <?php echo SITE_NAME; ?> is a budget app without bank sync. We use 100% manual entry to ensure your data stays private and you stay conscious of every dollar you spend."],
+                ["q" => "How is <?php echo SITE_NAME; ?> different from YNAB or EveryDollar?", "a" => "<?php echo SITE_NAME; ?> is a private YNAB manual entry alternative. Unlike other apps, we don't force you into complex methodologies or badger you to link your bank accounts. You get a premium UI with zero forced bank connections."],
+                ["q" => "Can I export my data?", "a" => "Absolutely. Unlike competitors who paywall your data, <?php echo SITE_NAME; ?> allows you to export your transactions to CSV or professional PDF reports for free, anytime."],
+                ["q" => "Who created <?php echo SITE_NAME; ?>?", "a" => "<?php echo SITE_NAME; ?> is built by CreativeUtil, a small studio focused on building beautiful, privacy-first tools for humans."]
             ];
             foreach ($faqs_final as $i => $faq): ?>
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-white/5 overflow-hidden">

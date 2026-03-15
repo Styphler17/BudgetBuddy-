@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title . ' | SpendScribe' : 'SpendScribe'; ?></title>
+    <title><?php echo isset($title) ? $title . ' | ' . SITE_NAME : SITE_NAME; ?></title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>/public/favicon.png">
@@ -16,15 +16,15 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://spendscribe.creativeutil.com/">
-    <meta property="og:title" content="SpendScribe – Simple Manual Budget & Spending Tracker">
-    <meta property="og:description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta property="og:title" content="<?php echo SITE_NAME; ?> – Simple Manual Budget & Spending Tracker">
+    <meta property="og:description" content="<?php echo SITE_NAME; ?> is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
     <meta property="og:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://spendscribe.creativeutil.com/">
-    <meta property="twitter:title" content="SpendScribe – Simple Manual Budget & Spending Tracker">
-    <meta property="twitter:description" content="SpendScribe is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
+    <meta property="twitter:title" content="<?php echo SITE_NAME; ?> – Simple Manual Budget & Spending Tracker">
+    <meta property="twitter:description" content="<?php echo SITE_NAME; ?> is a free, simple manual budget tracker that helps you plan budgets, log expenses, and track your spending and savings without spreadsheets or bank connections.">
     <meta property="twitter:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
     
     <!-- Fonts -->

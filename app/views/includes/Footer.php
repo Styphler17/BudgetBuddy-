@@ -4,7 +4,7 @@
             <!-- Brand Column -->
             <div class="lg:col-span-4 space-y-6">
                 <a href="<?php echo BASE_URL; ?>/" class="flex items-center group">
-                    <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+                    <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="<?php echo SITE_NAME; ?>" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
                 </a>
                 <p class="text-gray-400 dark:text-slate-300 max-w-sm leading-relaxed">
                     Smart budgeting made simple. Join thousands of users who have taken control of their financial future with our intelligent platform.

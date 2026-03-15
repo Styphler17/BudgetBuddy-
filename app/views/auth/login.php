@@ -8,12 +8,12 @@
             
             <div class="flex flex-col items-center gap-6 lg:items-start relative z-10">
                 <div class="max-w-xl space-y-6">
-                    <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-12 w-auto object-contain animate-fade-in">
+                    <img src="<?php echo BASE_URL; ?>/public/<?php echo SITE_NAME; ?>.png" alt="<?php echo SITE_NAME; ?> Logo" class="h-12 w-auto object-contain animate-fade-in">
                     <h1 class="text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-white font-outfit">
                         Empower your finances with <span class="text-primary dark:text-accent italic">clarity</span> and confidence.
                     </h1>
                     <p class="text-lg text-gray-600 dark:text-slate-300 leading-relaxed font-medium">
-                        SpendScribe helps you visualize spending, plan smarter budgets, and stay in control with real-time insights designed for peace of mind.
+                        <?php echo SITE_NAME; ?> helps you visualize spending, plan smarter budgets, and stay in control with real-time insights designed for peace of mind.
                     </p>
 
                     <div class="flex flex-wrap gap-3 pt-4 justify-center lg:justify-start font-bold">
@@ -53,7 +53,7 @@
                     <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
                 <span class="text-gray-600 dark:text-slate-300 leading-relaxed italic">
-                    "SpendScribe completely changed how I manage my finances. The visual analytics make it incredibly easy to see exactly where my money is going."
+                    "<?php echo SITE_NAME; ?> completely changed how I manage my finances. The visual analytics make it incredibly easy to see exactly where my money is going."
                 </span>
                 <span class="text-primary dark:text-accent font-bold mt-1">— Sarah Jenkins, Designer</span>
             </div>
@@ -66,7 +66,7 @@
                 <div class="p-8 flex flex-col items-center space-y-4 text-center">
                     <h2 class="text-3xl font-bold text-gray-900 dark:text-white font-outfit tracking-tight">Welcome Back</h2>
                     <p class="text-gray-500 dark:text-slate-300 font-medium">
-                        Sign in to your SpendScribe account
+                        Sign in to your <?php echo SITE_NAME; ?> account
                     </p>
                 </div>
                 

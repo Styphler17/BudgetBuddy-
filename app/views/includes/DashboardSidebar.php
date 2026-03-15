@@ -19,7 +19,7 @@ $menu_items = [
 <aside id="dashboard-sidebar" class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full transition-all duration-300 lg:translate-x-0 bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-white/5 flex flex-col shadow-xl lg:shadow-none">
     <!-- Logo -->
     <div class="p-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-center">
-        <img src="<?php echo BASE_URL; ?>/public/SpendScribe.png" alt="SpendScribe Logo" class="h-8 w-auto object-contain">
+        <img src="<?php echo BASE_URL; ?>/public/<?php echo SITE_NAME; ?>.png" alt="<?php echo SITE_NAME; ?> Logo" class="h-8 w-auto object-contain">
     </div>
 
     <!-- Menu -->

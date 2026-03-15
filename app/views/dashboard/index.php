@@ -19,10 +19,18 @@
                 $size = 'md';
                 $icon = 'plus';
                 $class = 'rounded-2xl';
+                $attr = 'onclick="openModal(\'add-transaction-modal\')"';
                 include APP_PATH . '/views/includes/Button.php';
             ?>
         </div>
     </header>
+
+    <?php 
+    // Capture Modal for Global Stack
+    ob_start();
+    include APP_PATH . '/views/includes/TransactionModal.php';
+    $GLOBALS['view_modal_content'] = ob_get_clean();
+    ?>
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

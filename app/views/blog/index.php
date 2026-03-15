@@ -134,6 +134,18 @@
                                     </a>
                                 </div>
                             </div>
+
+                            <!-- Google AdSense - Multiplex Ad -->
+                            <div class="mt-16 animate-slide-up">
+                                <ins class="adsbygoogle"
+                                     style="display:block"
+                                     data-ad-format="autorelaxed"
+                                     data-ad-client="ca-pub-6388735455910610"
+                                     data-ad-slot="7562938709"></ins>
+                                <script>
+                                     (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                            </div>
                         <?php endif; ?>
                     </div>
 
@@ -236,10 +248,21 @@
                             <?php endif; ?>
                         </div>
                     </div>
-                </div>
-            <?php endif; ?>
-        </div>
-    </section>
+                    </div>
+
+                    <!-- Google AdSense - Multiplex Ad -->
+                    <div class="mt-16 animate-slide-up">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-format="autorelaxed"
+                         data-ad-client="ca-pub-6388735455910610"
+                         data-ad-slot="7562938709"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                    </div>
+                    <?php endif; ?>
+                    </div>    </section>
 
     <!-- CTAs -->
     <section class="container mx-auto px-6 py-32">

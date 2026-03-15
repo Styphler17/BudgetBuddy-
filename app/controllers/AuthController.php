@@ -101,7 +101,8 @@ class AuthController extends BaseController {
                 if ($token) {
                     // Send verification email
                     $verifyLink = BASE_URL . "/verify-email?token=" . $token;
-                    $subject = "Verify your SpendScribe account";
+                    $subject = "Verify your " . SITE_NAME . " account";
+                    $from_email = "noreply@spendscribe.creativeutil.com";
                     
                     // Professional HTML Email Template
                     $message = "
@@ -119,11 +120,11 @@ class AuthController extends BaseController {
                     <body>
                         <div class='email-container'>
                             <div class='header'>
-                                <a href='" . BASE_URL . "' class='logo'>SpendScribe</a>
+                                <a href='" . BASE_URL . "' class='logo'>" . SITE_NAME . "</a>
                             </div>
                             <div class='content'>
-                                <h2>Welcome to SpendScribe, " . htmlspecialchars($data['name']) . "!</h2>
-                                <p>Thank you for joining SpendScribe. To start tracking your finances with total privacy and control, please verify your email address by clicking the button below.</p>
+                                <h2>Welcome to " . SITE_NAME . ", " . htmlspecialchars($data['name']) . "!</h2>
+                                <p>Thank you for joining " . SITE_NAME . ". To start tracking your finances with total privacy and control, please verify your email address by clicking the button below.</p>
                                 <div style='text-align: center;'>
                                     <a href='" . $verifyLink . "' class='button'>Verify My Email Address</a>
                                 </div>
@@ -131,8 +132,8 @@ class AuthController extends BaseController {
                                 <p style='font-size: 12px; color: #10237f; word-break: break-all;'>" . $verifyLink . "</p>
                             </div>
                             <div class='footer'>
-                                <p>&copy; " . date('Y') . " SpendScribe. Built by CreativeUtil.</p>
-                                <p>You received this email because you signed up for SpendScribe.</p>
+                                <p>&copy; " . date('Y') . " " . SITE_NAME . ". All rights reserved.</p>
+                                <p>You received this email because you signed up for " . SITE_NAME . ".</p>
                             </div>
                         </div>
                     </body>
@@ -141,9 +142,11 @@ class AuthController extends BaseController {
 
                     $headers = "MIME-Version: 1.0" . "\r\n";
                     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-                    $headers .= "From: SpendScribe <noreply@creativeutil.com>" . "\r\n";
+                    $headers .= "From: " . SITE_NAME . " <" . $from_email . ">" . "\r\n";
+                    $headers .= "Reply-To: " . $from_email . "\r\n";
+                    $headers .= "X-Mailer: PHP/" . phpversion();
                     
-                    @mail($data['email'], $subject, $message, $headers);
+                    @mail($data['email'], $subject, $message, $headers, "-f " . $from_email);
                     
                     // Audit Log
                     try {
