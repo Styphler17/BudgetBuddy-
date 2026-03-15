@@ -103,7 +103,21 @@ class User {
 
         // Check password
         if (password_verify($password, $user['password_hash'])) {
-            // Temporarily bypass all other checks for debugging
+            // Check if email is verified
+            if (!$user['email_verified']) {
+                return ['status' => 'unverified'];
+            }
+
+            // Check if account is active
+            if (!$user['is_active']) {
+                return ['status' => 'inactive'];
+            }
+
+            // Check if 2FA is enabled
+            if ($user['two_factor_enabled']) {
+                return ['status' => 'require_2fa', 'user' => $user];
+            }
+
             return ['status' => 'success', 'user' => $user];
         }
         
