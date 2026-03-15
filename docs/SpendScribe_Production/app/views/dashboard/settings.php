@@ -102,19 +102,20 @@
                 </form>
 
                 <?php if ($user['two_factor_enabled'] ?? 0): 
-                    // Generate QR Code URL using Google Chart API
-                    $chl = "otpauth://totp/" . urlencode(SITE_NAME) . ":" . urlencode($user['email']) . "?secret=" . $user['two_factor_secret'] . "&issuer=" . urlencode(SITE_NAME);
-                    $qrCodeUrl = "https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=" . urlencode($chl);
+                    // Generate QR Code URL using QR Server API (more reliable than Google Charts)
+                    $label = SITE_NAME . ":" . ($user['email'] ?? 'User');
+                    $chl = "otpauth://totp/" . $label . "?secret=" . $user['two_factor_secret'] . "&issuer=" . urlencode(SITE_NAME);
+                    $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($chl);
                 ?>
                     <div class="p-4 border border-blue-100 dark:border-blue-900/30 bg-blue-50 dark:bg-blue-900/10 rounded-lg space-y-4">
-                        <div class="flex flex-col items-center text-center space-y-3">
-                            <div class="bg-white p-2 rounded-lg shadow-sm">
-                                <img src="<?php echo $qrCodeUrl; ?>" alt="2FA QR Code" class="w-32 h-32">
+                        <div class="flex flex-col items-center text-center space-y-4">
+                            <div class="bg-white p-3 rounded-xl shadow-sm border border-blue-100 dark:border-none">
+                                <img src="<?php echo $qrCodeUrl; ?>" alt="2FA QR Code" class="w-40 h-40 block mx-auto" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-red-500 p-4\'>Failed to load QR code.<br>Please use manual entry below.</div>'">
                             </div>
                             <div class="text-xs text-blue-700 dark:text-blue-300">
-                                <p class="font-bold mb-1">Scan this QR code with your app</p>
-                                <p>Or enter this secret key manually:</p>
-                                <code class="block mt-2 font-mono font-bold bg-blue-100 dark:bg-blue-900/50 px-2 py-1 rounded text-sm tracking-wider"><?php echo $user['two_factor_secret'] ?? 'N/A'; ?></code>
+                                <p class="font-bold mb-2 text-sm">Scan this QR code with your app</p>
+                                <p class="mb-2 opacity-80 text-[10px] uppercase tracking-widest font-black">Or Manual Entry</p>
+                                <code class="block font-mono font-bold bg-white/50 dark:bg-blue-900/50 px-3 py-2 rounded-lg text-sm tracking-[0.2em] border border-blue-200/50 dark:border-blue-400/20"><?php echo $user['two_factor_secret'] ?? 'N/A'; ?></code>
                             </div>
                         </div>
                     </div>
