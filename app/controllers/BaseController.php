@@ -9,6 +9,9 @@ class BaseController {
      * Render a view with optional data
      */
     protected function render($view, $data = []) {
+        // Automatically sync session data from DB if user is logged in
+        $this->syncSessionWithDatabase();
+
         // Extract layout name from data or default to 'main'
         $layout = $data['layout'] ?? 'main';
         
@@ -66,5 +69,32 @@ class BaseController {
         }
         header("Location: " . $url);
         exit;
+    }
+
+    /**
+     * Synchronize session data with database
+     */
+    private function syncSessionWithDatabase() {
+        if (isset($_SESSION['user_id'])) {
+            $userModel = new User();
+            $user = $userModel->findById($_SESSION['user_id']);
+            
+            if ($user) {
+                // Keep these critical session variables in sync with DB
+                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_profile_pic'] = $user['profile_pic'];
+                
+                // If account was deactivated or unverified since last check
+                if (!$user['is_active'] || (defined('REQUIRE_VERIFICATION') && !$user['email_verified'])) {
+                    session_destroy();
+                    $this->redirect('/login');
+                }
+            } else {
+                // User no longer exists
+                session_destroy();
+                $this->redirect('/login');
+            }
+        }
     }
 }
