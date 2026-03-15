@@ -489,8 +489,8 @@ class DashboardController extends BaseController {
             if ($action === 'update_2fa') {
                 $enable = isset($_POST['enable_2fa']);
                 if ($enable) {
-                    // Generate a random secret for 2FA if not already set
-                    $secret = bin2hex(random_bytes(16));
+                    // Generate a random Base32 secret for 2FA
+                    $secret = SecurityHelper::generate2FASecret();
                     $data = [
                         'two_factor_enabled' => 1,
                         'two_factor_secret' => $secret

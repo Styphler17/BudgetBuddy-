@@ -35,7 +35,7 @@ foreach ($staticPages as $page) {
 // 2. Dynamic Blog Posts
 try {
     $db = Database::getConnection();
-    $stmt = $db->query("SELECT slug, updated_at, created_at FROM blogs WHERE status = 'published' ORDER BY created_at DESC");
+    $stmt = $db->query("SELECT slug, updated_at, created_at FROM blog_posts WHERE status = 'published' ORDER BY created_at DESC");
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($posts as $post) {

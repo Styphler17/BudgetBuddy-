@@ -101,13 +101,20 @@
                     </div>
                 </form>
 
-                <?php if ($user['two_factor_enabled'] ?? 0): ?>
-                    <div class="p-4 border border-blue-100 dark:border-blue-900/30 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
-                        <div class="flex gap-3">
-                            <i data-lucide="info" class="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0"></i>
+                <?php if ($user['two_factor_enabled'] ?? 0): 
+                    // Generate QR Code URL using Google Chart API
+                    $chl = "otpauth://totp/" . urlencode(SITE_NAME) . ":" . urlencode($user['email']) . "?secret=" . $user['two_factor_secret'] . "&issuer=" . urlencode(SITE_NAME);
+                    $qrCodeUrl = "https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=" . urlencode($chl);
+                ?>
+                    <div class="p-4 border border-blue-100 dark:border-blue-900/30 bg-blue-50 dark:bg-blue-900/10 rounded-lg space-y-4">
+                        <div class="flex flex-col items-center text-center space-y-3">
+                            <div class="bg-white p-2 rounded-lg shadow-sm">
+                                <img src="<?php echo $qrCodeUrl; ?>" alt="2FA QR Code" class="w-32 h-32">
+                            </div>
                             <div class="text-xs text-blue-700 dark:text-blue-300">
-                                2FA is active. Your secret key is: <code class="font-mono font-bold bg-blue-100 dark:bg-blue-900/50 px-1 rounded"><?php echo $user['two_factor_secret'] ?? 'N/A'; ?></code>. 
-                                <p class="mt-1">Enter this secret into your authenticator app.</p>
+                                <p class="font-bold mb-1">Scan this QR code with your app</p>
+                                <p>Or enter this secret key manually:</p>
+                                <code class="block mt-2 font-mono font-bold bg-blue-100 dark:bg-blue-900/50 px-2 py-1 rounded text-sm tracking-wider"><?php echo $user['two_factor_secret'] ?? 'N/A'; ?></code>
                             </div>
                         </div>
                     </div>
