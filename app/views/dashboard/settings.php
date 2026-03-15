@@ -32,8 +32,12 @@
                     <div class="flex items-center gap-6 mb-6">
                         <div class="relative group">
                             <div class="h-20 w-20 rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-slate-800">
-                                <?php if ($user['profile_pic']): ?>
-                                    <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $user['profile_pic']; ?>" class="h-full w-full object-cover">
+                                <?php if ($user['profile_pic']): 
+                                    $profilePic = $user['profile_pic'];
+                                    $isBase64 = (strpos($profilePic, 'data:image') === 0);
+                                    $src = $isBase64 ? $profilePic : BASE_URL . '/public/uploads/profile_pics/' . $profilePic;
+                                ?>
+                                    <img src="<?php echo $src; ?>" class="h-full w-full object-cover">
                                 <?php else: ?>
                                     <div class="h-full w-full flex items-center justify-center text-gray-400">
                                         <i data-lucide="user" class="h-10 w-10"></i>

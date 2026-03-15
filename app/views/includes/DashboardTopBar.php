@@ -37,8 +37,12 @@
                     <span class="text-[8px] sm:text-[10px] font-black text-primary dark:text-accent uppercase tracking-widest">Settings</span>
                 </div>
                 <div class="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-primary dark:bg-accent flex items-center justify-center text-white dark:text-primary font-black text-xs sm:text-sm shadow-md cursor-pointer transition-all hover:rotate-6 overflow-hidden flex-shrink-0">
-                    <?php if (isset($_SESSION['user_profile_pic']) && $_SESSION['user_profile_pic']): ?>
-                        <img src="<?php echo BASE_URL; ?>/public/uploads/profile_pics/<?php echo $_SESSION['user_profile_pic']; ?>" class="h-full w-full object-cover">
+                    <?php if (isset($_SESSION['user_profile_pic']) && $_SESSION['user_profile_pic']): 
+                        $profilePic = $_SESSION['user_profile_pic'];
+                        $isBase64 = (strpos($profilePic, 'data:image') === 0);
+                        $src = $isBase64 ? $profilePic : BASE_URL . '/public/uploads/profile_pics/' . $profilePic;
+                    ?>
+                        <img src="<?php echo $src; ?>" class="h-full w-full object-cover">
                     <?php else: ?>
                         <?php echo isset($_SESSION['user_name']) ? strtoupper(substr($_SESSION['user_name'], 0, 1)) : 'U'; ?>
                     <?php endif; ?>
