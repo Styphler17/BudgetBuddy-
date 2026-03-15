@@ -57,9 +57,8 @@ class AuthController extends BaseController {
             $userModel = new User();
             $user = $userModel->findById($_SESSION['temp_user_id']);
 
-            // Simplified TOTP verification placeholder
             if ($user && $user['two_factor_enabled']) {
-                if (strlen($code) === 6) { 
+                if (SecurityHelper::verifyTOTP($user['two_factor_secret'], $code)) { 
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_name'] = $user['name'];
                     $_SESSION['user_email'] = $user['email'];
@@ -72,7 +71,7 @@ class AuthController extends BaseController {
                     
                     $this->redirect('/dashboard');
                 } else {
-                    $error = "Invalid 2FA code.";
+                    $error = "Invalid 2FA code. Please try again.";
                 }
             }
         }
