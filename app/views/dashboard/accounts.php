@@ -96,6 +96,7 @@ ob_start();
                     </button>
                 </div>
                 <form action="<?php echo BASE_URL; ?>/accounts/transfer" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <?php echo BaseController::csrfField(); ?>
                     <div class="space-y-2">
                         <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">From Account</label>
                         <select name="from_account_id" class="w-full h-12 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary/20" required>
@@ -147,6 +148,7 @@ ob_start();
                     </button>
                 </div>
                 <form action="<?php echo BASE_URL; ?>/accounts/create" method="POST" class="space-y-5">
+                    <?php echo BaseController::csrfField(); ?>
                     <div class="space-y-2">
                         <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Account Name</label>
                         <input type="text" name="name" placeholder="e.g. Daily Spending" class="w-full h-12 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary/20" required>
@@ -200,6 +202,7 @@ ob_start();
                     </button>
                 </div>
                 <form action="<?php echo BASE_URL; ?>/accounts/update" method="POST" class="space-y-5">
+                    <?php echo BaseController::csrfField(); ?>
                     <input type="hidden" name="id" id="edit_acc_id">
                     <div class="space-y-2">
                         <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Account Name</label>

@@ -157,6 +157,7 @@ ob_start();
                     </button>
                 </div>
                 <form action="<?php echo BASE_URL; ?>/transactions/update" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <?php echo BaseController::csrfField(); ?>
                     <input type="hidden" name="id" id="edit_tx_id">
                     <div class="md:col-span-2 space-y-2">
                         <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Description</label>

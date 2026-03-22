@@ -85,6 +85,7 @@ ob_start();
                     </button>
                 </div>
                 <form action="<?php echo BASE_URL; ?>/categories/create" method="POST" class="space-y-5">
+                    <?php echo BaseController::csrfField(); ?>
                     <div class="space-y-2">
                         <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Category Name</label>
                         <input type="text" name="name" placeholder="e.g. Groceries" class="w-full h-12 border border-gray-300 dark:border-white/10 rounded-xl px-4 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary/20" required>
@@ -125,6 +126,7 @@ ob_start();
                     </button>
                 </div>
                 <form action="<?php echo BASE_URL; ?>/categories/update" method="POST" class="space-y-5">
+                    <?php echo BaseController::csrfField(); ?>
                     <input type="hidden" name="id" id="edit_cat_id">
                     <div class="space-y-2">
                         <label class="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Category Name</label>

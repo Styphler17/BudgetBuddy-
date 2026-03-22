@@ -154,6 +154,7 @@ class DashboardController extends BaseController {
 
     public function transactionCreate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $transactionModel = new Transaction();
             $data = [
                 'user_id' => $this->userId,
@@ -273,6 +274,7 @@ class DashboardController extends BaseController {
 
     public function transferCreate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $fromId = $_POST['from_account_id'];
             $toId = $_POST['to_account_id'];
             $amount = $_POST['amount'];
@@ -317,6 +319,7 @@ class DashboardController extends BaseController {
 
     public function transactionUpdate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $transactionModel = new Transaction();
             $id = $_POST['id'];
             $data = [
@@ -385,6 +388,7 @@ class DashboardController extends BaseController {
 
     public function accountCreate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $accountModel = new Account();
             $data = [
                 'user_id' => $this->userId,
@@ -408,6 +412,7 @@ class DashboardController extends BaseController {
 
     public function accountUpdate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $accountModel = new Account();
             $id = $_POST['id'];
             $data = [
@@ -428,6 +433,7 @@ class DashboardController extends BaseController {
         $activityLogs = (new AuditLog())->getByUserId($this->userId, 10);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $action = $_POST['action'] ?? '';
             
             if ($action === 'update_profile') {
@@ -571,6 +577,7 @@ class DashboardController extends BaseController {
 
     public function goalCreate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $goalModel = new Goal();
             $data = [
                 'user_id' => $this->userId,
@@ -594,6 +601,7 @@ class DashboardController extends BaseController {
 
     public function goalUpdate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $goalModel = new Goal();
             $id = $_POST['id'];
             $data = [
@@ -621,6 +629,7 @@ class DashboardController extends BaseController {
 
     public function categoryCreate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $categoryModel = new Category();
             $data = [
                 'user_id' => $this->userId,
@@ -644,6 +653,7 @@ class DashboardController extends BaseController {
 
     public function categoryUpdate() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->validateCsrfToken();
             $categoryModel = new Category();
             $id = $_POST['id'];
             $data = [
