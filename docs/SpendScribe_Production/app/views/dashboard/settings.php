@@ -26,6 +26,7 @@
                 </div>
                 
                 <form action="<?php echo BASE_URL; ?>/settings" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    <?php echo BaseController::csrfField(); ?>
                     <input type="hidden" name="action" value="update_profile">
                     
                     <!-- Profile Picture Upload -->
@@ -89,6 +90,7 @@
                 <p class="text-sm text-gray-500 dark:text-slate-300">Add an extra layer of security to your account using TOTP.</p>
                 
                 <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
+                    <?php echo BaseController::csrfField(); ?>
                     <input type="hidden" name="action" value="update_2fa">
                     <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-white/5">
                         <div class="flex items-center gap-3">
@@ -191,6 +193,7 @@
                 </div>
                 
                 <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-4">
+                    <?php echo BaseController::csrfField(); ?>
                     <input type="hidden" name="action" value="update_password">
                     <div class="space-y-2">
                         <label for="set-pass" class="text-sm font-medium text-gray-700 dark:text-slate-300">New Password</label>
@@ -229,6 +232,7 @@
                 <p class="text-sm text-gray-500 dark:text-slate-300">Choose the currency SpendScribe should display for your budgets and reports.</p>
                 
                 <form action="<?php echo BASE_URL; ?>/settings" method="POST" class="space-y-2">
+                    <?php echo BaseController::csrfField(); ?>
                     <input type="hidden" name="action" value="update_currency">
                     <label for="preferred_currency" class="text-sm font-medium text-gray-700 dark:text-slate-300">Preferred Currency</label>
                     <div class="flex gap-2">
@@ -278,6 +282,7 @@
                     <p class="text-sm text-gray-500 dark:text-slate-300">Permanently delete your account and all data</p>
                 </div>
                 <form action="<?php echo BASE_URL; ?>/settings" method="POST" onsubmit="return confirm('CRITICAL: This will permanently delete your account and all transaction history. This action cannot be undone. Proceed?');">
+                    <?php echo BaseController::csrfField(); ?>
                     <input type="hidden" name="action" value="delete_account">
                     <button type="submit" class="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors w-full sm:w-auto">
                         Delete My Account

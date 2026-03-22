@@ -99,7 +99,7 @@
             
             <main class="flex-1 p-4 md:p-8">
                 <div class="max-w-7xl mx-auto">
-                    <?php echo $content; ?>
+                    <?php echo (string)($content ?? ''); ?>
                 </div>
             </main>
         </div>

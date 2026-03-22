@@ -17,7 +17,14 @@
 
             <header>
                 <div class="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-6">
-                    <span class="text-primary dark:text-accent"><?php echo $post['tags'][0] ?? 'Budgeting'; ?></span>
+                    <?php 
+                        $displayTag = 'Budgeting';
+                        if (!empty($post['tags'])) {
+                            $tagsArr = is_array($post['tags']) ? $post['tags'] : explode(',', $post['tags']);
+                            $displayTag = $tagsArr[0] ?? 'Budgeting';
+                        }
+                    ?>
+                    <span class="text-primary dark:text-accent"><?php echo htmlspecialchars($displayTag); ?></span>
                     <span>•</span>
                     <span><?php echo $post['reading_time'] ?? '5'; ?> min read</span>
                 </div>
@@ -55,48 +62,68 @@
                 <?php endif; ?>
 
                 <div class="text-gray-700 dark:text-slate-300 leading-relaxed text-lg space-y-6">
-                    <?php if (!empty($post['content'])): ?>
-                        <?php if (is_array($post['content'])): ?>
-                            <?php foreach ($post['content'] as $block): ?>
-                                <div class="mb-8">
-                                    <?php if ($block['type'] === 'heading'): ?>
-                                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4 font-outfit"><?php echo htmlspecialchars($block['text']); ?></h2>
-                                    
-                                    <?php elseif ($block['type'] === 'paragraph'): ?>
-                                        <p class="mb-4"><?php echo $block['text']; ?></p>
+                    <?php 
+                    if (!empty($post['content'])): 
+                        $content = $post['content'];
+                        
+                        // If it's a JSON string that wasn't decoded, try again just in case
+                        if (is_string($content) && (strpos($content, '[') === 0 || strpos($content, '{') === 0)) {
+                            $decoded = json_decode($content, true);
+                            if (json_last_error() === JSON_ERROR_NONE) {
+                                $content = $decoded;
+                            }
+                        }
 
-                                    <?php elseif ($block['type'] === 'image'): ?>
+                        if (is_array($content)): 
+                            foreach ($content as $block): 
+                                if (!is_array($block)) continue;
+                                ?>
+                                <div class="mb-8">
+                                    <?php if (isset($block['type']) && $block['type'] === 'heading'): ?>
+                                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4 font-outfit"><?php echo htmlspecialchars($block['text'] ?? ''); ?></h2>
+                                    
+                                    <?php elseif (isset($block['type']) && $block['type'] === 'paragraph'): ?>
+                                        <p class="mb-4"><?php echo $block['text'] ?? ''; ?></p>
+
+                                    <?php elseif (isset($block['type']) && $block['type'] === 'image'): ?>
                                         <figure class="my-10">
-                                            <img src="<?php echo htmlspecialchars($block['url']); ?>" alt="<?php echo htmlspecialchars($block['alt'] ?? ''); ?>" class="rounded-lg w-full border dark:border-white/10">
+                                            <img src="<?php echo htmlspecialchars($block['url'] ?? ''); ?>" alt="<?php echo htmlspecialchars($block['alt'] ?? ''); ?>" class="rounded-lg w-full border dark:border-white/10">
                                             <?php if (!empty($block['caption'])): ?>
                                                 <figcaption class="text-center text-sm text-gray-500 dark:text-slate-400 mt-3 italic"><?php echo htmlspecialchars($block['caption']); ?></figcaption>
                                             <?php endif; ?>
                                         </figure>
 
-                                    <?php elseif ($block['type'] === 'quote'): ?>
+                                    <?php elseif (isset($block['type']) && $block['type'] === 'quote'): ?>
                                         <blockquote class="border-l-4 border-primary dark:border-accent pl-6 py-2 my-8 italic text-xl text-gray-900 dark:text-slate-200 font-medium">
-                                            "<?php echo htmlspecialchars($block['text']); ?>"
+                                            "<?php echo htmlspecialchars($block['text'] ?? ''); ?>"
                                             <?php if (!empty($block['caption'])): ?>
                                                 <footer class="text-sm text-gray-500 dark:text-slate-400 mt-2 not-italic">— <?php echo htmlspecialchars($block['caption']); ?></footer>
                                             <?php endif; ?>
                                         </blockquote>
 
-                                    <?php elseif ($block['type'] === 'list'): ?>
+                                    <?php elseif (isset($block['type']) && $block['type'] === 'list'): ?>
                                         <ul class="list-disc pl-6 space-y-2">
-                                            <?php foreach ($block['items'] as $item): ?>
-                                                <li><?php echo htmlspecialchars($item); ?></li>
-                                            <?php endforeach; ?>
+                                            <?php if (isset($block['items']) && is_array($block['items'])): ?>
+                                                <?php foreach ($block['items'] as $item): ?>
+                                                    <li><?php echo htmlspecialchars($item); ?></li>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </ul>
                                     <?php endif; ?>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="raw-content">
-                                <?php echo $post['content']; // Render raw HTML from TinyMCE ?>
+                            <?php 
+                            endforeach; 
+                        else: 
+                            // It's a string (HTML)
+                            ?>
+                            <div class="raw-content prose-headings:font-outfit prose-headings:font-bold prose-p:leading-relaxed prose-a:text-primary dark:prose-a:text-accent font-medium">
+                                <?php echo $content; ?>
                             </div>
-                        <?php endif; ?>
-                    </div>
-                    <?php endif; ?>
+                        <?php 
+                        endif; 
+                    endif; 
+                    ?>
+                </div>
 
                     <!-- Google AdSense - In-Article/Multiplex Ad -->
                     <div class="my-12 pt-8 border-t border-gray-100 dark:border-white/5">
@@ -113,10 +140,15 @@
                     <!-- Tags -->
                     <footer class="mt-16 pt-8 border-t border-gray-100 dark:border-white/5">
                     <div class="flex flex-wrap gap-2">
-                        <?php if (!empty($post['tags'])): ?>
-                            <?php foreach ($post['tags'] as $tag): ?>
-                                <a href="<?php echo BASE_URL; ?>/blog?tag=<?php echo urlencode(trim($tag)); ?>" class="px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-800 text-sm text-gray-600 dark:text-slate-400 hover:bg-primary dark:hover:bg-accent hover:text-white dark:hover:text-primary transition-colors border dark:border-white/5">
-                                    #<?php echo htmlspecialchars(trim($tag)); ?>
+                        <?php 
+                            if (!empty($post['tags'])): 
+                                $tagsList = is_array($post['tags']) ? $post['tags'] : explode(',', $post['tags']);
+                                foreach ($tagsList as $tag): 
+                                    $tag = trim($tag);
+                                    if (empty($tag)) continue;
+                        ?>
+                                <a href="<?php echo BASE_URL; ?>/blog?tag=<?php echo urlencode($tag); ?>" class="px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-800 text-sm text-gray-600 dark:text-slate-400 hover:bg-primary dark:hover:bg-accent hover:text-white dark:hover:text-primary transition-colors border dark:border-white/5">
+                                    #<?php echo htmlspecialchars($tag); ?>
                                 </a>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -146,12 +178,6 @@
         </div>
     </section>
 </div>
-
-<script>
-    window.addEventListener('load', () => {
-        lucide.createIcons();
-    });
-</script>
 
 <script>
     window.addEventListener('load', () => {

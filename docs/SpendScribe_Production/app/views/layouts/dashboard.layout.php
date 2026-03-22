@@ -89,13 +89,13 @@
 
         <!-- Content -->
         <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
-            <?php echo $content; ?>
+            <?php echo (string)($content ?? ''); ?>
         </main>
     </div>
 
     <!-- Global Modal Stack -->
     <div id="global-modal-stack" class="fixed inset-0 z-modal-stack pointer-events-none">
-        <?php echo $modal_content ?? ''; ?>
+        <?php echo (string)($modal_content ?? ''); ?>
     </div>
 
     <!-- Toast Component -->

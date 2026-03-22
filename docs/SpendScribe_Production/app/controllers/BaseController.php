@@ -9,6 +9,11 @@ class BaseController {
      * Render a view with optional data
      */
     protected function render($view, $data = []) {
+        // CSRF Token generation
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
         // Automatically sync session data from DB if user is logged in
         $this->syncSessionWithDatabase();
 
@@ -96,5 +101,28 @@ class BaseController {
                 $this->redirect('/login');
             }
         }
+    }
+
+    /**
+     * CSRF Validation
+     */
+    protected function validateCsrfToken() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+                // Return 403 Forbidden
+                http_response_code(403);
+                die('CSRF token validation failed.');
+            }
+        }
+    }
+
+    /**
+     * CSRF Field for forms
+     */
+    public static function csrfField() {
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
     }
 }
