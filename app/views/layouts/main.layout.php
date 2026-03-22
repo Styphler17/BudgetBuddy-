@@ -143,7 +143,7 @@
 
     <!-- Main Content -->
     <main class="flex-grow">
-        <?php echo $content; ?>
+        <?php echo (string)($content ?? ''); ?>
     </main>
 
     <!-- Footer -->
