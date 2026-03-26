@@ -8,6 +8,35 @@ class AdminDashboardController extends BaseController {
         if (!isset($_SESSION['admin_id'])) {
             $this->redirect('/admin-login');
         }
+        // Sync role from DB on each request in case it was changed
+        if (empty($_SESSION['admin_role'])) {
+            $adminModel = new Admin();
+            $admin = $adminModel->findByEmail($_SESSION['admin_email'] ?? '');
+            if ($admin) {
+                $_SESSION['admin_role'] = $admin['role'];
+            }
+        }
+    }
+
+    /**
+     * Require a minimum role level. Roles (ascending): moderator < admin < super_admin.
+     * Redirects with 403 if the current admin does not meet the required role.
+     */
+    private function requireRole(string $minRole): void {
+        $hierarchy = ['moderator' => 1, 'admin' => 2, 'super_admin' => 3];
+        $current   = $_SESSION['admin_role'] ?? 'moderator';
+        $required  = $hierarchy[$minRole] ?? 1;
+        $actual    = $hierarchy[$current] ?? 1;
+
+        if ($actual < $required) {
+            http_response_code(403);
+            $this->render('admin/403', [
+                'title'  => 'Access Denied',
+                'layout' => 'admin',
+                'message' => "Your role ({$current}) does not have permission to perform this action. Required: {$minRole}."
+            ]);
+            exit;
+        }
     }
 
     public function index() {
@@ -53,6 +82,7 @@ class AdminDashboardController extends BaseController {
     }
 
     public function userEdit($id) {
+        $this->requireRole('admin');
         $userModel = new User();
         $user = $userModel->findById($id);
 
@@ -173,14 +203,40 @@ class AdminDashboardController extends BaseController {
     public function blogUpload() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
             $file = $_FILES['image'];
-            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $filename = uniqid('blog_') . '.' . $ext;
+
+            $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $maxSize = 5 * 1024 * 1024; // 5MB
+
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                $this->json(['error' => 'Upload error.'], 400);
+                return;
+            }
+            if ($file['size'] > $maxSize) {
+                $this->json(['error' => 'File too large. Max 5MB.'], 400);
+                return;
+            }
+
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $detectedMime = $finfo->file($file['tmp_name']);
+            if (!in_array($detectedMime, $allowedMimes)) {
+                $this->json(['error' => 'Invalid file type.'], 400);
+                return;
+            }
+
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (!in_array($ext, $allowedExtensions)) {
+                $this->json(['error' => 'Invalid file extension.'], 400);
+                return;
+            }
+
+            $filename = bin2hex(random_bytes(16)) . '.' . $ext;
             $uploadDir = __DIR__ . '/../../public/blog/';
-            
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-            
+
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
             $targetPath = $uploadDir . $filename;
-            
+
             if (move_uploaded_file($file['tmp_name'], $targetPath)) {
                 $url = BASE_URL . '/public/blog/' . $filename;
                 $this->json(['url' => $url]);
@@ -203,21 +259,31 @@ class AdminDashboardController extends BaseController {
             // Handle Admin Profile Picture Upload
             if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
                 $fileTmpPath = $_FILES['profile_pic']['tmp_name'];
-                $fileName = $_FILES['profile_pic']['name'];
-                $fileSize = $_FILES['profile_pic']['size'];
-                $fileType = $_FILES['profile_pic']['type'];
-                $fileNameCmps = explode(".", $fileName);
-                $fileExtension = strtolower(end($fileNameCmps));
+                $fileSize    = $_FILES['profile_pic']['size'];
+                $fileName    = $_FILES['profile_pic']['name'];
 
-                $allowedExtensions = array('jpg', 'gif', 'png', 'jpeg', 'webp');
+                $allowedMimes      = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                $maxSize           = 2 * 1024 * 1024; // 2MB
 
-                if (in_array($fileExtension, $allowedExtensions)) {
-                    // Max size 2MB for Base64 storage
-                    if ($fileSize <= 2 * 1024 * 1024) {
-                        $imageData = file_get_contents($fileTmpPath);
-                        $base64Image = 'data:' . $fileType . ';base64,' . base64_encode($imageData);
-                        $data['profile_pic'] = $base64Image;
-                        $_SESSION['admin_profile_pic'] = $base64Image;
+                $finfo        = new finfo(FILEINFO_MIME_TYPE);
+                $detectedMime = $finfo->file($fileTmpPath);
+                $fileExt      = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                if ($fileSize <= $maxSize && in_array($detectedMime, $allowedMimes) && in_array($fileExt, $allowedExtensions)) {
+                    $uploadDir = __DIR__ . '/../../public/uploads/profile_pics/';
+                    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+                    // Delete old file if it exists on disk
+                    if (!empty($admin['profile_pic']) && !str_starts_with($admin['profile_pic'], 'data:')) {
+                        $oldFile = $uploadDir . basename($admin['profile_pic']);
+                        if (file_exists($oldFile)) unlink($oldFile);
+                    }
+
+                    $newFilename = bin2hex(random_bytes(16)) . '.' . $fileExt;
+                    if (move_uploaded_file($fileTmpPath, $uploadDir . $newFilename)) {
+                        $data['profile_pic'] = $newFilename;
+                        $_SESSION['admin_profile_pic'] = $newFilename;
                     }
                 }
             }
@@ -253,6 +319,7 @@ class AdminDashboardController extends BaseController {
     }
 
     public function admins() {
+        $this->requireRole('super_admin');
         $adminModel = new Admin();
         $admins = $adminModel->getAll();
         
@@ -264,6 +331,7 @@ class AdminDashboardController extends BaseController {
     }
 
     public function adminEdit($id) {
+        $this->requireRole('super_admin');
         $adminModel = new Admin();
         $admins = $adminModel->getAll();
         $adminToEdit = null;
@@ -301,6 +369,7 @@ class AdminDashboardController extends BaseController {
     }
 
     public function adminCreate() {
+        $this->requireRole('super_admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $adminModel = new Admin();
             $data = [

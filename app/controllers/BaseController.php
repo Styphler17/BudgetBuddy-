@@ -14,6 +14,9 @@ class BaseController {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
 
+        // Session timeout: 2 hours of inactivity
+        $this->checkSessionTimeout();
+
         // Automatically sync session data from DB if user is logged in
         $this->syncSessionWithDatabase();
 
@@ -104,12 +107,32 @@ class BaseController {
     }
 
     /**
+     * Session inactivity timeout (2 hours)
+     */
+    private function checkSessionTimeout(): void {
+        $timeout = 7200; // 2 hours
+        if (isset($_SESSION['user_id']) || isset($_SESSION['admin_id'])) {
+            if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout) {
+                $userId = $_SESSION['user_id'] ?? null;
+                if ($userId) {
+                    try {
+                        (new AuditLog())->log($userId, 'Session Timeout', 'Session expired due to inactivity');
+                    } catch (Exception $e) {}
+                }
+                session_destroy();
+                $this->redirect('/login');
+            }
+            $_SESSION['last_activity'] = time();
+        }
+    }
+
+    /**
      * CSRF Validation
      */
     protected function validateCsrfToken() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-                // Return 403 Forbidden
+            if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
+                !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
                 http_response_code(403);
                 die('CSRF token validation failed.');
             }

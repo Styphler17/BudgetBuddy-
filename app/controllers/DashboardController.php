@@ -168,6 +168,11 @@ class DashboardController extends BaseController {
             $transactionModel->create($data);
             $_SESSION['success_message'] = 'Transaction recorded successfully!';
 
+            // Budget alert check (only for expense transactions with a category)
+            if (($data['type'] ?? '') === 'expense' && !empty($data['category_id'])) {
+                $this->checkBudgetAlerts((int)$data['category_id']);
+            }
+
             // Savings Milestones Logic
             $goalModel = new Goal();
             $notificationModel = new Notification();
@@ -203,6 +208,64 @@ class DashboardController extends BaseController {
         
         $redirectTo = $_POST['redirect_to'] ?? '/transactions';
         $this->redirect($redirectTo);
+    }
+
+    private function checkBudgetAlerts(int $categoryId): void {
+        $categoryModel    = new Category();
+        $notificationModel = new Notification();
+
+        $categories = $categoryModel->getByUserId($this->userId);
+        $category   = null;
+        foreach ($categories as $c) {
+            if ((int)$c['id'] === $categoryId) {
+                $category = $c;
+                break;
+            }
+        }
+
+        if (!$category || (float)$category['budget'] <= 0) return;
+
+        $thisMonthStart = date('Y-m-01');
+        $today          = date('Y-m-d');
+
+        $stmt = Database::getConnection()->prepare(
+            "SELECT COALESCE(SUM(amount), 0) as total
+             FROM transactions
+             WHERE user_id = ? AND category_id = ? AND type = 'expense' AND date BETWEEN ? AND ?"
+        );
+        $stmt->execute([$this->userId, $categoryId, $thisMonthStart, $today]);
+        $spent      = (float)($stmt->fetch()['total'] ?? 0);
+        $budget     = (float)$category['budget'];
+        $percentage = ($spent / $budget) * 100;
+
+        $lastAlert = $category['last_budget_alert'] ?? 0;
+
+        if ($percentage >= 100 && $lastAlert < 100) {
+            $notificationModel->create([
+                'user_id' => $this->userId,
+                'title'   => 'Budget Exceeded!',
+                'message' => "You have exceeded your budget for \"{$category['name']}\" this month.",
+                'type'    => 'warning',
+                'icon'    => 'alert-triangle'
+            ]);
+            $this->updateCategoryBudgetAlert($categoryId, 100);
+        } elseif ($percentage >= 80 && $lastAlert < 80) {
+            $notificationModel->create([
+                'user_id' => $this->userId,
+                'title'   => 'Budget Warning',
+                'message' => "You've used " . round($percentage) . "% of your \"{$category['name']}\" budget this month.",
+                'type'    => 'info',
+                'icon'    => 'alert-circle'
+            ]);
+            $this->updateCategoryBudgetAlert($categoryId, 80);
+        }
+    }
+
+    private function updateCategoryBudgetAlert(int $categoryId, int $level): void {
+        $stmt = Database::getConnection()->prepare(
+            "UPDATE categories SET last_budget_alert = ? WHERE id = ? AND user_id = ?"
+        );
+        $stmt->execute([$level, $categoryId, $this->userId]);
     }
 
     public function transactionExport() {
@@ -445,23 +508,35 @@ class DashboardController extends BaseController {
                 // Handle Profile Picture Upload
                 if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
                     $fileTmpPath = $_FILES['profile_pic']['tmp_name'];
-                    $fileName = $_FILES['profile_pic']['name'];
-                    $fileSize = $_FILES['profile_pic']['size'];
-                    $fileType = $_FILES['profile_pic']['type'];
-                    $fileNameCmps = explode(".", $fileName);
-                    $fileExtension = strtolower(end($fileNameCmps));
+                    $fileSize    = $_FILES['profile_pic']['size'];
+                    $fileName    = $_FILES['profile_pic']['name'];
 
-                    $allowedExtensions = array('jpg', 'gif', 'png', 'jpeg', 'webp');
+                    $allowedMimes      = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                    $maxSize           = 2 * 1024 * 1024; // 2MB
 
-                    if (in_array($fileExtension, $allowedExtensions)) {
-                        // Max size 2MB for Base64 storage
-                        if ($fileSize <= 2 * 1024 * 1024) {
-                            $imageData = file_get_contents($fileTmpPath);
-                            $base64Image = 'data:' . $fileType . ';base64,' . base64_encode($imageData);
-                            $data['profile_pic'] = $base64Image;
-                            $_SESSION['user_profile_pic'] = $base64Image;
-                        } else {
-                            $_SESSION['error_message'] = 'Image is too large. Max 2MB allowed.';
+                    $finfo        = new finfo(FILEINFO_MIME_TYPE);
+                    $detectedMime = $finfo->file($fileTmpPath);
+                    $fileExt      = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                    if ($fileSize > $maxSize) {
+                        $_SESSION['error_message'] = 'Image is too large. Max 2MB allowed.';
+                    } elseif (!in_array($detectedMime, $allowedMimes) || !in_array($fileExt, $allowedExtensions)) {
+                        $_SESSION['error_message'] = 'Invalid file type. Only JPG, PNG, GIF, and WebP are allowed.';
+                    } else {
+                        $uploadDir = __DIR__ . '/../../public/uploads/profile_pics/';
+                        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+                        // Delete old file if stored on disk
+                        if (!empty($user['profile_pic']) && !str_starts_with($user['profile_pic'], 'data:')) {
+                            $oldFile = $uploadDir . basename($user['profile_pic']);
+                            if (file_exists($oldFile)) unlink($oldFile);
+                        }
+
+                        $newFilename = bin2hex(random_bytes(16)) . '.' . $fileExt;
+                        if (move_uploaded_file($fileTmpPath, $uploadDir . $newFilename)) {
+                            $data['profile_pic'] = $newFilename;
+                            $_SESSION['user_profile_pic'] = $newFilename;
                         }
                     }
                 }

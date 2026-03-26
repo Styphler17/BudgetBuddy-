@@ -125,6 +125,41 @@ class User {
     }
 
     /**
+     * Store a password-reset token (hashed) and expiry for the given user.
+     */
+    public function setResetToken(int $userId, string $plainToken, string $expires): void {
+        $hash = hash('sha256', $plainToken);
+        $stmt = $this->db->prepare(
+            "UPDATE users SET password_reset_token = ?, password_reset_expires = ? WHERE id = ?"
+        );
+        $stmt->execute([$hash, $expires, $userId]);
+    }
+
+    /**
+     * Find a user by a plain-text reset token (compares against stored hash).
+     * Returns null if not found or expired.
+     */
+    public function findByResetToken(string $plainToken): ?array {
+        $hash = hash('sha256', $plainToken);
+        $stmt = $this->db->prepare(
+            "SELECT * FROM users WHERE password_reset_token = ? AND password_reset_expires > NOW()"
+        );
+        $stmt->execute([$hash]);
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+
+    /**
+     * Set a new password and clear the reset token.
+     */
+    public function resetPassword(int $userId, string $newPassword): void {
+        $stmt = $this->db->prepare(
+            "UPDATE users SET password_hash = ?, password_reset_token = NULL, password_reset_expires = NULL, updated_at = NOW() WHERE id = ?"
+        );
+        $stmt->execute([password_hash($newPassword, PASSWORD_DEFAULT), $userId]);
+    }
+
+    /**
      * Delete user account and all associated data
      */
     public function delete($id) {

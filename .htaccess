@@ -23,4 +23,17 @@ Options -Indexes
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-Content-Type-Options "nosniff"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    # HSTS: enforce HTTPS for 1 year (enable only when HTTPS is confirmed)
+    # Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    # Content Security Policy
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
 </IfModule>
+
+# Block direct access to PHP files in upload directories
+<FilesMatch "\.php$">
+    <If "%{REQUEST_URI} =~ m|^/public/uploads/|">
+        Order allow,deny
+        Deny from all
+    </If>
+</FilesMatch>

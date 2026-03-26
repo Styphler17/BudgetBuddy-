@@ -28,19 +28,30 @@ class CurrencyService {
 
         // 2. Try to fetch from API
         try {
-            $response = @file_get_contents($this->apiUrl . $from);
-            if ($response) {
+            $ch = curl_init($this->apiUrl . $from);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT        => 5,
+                CURLOPT_CONNECTTIMEOUT => 3,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_MAXREDIRS      => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_USERAGENT      => 'SpendScribe/1.0',
+            ]);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($response && $httpCode === 200) {
                 $data = json_decode($response, true);
                 if ($data && isset($data['rates'][$to])) {
                     $rate = (float)$data['rates'][$to];
-                    
-                    // Update cache
                     $this->updateCache($from, $to, $rate);
                     return $rate;
                 }
             }
         } catch (Exception $e) {
-            // Log error if needed
+            // Fall through to cached/static fallback
         }
 
         // 3. Fallback to existing database rate even if old

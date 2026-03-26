@@ -17,6 +17,12 @@ if (APP_ENV === 'development') {
     error_reporting(0);
 }
 
+// Session hardening
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.use_strict_mode', '1');
+ini_set('session.gc_maxlifetime', '7200');
+
 // Session Start
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

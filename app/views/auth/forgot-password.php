@@ -9,7 +9,19 @@
             </div>
             
             <div class="p-8 pt-0">
+                <?php if (isset($success)): ?>
+                    <div class="p-4 rounded-md bg-green-50 border border-green-200 text-green-700 text-sm text-center mb-4">
+                        <?php echo htmlspecialchars($success); ?>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <a href="<?php echo BASE_URL; ?>/login" class="inline-flex items-center text-sm font-medium text-primary hover:underline">
+                            <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i>
+                            Back to Sign In
+                        </a>
+                    </div>
+                <?php else: ?>
                 <form action="<?php echo BASE_URL; ?>/forgot-password" method="POST" class="space-y-4 text-left">
+                    <?php echo BaseController::csrfField(); ?>
                     <?php if (isset($error)): ?>
                         <div class="p-3 rounded-md bg-red-50 border border-red-200 text-red-600 text-sm">
                             <?php echo htmlspecialchars($error); ?>
@@ -47,6 +59,7 @@
                         Back to Sign In
                     </a>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -42,7 +42,14 @@ try {
             rate DECIMAL(15, 6) NOT NULL,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             UNIQUE KEY (from_currency, to_currency)
-        )"
+        )",
+
+        // 6. Password reset columns
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_reset_token VARCHAR(64) DEFAULT NULL",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_reset_expires DATETIME DEFAULT NULL",
+
+        // 7. Budget alert tracking column
+        "ALTER TABLE categories ADD COLUMN IF NOT EXISTS last_budget_alert TINYINT DEFAULT 0"
     ];
     
     foreach ($queries as $sql) {

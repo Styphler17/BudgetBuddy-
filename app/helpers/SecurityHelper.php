@@ -28,7 +28,7 @@ class SecurityHelper {
 
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
             $calculatedCode = self::getCode($secret, $currentTimeSlice + $i);
-            if ($calculatedCode === $code) {
+            if (hash_equals($calculatedCode, $code)) {
                 return true;
             }
         }

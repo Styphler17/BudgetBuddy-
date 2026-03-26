@@ -62,6 +62,11 @@ class Router {
                 $controller->forgotPassword();
                 break;
 
+            case 'reset-password':
+                $controller = new AuthController();
+                $controller->resetPassword();
+                break;
+
             case 'contact':
                 $controller = new HomeController();
                 $controller->contact();
