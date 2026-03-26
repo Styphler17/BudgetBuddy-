@@ -31,6 +31,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Generate CSRF token once per session, immediately after session start
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 // Define Path Constants
 define('ROOT_PATH', __DIR__);
 define('APP_PATH', ROOT_PATH . '/app');
