@@ -23,6 +23,7 @@
                 
                 <div class="p-8 pt-0">
                     <form action="<?php echo BASE_URL; ?>/admin-login" method="POST" class="space-y-5 text-left">
+                        <?php echo BaseController::csrfField(); ?>
                         <?php if (isset($error)): ?>
                             <div class="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-2">
                                 <i data-lucide="alert-circle" class="h-4 w-4 shrink-0"></i>

@@ -11,6 +11,7 @@
             </p>
 
             <form action="<?php echo BASE_URL; ?>/login/2fa" method="POST" class="space-y-6">
+                <?php echo BaseController::csrfField(); ?>
                 <?php if (isset($error)): ?>
                     <div class="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 text-red-600 dark:text-red-400 text-xs font-medium">
                         <?php echo htmlspecialchars($error); ?>
