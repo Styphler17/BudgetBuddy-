@@ -21,7 +21,7 @@
                 <div class="relative w-5 h-5">
                     <i data-lucide="bell" class="h-5 w-5 group-hover:shake"></i>
                     <?php if (isset($_SESSION['unread_notifications']) && $_SESSION['unread_notifications'] > 0): ?>
-                        <span class="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-950">
+                        <span class="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary dark:bg-rose-500 text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-950">
                             <?php echo $_SESSION['unread_notifications']; ?>
                         </span>
                     <?php endif; ?>
