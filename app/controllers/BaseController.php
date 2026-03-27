@@ -122,15 +122,27 @@ class BaseController {
     }
 
     /**
-     * CSRF Validation
+     * CSRF Validation — redirects back with an error instead of dying.
      */
     protected function validateCsrfToken() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
-                !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-                http_response_code(403);
-                die('CSRF token validation failed.');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+
+        $postToken    = $_POST['csrf_token'] ?? '';
+        $sessionToken = $_SESSION['csrf_token'] ?? '';
+
+        if (empty($sessionToken) || empty($postToken) || !hash_equals($sessionToken, $postToken)) {
+            // Regenerate a fresh token for the next request
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+            $_SESSION['error_message'] = 'Your session expired. Please try again.';
+
+            // Redirect back to where the user came from, or login
+            $referer = $_SERVER['HTTP_REFERER'] ?? null;
+            if ($referer) {
+                header('Location: ' . $referer);
+            } else {
+                $this->redirect('/login');
             }
+            exit;
         }
     }
 

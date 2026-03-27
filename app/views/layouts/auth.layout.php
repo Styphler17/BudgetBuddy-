@@ -83,6 +83,13 @@
     <!-- Header/Navigation -->
     <?php require_once APP_PATH . '/views/includes/Header.php'; ?>
 
+    <!-- Flash error from session (e.g. CSRF redirect) -->
+    <?php if (!empty($_SESSION['error_message'])): ?>
+        <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white text-sm font-medium px-5 py-3 rounded-xl shadow-lg">
+            <?php echo htmlspecialchars($_SESSION['error_message']); unset($_SESSION['error_message']); ?>
+        </div>
+    <?php endif; ?>
+
     <!-- Main Content -->
     <main class="flex-grow">
         <?php echo (string)($content ?? ''); ?>
