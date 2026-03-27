@@ -20,7 +20,7 @@
             <a href="<?php echo BASE_URL; ?>/notifications" class="p-2.5 rounded-xl bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-white/10 transition-all block relative group">
                 <i data-lucide="bell" class="h-5 w-5 group-hover:shake"></i>
                 <?php if (isset($_SESSION['unread_notifications']) && $_SESSION['unread_notifications'] > 0): ?>
-                    <span class="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-950 animate-bounce-slow">
+                    <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-950 animate-bounce-slow">
                         <?php echo $_SESSION['unread_notifications']; ?>
                     </span>
                 <?php endif; ?>

@@ -187,7 +187,7 @@ class DashboardController extends BaseController {
                 if ($percent >= 100 && $lastMilestone < 100) {
                     $notificationModel->create([
                         'user_id' => $this->userId,
-                        'title' => 'Goal Achieved! 🏆',
+                        'title' => 'Goal Achieved!',
                         'message' => "Congratulations! You've reached 100% of your goal: " . $goal['name'],
                         'type' => 'success',
                         'icon' => 'trophy'
@@ -196,7 +196,7 @@ class DashboardController extends BaseController {
                 } elseif ($percent >= 50 && $lastMilestone < 50) {
                     $notificationModel->create([
                         'user_id' => $this->userId,
-                        'title' => 'Halfway There! ✨',
+                        'title' => 'Halfway There!',
                         'message' => "Great job! You've reached 50% of your goal: " . $goal['name'],
                         'type' => 'info',
                         'icon' => 'star'
