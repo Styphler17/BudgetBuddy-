@@ -53,6 +53,7 @@
                     <li><a href="<?php echo BASE_URL; ?>/help" class="hover:text-white transition-colors">Help Center</a></li>
                     <li><a href="<?php echo BASE_URL; ?>/contact" class="hover:text-white transition-colors">Contact Us</a></li>
                     <li><a href="<?php echo BASE_URL; ?>/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>/forgot-password" class="hover:text-white transition-colors">Reset Password</a></li>
                 </ul>
             </div>
 

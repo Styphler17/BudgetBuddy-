@@ -8,21 +8,34 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>/public/favicon.png">
     
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-T7B4GXB3');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Canonical URL -->
+    <?php if (isset($canonical)): ?>
+    <link rel="canonical" href="<?php echo htmlspecialchars($canonical); ?>">
+    <?php endif; ?>
+
     <!-- Meta Tags -->
-    <meta name="description" content="<?php echo SITE_NAME; ?> is the best manual budget app and expense tracker. Plan budgets and log spending manually without bank sync or spreadsheets. The perfect private YNAB alternative.">
+    <meta name="description" content="<?php echo isset($metaDescription) ? htmlspecialchars($metaDescription) : SITE_NAME . ': free manual budget app. Track expenses, plan budgets, and manage spending without bank sync or spreadsheets.'; ?>">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://spendscribe.creativeutil.com/">
     <meta property="og:title" content="<?php echo SITE_NAME; ?> – Best Budget App Without Bank Sync & Manual Tracker">
-    <meta property="og:description" content="<?php echo SITE_NAME; ?> is the best manual budget app and expense tracker. Plan budgets and log spending manually without bank sync or spreadsheets. The perfect private YNAB alternative.">
+    <meta property="og:description" content="<?php echo isset($metaDescription) ? htmlspecialchars($metaDescription) : SITE_NAME . ': free manual budget app. Track expenses, plan budgets, and manage spending without bank sync or spreadsheets.'; ?>">
     <meta property="og:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://spendscribe.creativeutil.com/">
     <meta property="twitter:title" content="<?php echo SITE_NAME; ?> – Best Budget App Without Bank Sync & Manual Tracker">
-    <meta property="twitter:description" content="<?php echo SITE_NAME; ?> is the best manual budget app and expense tracker. Plan budgets and log spending manually without bank sync or spreadsheets. The perfect private YNAB alternative.">
+    <meta property="twitter:description" content="<?php echo isset($metaDescription) ? htmlspecialchars($metaDescription) : SITE_NAME . ': free manual budget app. Track expenses, plan budgets, and manage spending without bank sync or spreadsheets.'; ?>">
     <meta property="twitter:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
 
     <!-- JSON-LD Structured Data (SEO & E-E-A-T) -->
@@ -124,6 +137,10 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7B4GXB3"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <script>
         // Dark mode initialization - 3 State Support
         (function() {
