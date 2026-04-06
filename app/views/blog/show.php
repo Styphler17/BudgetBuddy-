@@ -1,3 +1,29 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": <?php echo json_encode($post['title']); ?>,
+  "description": <?php echo json_encode($post['meta_description'] ?? $post['excerpt'] ?? ''); ?>,
+  "image": "<?php echo !empty($post['cover_image_url']) ? htmlspecialchars($post['cover_image_url']) : 'https://spendscribe.creativeutil.com/public/og-image.png'; ?>",
+  "url": "https://spendscribe.creativeutil.com/blog/<?php echo htmlspecialchars($post['slug']); ?>",
+  "datePublished": "<?php echo date('c', strtotime($post['published_at'] ?? $post['created_at'])); ?>",
+  "dateModified": "<?php echo date('c', strtotime($post['updated_at'] ?? $post['created_at'])); ?>",
+  "author": {
+    "@type": "Organization",
+    "name": "SpendScribe",
+    "url": "https://spendscribe.creativeutil.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SpendScribe",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://spendscribe.creativeutil.com/public/SpendScribe.png"
+    }
+  }
+}
+</script>
+
 <div class="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
     <!-- Breadcrumb and Hero Section -->
     <section class="bg-gray-50 dark:bg-slate-900/50 py-10 pt-24">

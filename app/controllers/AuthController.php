@@ -264,9 +264,10 @@ class AuthController extends BaseController {
         }
 
         $this->render('auth/admin-login', [
-            'title'  => 'Admin Sign In',
-            'layout' => 'auth',
-            'error'  => $error ?? null
+            'title'   => 'Admin Sign In',
+            'layout'  => 'auth',
+            'noIndex' => true,
+            'error'   => $error ?? null
         ]);
     }
 

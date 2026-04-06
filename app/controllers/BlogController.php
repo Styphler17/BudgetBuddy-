@@ -78,8 +78,13 @@ class BlogController extends BaseController {
         }
 
         $this->render('blog/show', [
-            'title' => $post['title'],
-            'post' => $post
+            'title'           => !empty($post['meta_title']) ? $post['meta_title'] : $post['title'] . ' | SpendScribe',
+            'metaDescription' => !empty($post['meta_description']) ? $post['meta_description'] : $post['excerpt'],
+            'metaKeywords'    => $post['meta_keywords'] ?? '',
+            'canonical'       => 'https://spendscribe.creativeutil.com/blog/' . $post['slug'],
+            'ogImage'         => !empty($post['cover_image_url']) ? $post['cover_image_url'] : BASE_URL . '/public/og-image.png',
+            'ogType'          => 'article',
+            'post'            => $post,
         ]);
     }
 }

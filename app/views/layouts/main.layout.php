@@ -24,19 +24,30 @@
     <!-- Meta Tags -->
     <meta name="description" content="<?php echo isset($metaDescription) ? htmlspecialchars($metaDescription) : SITE_NAME . ': free manual budget app. Track expenses, plan budgets, and manage spending without bank sync or spreadsheets.'; ?>">
     
+    <?php if (!empty($metaKeywords)): ?>
+    <meta name="keywords" content="<?php echo htmlspecialchars($metaKeywords); ?>">
+    <?php endif; ?>
+
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://spendscribe.creativeutil.com/">
-    <meta property="og:title" content="<?php echo SITE_NAME; ?> – Best Budget App Without Bank Sync & Manual Tracker">
-    <meta property="og:description" content="<?php echo isset($metaDescription) ? htmlspecialchars($metaDescription) : SITE_NAME . ': free manual budget app. Track expenses, plan budgets, and manage spending without bank sync or spreadsheets.'; ?>">
-    <meta property="og:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
+    <?php
+        $ogTitle  = isset($title) ? htmlspecialchars($title . ' | ' . SITE_NAME) : SITE_NAME . ' – Best Budget App Without Bank Sync & Manual Tracker';
+        $ogDesc   = isset($metaDescription) ? htmlspecialchars($metaDescription) : SITE_NAME . ': free manual budget app. Track expenses, plan budgets, and manage spending without bank sync or spreadsheets.';
+        $ogUrl    = isset($canonical) ? htmlspecialchars($canonical) : 'https://spendscribe.creativeutil.com/';
+        $ogImage  = isset($ogImage) ? htmlspecialchars($ogImage) : BASE_URL . '/public/og-image.png';
+        $ogType   = isset($ogType) ? htmlspecialchars($ogType) : 'website';
+    ?>
+    <meta property="og:type"        content="<?php echo $ogType; ?>">
+    <meta property="og:url"         content="<?php echo $ogUrl; ?>">
+    <meta property="og:title"       content="<?php echo $ogTitle; ?>">
+    <meta property="og:description" content="<?php echo $ogDesc; ?>">
+    <meta property="og:image"       content="<?php echo $ogImage; ?>">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://spendscribe.creativeutil.com/">
-    <meta property="twitter:title" content="<?php echo SITE_NAME; ?> – Best Budget App Without Bank Sync & Manual Tracker">
-    <meta property="twitter:description" content="<?php echo isset($metaDescription) ? htmlspecialchars($metaDescription) : SITE_NAME . ': free manual budget app. Track expenses, plan budgets, and manage spending without bank sync or spreadsheets.'; ?>">
-    <meta property="twitter:image" content="<?php echo BASE_URL; ?>/public/og-image.png">
+    <meta property="twitter:card"        content="summary_large_image">
+    <meta property="twitter:url"         content="<?php echo $ogUrl; ?>">
+    <meta property="twitter:title"       content="<?php echo $ogTitle; ?>">
+    <meta property="twitter:description" content="<?php echo $ogDesc; ?>">
+    <meta property="twitter:image"       content="<?php echo $ogImage; ?>">
 
     <!-- JSON-LD Structured Data (SEO & E-E-A-T) -->
     <script type="application/ld+json">

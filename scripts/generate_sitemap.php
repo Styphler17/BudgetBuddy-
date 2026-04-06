@@ -20,7 +20,6 @@ $staticPages = [
     ['loc' => 'privacy', 'priority' => '0.5', 'freq' => 'yearly'],
     ['loc' => 'login', 'priority' => '0.4', 'freq' => 'monthly'],
     ['loc' => 'register', 'priority' => '0.4', 'freq' => 'monthly'],
-    ['loc' => 'admin-login', 'priority' => '0.2', 'freq' => 'monthly'],
 ];
 
 foreach ($staticPages as $page) {
